@@ -7,9 +7,11 @@
   "authors": ["idbecrucified"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/crucifieds-configs/icon.png",
   "environment": "client",
   "entrypoints": {
+    "main": [
+      "com.example.survivalfly.SurvivalFlyMod"
+    ],
     "client": [
       "com.example.survivalfly.SurvivalFlyClient"
     ]
