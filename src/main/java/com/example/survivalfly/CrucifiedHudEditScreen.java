@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
-    private static final Identifier LOGO_TEXTURE = new Identifier("survivalfly", "textures/gui/logo.png");
+    private static final Identifier LOGO_TEXTURE = new Identifier("survivalfly", "textures/gui/icon.png");
     
     private String draggingHud = null;
     private int dragOffsetX = 0;
@@ -19,10 +19,10 @@ public class CrucifiedHudEditScreen extends Screen {
 
     @Override
     protected void init() {
-        int buttonWidth = 220;
-        int buttonHeight = 30;
-        int buttonX = (this.width - buttonWidth) / 2; // Perfectly centers the button horizontally
-        int buttonY = this.height - 70;
+        int buttonWidth = 120;
+        int buttonHeight = 24;
+        int buttonX = (this.width - buttonWidth) / 2; // Exact horizontal center
+        int buttonY = this.height - 65;
 
         this.addDrawableChild(ButtonWidget.builder(
                 Text.literal("MODS"),
@@ -107,7 +107,7 @@ public class CrucifiedHudEditScreen extends Screen {
             HudRenderer.renderAllHuds(context, this.client, true);
         }
 
-        // Render Custom Logo at top center with correct proportion
+        // Render Custom Logo at top center
         int logoWidth = 180;
         int logoHeight = 70;
         int logoX = (this.width - logoWidth) / 2;
