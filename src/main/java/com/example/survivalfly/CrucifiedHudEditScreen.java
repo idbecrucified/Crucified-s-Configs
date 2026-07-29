@@ -1,139 +1,74 @@
-package com.example.survivalfly;
+package com.example.survivalfly.screen;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
-    private static final Identifier LOGO_TEXTURE = new Identifier("survivalfly", "textures/gui/logo.png");
-    
-    private String draggingHud = null;
-    private int dragOffsetX = 0;
-    private int dragOffsetY = 0;
+    private final Screen parent;
+    private String currentDescription = "Hover over or toggle settings to see descriptions here.";
 
-    public CrucifiedHudEditScreen() {
-        super(Text.literal("Crucified's HUD Overlay"));
+    public CrucifiedHudEditScreen(Screen parent) {
+        super(Text.literal("Crucified's Mods Manager"));
+        this.parent = parent;
     }
 
     @Override
     protected void init() {
         super.init();
-        int buttonWidth = 100;
-        int buttonHeight = 22;
-        int buttonX = (this.width - buttonWidth) / 2;
-        int buttonY = (this.height / 2) + 20;
 
-        // Center MODS button
-        this.addDrawableChild(ButtonWidget.builder(
-                Text.literal("MODS"),
-                button -> this.client.setScreen(new LunarModMenuScreen(this))
-        ).dimensions(buttonX, buttonY, buttonWidth, buttonHeight).build());
+        int centerX = this.width / 2;
+        int startY = 40; // Starting Y position for the first button
+        int buttonWidth = 200;
+        int buttonHeight = 20;
+        int spacing = 4;
 
-        // Bottom-Left Themes button
-        this.addDrawableChild(ButtonWidget.builder(
-                Text.literal("Themes"),
-                button -> this.client.setScreen(new ThemeSelectionScreen(this))
-        ).dimensions(20, this.height - 35, 80, 20).build());
+        // Configuration Toggles
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Toggle Sprint: ON"), button -> {
+            // Your toggle logic here
+        }).dimensions(centerX - (buttonWidth / 2), startY, buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Totem Counter: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing), buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Armor Status: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 2, buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("CPS Display: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 3, buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Keystrokes: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 4, buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("FPS Counter: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 5, buttonWidth, buttonHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Fullbright: ON"), button -> {
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 6, buttonWidth, buttonHeight).build());
+
+        // Back Button safely pushed down below the grid
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Back to HUD Editor"), button -> {
+            this.client.setScreen(this.parent);
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 10, buttonWidth, buttonHeight).build());
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            int mx = (int) mouseX;
-            int my = (int) mouseY;
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, delta);
 
-            if (CrucifiedsConfigs.fpsCounter && mx >= CrucifiedsConfigs.fpsCounterX && mx <= CrucifiedsConfigs.fpsCounterX + 60 && my >= CrucifiedsConfigs.fpsCounterY && my <= CrucifiedsConfigs.fpsCounterY + 12) {
-                draggingHud = "fps";
-                dragOffsetX = mx - CrucifiedsConfigs.fpsCounterX;
-                dragOffsetY = my - CrucifiedsConfigs.fpsCounterY;
-                return true;
-            }
-            if (CrucifiedsConfigs.totemCounter && mx >= CrucifiedsConfigs.totemCounterX && mx <= CrucifiedsConfigs.totemCounterX + 70 && my >= CrucifiedsConfigs.totemCounterY && my <= CrucifiedsConfigs.totemCounterY + 12) {
-                draggingHud = "totem";
-                dragOffsetX = mx - CrucifiedsConfigs.totemCounterX;
-                dragOffsetY = my - CrucifiedsConfigs.totemCounterY;
-                return true;
-            }
-            if (CrucifiedsConfigs.keystrokes && mx >= CrucifiedsConfigs.keystrokesX && mx <= CrucifiedsConfigs.keystrokesX + 60 && my >= CrucifiedsConfigs.keystrokesY && my <= CrucifiedsConfigs.keystrokesY + 40) {
-                draggingHud = "keystrokes";
-                dragOffsetX = mx - CrucifiedsConfigs.keystrokesX;
-                dragOffsetY = my - CrucifiedsConfigs.keystrokesY;
-                return true;
-            }
-            if (CrucifiedsConfigs.cpsDisplay && mx >= CrucifiedsConfigs.cpsDisplayX && mx <= CrucifiedsConfigs.cpsDisplayX + 50 && my >= CrucifiedsConfigs.cpsDisplayY && my <= CrucifiedsConfigs.cpsDisplayY + 12) {
-                draggingHud = "cps";
-                dragOffsetX = mx - CrucifiedsConfigs.cpsDisplayX;
-                dragOffsetY = my - CrucifiedsConfigs.cpsDisplayY;
-                return true;
-            }
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+        // Draw Title at the very top
+        graphics.drawCenteredString(this.textRenderer, this.title, this.width / 2, 15, 0xFF55FF);
+
+        // Fixed description section positioned safely at the bottom of the screen
+        int descY = this.height - 35;
+        graphics.drawCenteredString(this.textRenderer, "[Descriptions]", this.width / 2, descY, 0xAAAAAA);
+        graphics.drawCenteredString(this.textRenderer, this.currentDescription, this.width / 2, descY + 12, 0xFFFFFF);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (draggingHud != null) {
-            int newX = (int) mouseX - dragOffsetX;
-            int newY = (int) mouseY - dragOffsetY;
-
-            switch (draggingHud) {
-                case "fps":
-                    CrucifiedsConfigs.fpsCounterX = newX;
-                    CrucifiedsConfigs.fpsCounterY = newY;
-                    break;
-                case "totem":
-                    CrucifiedsConfigs.totemCounterX = newX;
-                    CrucifiedsConfigs.totemCounterY = newY;
-                    break;
-                case "keystrokes":
-                    CrucifiedsConfigs.keystrokesX = newX;
-                    CrucifiedsConfigs.keystrokesY = newY;
-                    break;
-                case "cps":
-                    CrucifiedsConfigs.cpsDisplayX = newX;
-                    CrucifiedsConfigs.cpsDisplayY = newY;
-                    break;
-            }
-            return true;
-        }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        draggingHud = null;
-        return super.mouseReleased(mouseX, mouseY, button);
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
-
-        if (this.client != null) {
-            HudRenderer.renderAllHuds(context, this.client, true);
-        }
-
-        int logoWidth = 160;
-        int logoHeight = 40;
-        int logoX = (this.width - logoWidth) / 2;
-        int logoY = 20;
-        
-        try {
-            // Safely attempt drawing the texture file
-            context.drawTexture(LOGO_TEXTURE, logoX, logoY, 0, 0, logoWidth, logoHeight, logoWidth, logoHeight);
-        } catch (Throwable t) {
-            // Fallback rendering if the PNG file format is invalid/missing
-            context.fill(logoX, logoY, logoX + logoWidth, logoY + logoHeight, 0x88000000);
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§lCRUCIFIED'S CONFIGS"), this.width / 2, logoY + 16, CrucifiedTheme.getPrimaryColor());
-        }
-
-        super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public boolean shouldCloseOnEsc() {
-        return true;
+    public void close() {
+        this.client.setScreen(this.parent);
     }
 }
