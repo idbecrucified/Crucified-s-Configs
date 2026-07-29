@@ -20,9 +20,10 @@ public class SurvivalFlyClient implements ClientModInitializer {
                 "category.survivalfly.general"
         ));
 
-        // Listen for key presses during the game tick and pass the current screen
+        // Listen for key presses and log them
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
+                SurvivalFlyMod.LOGGER.info("Right Shift was pressed! Attempting to open menu...");
                 client.setScreen(new LunarModMenuScreen(client.currentScreen));
             }
         });
