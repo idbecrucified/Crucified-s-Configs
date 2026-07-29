@@ -1,8 +1,10 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
+    public static String currentTheme = "Gamer";
+
     public static String getCurrentTheme() {
-        return CrucifiedsConfigs.currentTheme != null ? CrucifiedsConfigs.currentTheme : "Gamer";
+        return currentTheme != null ? currentTheme : "Gamer";
     }
 
     public static int getPrimaryColor() {
@@ -33,8 +35,8 @@ public class CrucifiedTheme {
 
     public static int getBackgroundColor() {
         String theme = getCurrentTheme();
-        if ("OLED".equals(theme)) return 0xFF000000; // Pure black for OLED
-        if ("Flash".equals(theme)) return 0xFF0A0A0A; // Pitch black/dark contrast
+        if ("OLED".equals(theme)) return 0xFF000000; 
+        if ("Flash".equals(theme)) return 0xFF0A0A0A; 
         return 0xCC1a1c23;
     }
 
@@ -49,7 +51,6 @@ public class CrucifiedTheme {
         return getPrimaryColor();
     }
 
-    // Gradient endpoints for menu backgrounds
     public static int getGradientStart() {
         return getBackgroundColor();
     }
