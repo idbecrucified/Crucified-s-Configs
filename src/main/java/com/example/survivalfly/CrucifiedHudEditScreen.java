@@ -10,6 +10,11 @@ public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
     private final String currentDescription = "Hover over or toggle settings to see descriptions here.";
 
+    // No-argument constructor to match SurvivalFlyClient.java call
+    public CrucifiedHudEditScreen() {
+        this(null);
+    }
+
     public CrucifiedHudEditScreen(Screen parent) {
         super(Text.literal("Crucified's Mods Manager"));
         this.parent = parent;
@@ -49,7 +54,9 @@ public class CrucifiedHudEditScreen extends Screen {
 
         // Back Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back to HUD Editor"), button -> {
-            this.client.setScreen(this.parent);
+            if (this.client != null) {
+                this.client.setScreen(this.parent);
+            }
         }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 10, buttonWidth, buttonHeight).build());
     }
 
@@ -83,6 +90,8 @@ public class CrucifiedHudEditScreen extends Screen {
 
     @Override
     public void close() {
-        this.client.setScreen(this.parent);
+        if (this.client != null) {
+            this.client.setScreen(this.parent);
+        }
     }
 }
