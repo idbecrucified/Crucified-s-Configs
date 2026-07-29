@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
@@ -19,7 +20,7 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
 
         int centerX = this.width / 2;
-        int startY = 40; // Starting Y position for the first button
+        int startY = 65; // Pushed down to leave space for the logo at the top
         int buttonWidth = 200;
         int buttonHeight = 20;
         int spacing = 4;
@@ -58,8 +59,22 @@ public class CrucifiedHudEditScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, delta);
 
-        // Draw Title at the very top
-        graphics.drawCenteredString(this.textRenderer, this.title, this.width / 2, 15, 0xFF55FF);
+        // Draw Logo at the top
+        int logoWidth = 48;
+        int logoHeight = 48;
+        int logoX = (this.width - logoWidth) / 2;
+        int logoY = 10;
+        
+        graphics.drawTexture(
+            Identifier.of("survivalfly", "textures/gui/logo.png"), 
+            logoX, logoY, 
+            0, 0, 
+            logoWidth, logoHeight, 
+            logoWidth, logoHeight
+        );
+
+        // Draw Title below the logo
+        graphics.drawCenteredString(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
 
         // Fixed description section positioned safely at the bottom of the screen
         int descY = this.height - 35;
