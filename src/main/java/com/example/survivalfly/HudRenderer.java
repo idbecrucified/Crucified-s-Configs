@@ -11,7 +11,6 @@ public class HudRenderer {
     public static void register() {
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
-            // Hide HUDs if F1 (hudHidden) or F3 (debugEnabled) is active, or player is null
             if (client.options.hudHidden || client.options.debugEnabled || client.player == null) return;
             renderAllHuds(context, client, false);
         });
@@ -47,8 +46,9 @@ public class HudRenderer {
 
         // 4. CPS Display
         if (CrucifiedsConfigs.cpsDisplay) {
+            String cpsText = "CPS: " + SurvivalFlyClient.getCps();
             if (editing) context.fill(CrucifiedsConfigs.cpsDisplayX - 2, CrucifiedsConfigs.cpsDisplayY - 2, CrucifiedsConfigs.cpsDisplayX + 50, CrucifiedsConfigs.cpsDisplayY + 12, 0x55DA70D6);
-            context.drawTextWithShadow(textRenderer, "CPS: 0", CrucifiedsConfigs.cpsDisplayX, CrucifiedsConfigs.cpsDisplayY, 0xFFDA70D6);
+            context.drawTextWithShadow(textRenderer, cpsText, CrucifiedsConfigs.cpsDisplayX, CrucifiedsConfigs.cpsDisplayY, 0xFFDA70D6);
         }
 
         // 5. Armor Status
