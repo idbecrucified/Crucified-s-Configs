@@ -4,27 +4,41 @@ public class CrucifiedTheme {
     public static String currentTheme = "Gamer";
 
     public static int getPrimaryColor() {
-        return switch (currentTheme) {
-            case "Sea" -> 0xFF00BFFF;     // Blue
-            case "Sun" -> 0xFFFF7F00;     // Orange
-            case "OLED" -> 0xFF444444;    // Gray accent
-            case "Flash" -> 0xFFFFFFFF;   // White
-            case "Natural" -> 0xFF228B22; // Forest Green
-            case "Rock" -> 0xFF708090;    // Slate Gray
-            default -> 0xFFFF007F;        // Gamer (Hot Pink)
-        };
+        switch (currentTheme) {
+            case "Sea":
+                return 0xFF00BFFF;     // Blue
+            case "Sun":
+                return 0xFFFF7F00;     // Orange
+            case "OLED":
+                return 0xFF444444;    // Gray accent
+            case "Flash":
+                return 0xFFFFFFFF;   // White
+            case "Natural":
+                return 0xFF228B22; // Forest Green
+            case "Rock":
+                return 0xFF708090;    // Slate Gray
+            default:
+                return 0xFFFF007F;        // Gamer (Hot Pink)
+        }
     }
 
     public static int getSecondaryColor() {
-        return switch (currentTheme) {
-            case "Sea" -> 0xFF00FFFF;     // Cyan
-            case "Sun" -> 0xFFFFD700;     // Yellow
-            case "OLED" -> 0xFF666666;    // Lighter Gray outline
-            case "Flash" -> 0xFFCCCCCC;   // Off-White
-            case "Natural" -> 0xFF32CD32; // Lime Green
-            case "Rock" -> 0xFFA9A9A9;    // Dark Gray Rock
-            default -> 0xFFFF69B4;        // Gamer (Pink)
-        };
+        switch (currentTheme) {
+            case "Sea":
+                return 0xFF00FFFF;     // Cyan
+            case "Sun":
+                return 0xFFFFD700;     // Yellow
+            case "OLED":
+                return 0xFF666666;    // Lighter Gray outline
+            case "Flash":
+                return 0xFFCCCCCC;   // Off-White
+            case "Natural":
+                return 0xFF32CD32; // Lime Green
+            case "Rock":
+                return 0xFFA9A9A9;    // Dark Gray Rock
+            default:
+                return 0xFFFF69B4;        // Gamer (Pink)
+        }
     }
 
     public static int getBackgroundColor() {
