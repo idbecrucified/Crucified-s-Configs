@@ -13,8 +13,8 @@ public class CrucifiedsConfigs {
 
     // HUD Customization Settings
     public static boolean hudBackground = true;
-    public static int hudBackgroundColor = 0x80000000; 
-    public static int hudTextColor = 0xFFFFFFFF;       
+    public static int hudBackgroundColor = 0x80000000; // Semi-transparent dark
+    public static int hudTextColor = 0xFFFFFFFF;       // White text
 
     // Performance Options
     public static boolean fastRender = true;
