@@ -116,14 +116,17 @@ public class CrucifiedHudEditScreen extends Screen {
         }
 
         int logoWidth = 160;
-        int logoHeight = 60;
+        int logoHeight = 40;
         int logoX = (this.width - logoWidth) / 2;
-        int logoY = 25;
+        int logoY = 20;
         
         try {
+            // Safely attempt drawing the texture file
             context.drawTexture(LOGO_TEXTURE, logoX, logoY, 0, 0, logoWidth, logoHeight, logoWidth, logoHeight);
-        } catch (Exception e) {
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MODS"), this.width / 2, logoY + 20, CrucifiedTheme.getPrimaryColor());
+        } catch (Throwable t) {
+            // Fallback rendering if the PNG file format is invalid/missing
+            context.fill(logoX, logoY, logoX + logoWidth, logoY + logoHeight, 0x88000000);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§lCRUCIFIED'S CONFIGS"), this.width / 2, logoY + 16, CrucifiedTheme.getPrimaryColor());
         }
 
         super.render(context, mouseX, mouseY, delta);
