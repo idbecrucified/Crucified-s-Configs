@@ -1,6 +1,6 @@
 package com.example.survivalfly;
 
-import com.example.survivalfly.screen.CrucifiedHudEditScreen;
+import com.example.survivalfly.screen.CrucifiedRootMenuScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -13,7 +13,7 @@ public class SurvivalFlyClient implements ClientModInitializer {
     private static KeyBinding editScreenKey;
     private static int cps = 0;
 
-    // Expanded Mod Toggle States
+    // Mod Toggle States
     public static boolean toggleSprint = true;
     public static boolean cpsDisplay = true;
     public static boolean keystrokes = true;
@@ -40,7 +40,7 @@ public class SurvivalFlyClient implements ClientModInitializer {
             case "Flash" -> 0xFFFFFFFF;
             case "Natural" -> 0xFF2E8B57;
             case "Rock" -> 0xFF708090;
-            default -> 0xFF8A49F5; // Gamer (Default)
+            default -> 0xFF8A49F5; // Gamer
         };
     }
 
@@ -79,7 +79,7 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (editScreenKey.wasPressed()) {
-                client.setScreen(new CrucifiedHudEditScreen());
+                client.setScreen(new CrucifiedRootMenuScreen());
             }
         });
 
