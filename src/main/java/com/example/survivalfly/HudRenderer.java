@@ -12,7 +12,7 @@ public class HudRenderer {
             if (client.player == null || client.options.hudHidden) return;
 
             if (CrucifiedsConfigs.fpsCounter) {
-                String fpsText = "FPS: " + MinecraftClient.getCurrentFps();
+                String fpsText = "FPS: " + MinecraftClient.getInstance().getCurrentFps();
                 context.drawTextWithShadow(client.textRenderer, fpsText, CrucifiedsConfigs.fpsCounterX, CrucifiedsConfigs.fpsCounterY, 0xEC4899);
             }
 
