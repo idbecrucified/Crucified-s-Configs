@@ -1,6 +1,7 @@
 package com.example.survivalfly.screen;
 
 import com.example.survivalfly.SurvivalFlyClient;
+import com.example.survivalfly.util.UIUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -53,14 +54,13 @@ public class CrucifiedsThemeScreen extends Screen {
         int panelLeft = (this.width - 300) / 2;
         int panelTop = (this.height - 240) / 2;
 
-        // Container background matching selected theme
-        context.fill(panelLeft, panelTop, panelLeft + 300, panelTop + 240, SurvivalFlyClient.getBackgroundColor());
+        // Rounded container background
+        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 300, 240, 10, SurvivalFlyClient.getBackgroundColor());
 
-        // Header banner
-        context.fill(panelLeft, panelTop, panelLeft + 300, panelTop + 32, SurvivalFlyClient.getHeaderColor());
+        // Rounded Header banner
+        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 300, 32, 10, SurvivalFlyClient.getHeaderColor());
         context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Select HUD Theme"), panelLeft + 150, panelTop + 10, 0xFFFFFF);
 
-        // Accent divider
         context.fill(panelLeft, panelTop + 32, panelLeft + 300, panelTop + 35, SurvivalFlyClient.getAccentColor());
 
         super.render(context, mouseX, mouseY, delta);
