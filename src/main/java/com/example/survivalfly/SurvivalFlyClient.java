@@ -13,6 +13,17 @@ public class SurvivalFlyClient implements ClientModInitializer {
     private static KeyBinding editScreenKey;
     private static int cps = 0;
 
+    // Global Mod Toggle States
+    public static boolean toggleSprint = true;
+    public static boolean totemCounter = true;
+    public static boolean armorStatus = true;
+    public static boolean cpsDisplay = true;
+    public static boolean keystrokes = true;
+    public static boolean fpsCounter = true;
+    public static boolean fullbright = true;
+    public static boolean fastRender = false;
+    public static boolean zoomToggle = true;
+
     @Override
     public void onInitializeClient() {
         // Register keybinding to open the HUD edit screen using Right Shift
@@ -30,7 +41,7 @@ public class SurvivalFlyClient implements ClientModInitializer {
             }
         });
 
-        // Register the HUD renderer so elements actually render on the screen
+        // Register the HUD renderer
         HudRenderCallback.EVENT.register(new HudRenderer());
     }
 
