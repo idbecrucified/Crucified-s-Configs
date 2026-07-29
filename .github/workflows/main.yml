@@ -15,15 +15,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Download and Setup Gradle
-        run: |
-          wget -q https://services.gradle.org/distributions/gradle-8.3-bin.zip
-          jar xf gradle-8.3-bin.zip
-          echo "$PWD/gradle-8.3/bin" >> $GITHUB_PATH
+      - name: Setup Gradle 8.3
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.3'
 
       - name: Generate Wrapper & Build
         run: |
           gradle wrapper --gradle-version 8.3
+          chmod +x gradlew
           ./gradlew build --no-daemon
 
       - name: Upload Mod Artifact
