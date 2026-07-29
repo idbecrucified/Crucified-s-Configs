@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LunarModMenuScreen extends Screen {
-    private final Screen parent;
+    public final Screen parent;
     private String currentCategory = "PvP";
 
     public LunarModMenuScreen(Screen parent) {
@@ -32,7 +32,7 @@ public class LunarModMenuScreen extends Screen {
         addCategoryButton(sidebarX, sidebarY + 25, "Performance");
         addCategoryButton(sidebarX, sidebarY + 50, "Graphics");
 
-        // Done / Close Button at bottom left of sidebar
+        // Back / Done Button at bottom left of sidebar
         this.addDrawableChild(ButtonWidget.builder(Text.literal("§dBack / Done"), button -> {
             this.client.setScreen(parent);
         }).dimensions(sidebarX, top + panelHeight - 30, 100, 20).build());
@@ -53,12 +53,12 @@ public class LunarModMenuScreen extends Screen {
             int cardX = gridStartX + col * (cardWidth + spacingX);
             int cardY = gridStartY + row * (cardHeight + spacingY);
 
-            // Toggle button for each mod card
+            // Toggle button for each mod card (refreshes screen safely on click)
             this.addDrawableChild(ButtonWidget.builder(
                     Text.literal(mod.getState() ? "§dENABLED" : "§7DISABLED"),
                     button -> {
                         mod.toggle();
-                        this.clearAndInit();
+                        this.client.setScreen(new LunarModMenuScreen(this.parent));
                     }
             ).dimensions(cardX, cardY + cardHeight - 22, cardWidth, 20).build());
 
@@ -72,7 +72,7 @@ public class LunarModMenuScreen extends Screen {
                 Text.literal((selected ? "§d> " : "§7") + category),
                 button -> {
                     this.currentCategory = category;
-                    this.clearAndInit();
+                    this.client.setScreen(new LunarModMenuScreen(this.parent));
                 }
         ).dimensions(x, y, 100, 20).build());
     }
@@ -109,13 +109,12 @@ public class LunarModMenuScreen extends Screen {
         int left = (this.width - panelWidth) / 2;
         int top = (this.height - panelHeight) / 2;
 
-        // Dark Window Background
-        context.fill(left, top, left + panelWidth, top + panelHeight, 0xEE1A111E); // Deep dark purple-tinted bg
-        // Outer border line
+        // Dark Window Background & Border
+        context.fill(left, top, left + panelWidth, top + panelHeight, 0xEE1A111E);
         context.drawBorder(left, top, panelWidth, panelHeight, 0xFF9370DB);
 
         // Top Header Bar
-        context.fill(left, top, left + panelWidth, top + 35, 0xFF4B0082); // Indigo/Purple header
+        context.fill(left, top, left + panelWidth, top + 35, 0xFF4B0082);
         context.drawTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MOD HUB"), left + 15, top + 12, 0xFFFFFF);
         context.drawTextWithShadow(this.textRenderer, Text.literal("Category: §f" + currentCategory), left + 280, top + 12, 0xFFC0CB);
 
@@ -135,11 +134,8 @@ public class LunarModMenuScreen extends Screen {
             int cardX = gridStartX + col * (cardWidth + spacingX);
             int cardY = gridStartY + row * (cardHeight + spacingY);
 
-            // Card box
             context.fill(cardX, cardY, cardX + cardWidth, cardY + cardHeight, 0xFF2D1B36);
             context.drawBorder(cardX, cardY, cardWidth, cardHeight, mod.getState() ? 0xFFDA70D6 : 0xFF4A3b5C);
-
-            // Mod Title inside card
             context.drawCenteredTextWithShadow(this.textRenderer, Text.literal(mod.name), cardX + (cardWidth / 2), cardY + 18, 0xFFFFFF);
 
             index++;
