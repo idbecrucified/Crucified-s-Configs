@@ -32,7 +32,7 @@ public class HudRenderer {
         if (CrucifiedsConfigs.totemCounter && client.player != null) {
             int totems = getTotemCount(client);
             if (totems > 0 || editing) {
-                String totemText = "Totems: " + (totems > 0 ? totems : 1);
+                String totemText = "Totems: " + totems;
                 if (editing) context.fill(CrucifiedsConfigs.totemCounterX - 2, CrucifiedsConfigs.totemCounterY - 2, CrucifiedsConfigs.totemCounterX + 70, CrucifiedsConfigs.totemCounterY + 12, 0x55DA70D6);
                 context.drawTextWithShadow(textRenderer, totemText, CrucifiedsConfigs.totemCounterX, CrucifiedsConfigs.totemCounterY, 0xFFFF69B4);
             }
@@ -62,11 +62,13 @@ public class HudRenderer {
 
     private static int getTotemCount(MinecraftClient client) {
         int count = 0;
-        if (client.player.getMainHandStack().isOf(Items.TOTEM_OF_UNDYING)) count += client.player.getMainHandStack().getCount();
-        if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) count += client.player.getOffHandStack().getCount();
+        if (client.player == null) return 0;
+        // Single unified inventory scan prevents double-counting main/offhand items
         for (int i = 0; i < client.player.getInventory().size(); i++) {
             ItemStack stack = client.player.getInventory().getStack(i);
-            if (stack.isOf(Items.TOTEM_OF_UNDYING)) count += stack.getCount();
+            if (stack.isOf(Items.TOTEM_OF_UNDYING)) {
+                count += stack.getCount();
+            }
         }
         return count;
     }
