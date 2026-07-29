@@ -18,7 +18,7 @@ jobs:
       - name: Download and Setup Gradle
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.3-bin.zip
-          unzip -q gradle-8.3-bin.zip
+          jar xf gradle-8.3-bin.zip
           echo "$PWD/gradle-8.3/bin" >> $GITHUB_PATH
 
       - name: Generate Wrapper & Build
