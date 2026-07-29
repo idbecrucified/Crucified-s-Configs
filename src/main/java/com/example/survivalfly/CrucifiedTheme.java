@@ -1,27 +1,49 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
-    public static String currentTheme = "Default";
+    public static String currentTheme = "Gamer";
 
     public static int getPrimaryColor() {
-        if ("Purple".equals(currentTheme)) return 0xFF9933FF;
-        if ("Blue".equals(currentTheme)) return 0xFF3399FF;
-        if ("Green".equals(currentTheme)) return 0xFF33FF99;
-        return 0xFFFF007F;
+        return switch (currentTheme) {
+            case "Sea" -> 0xFF00BFFF;     // Blue
+            case "Sun" -> 0xFFFF7F00;     // Orange
+            case "OLED" -> 0xFF444444;    // Gray accent
+            case "Flash" -> 0xFFFFFFFF;   // White
+            case "Natural" -> 0xFF228B22; // Forest Green
+            case "Rock" -> 0xFF708090;    // Slate Gray
+            default -> 0xFFFF007F;        // Gamer (Hot Pink)
+        };
     }
 
     public static int getSecondaryColor() {
-        if ("Purple".equals(currentTheme)) return 0xFFCC66FF;
-        if ("Blue".equals(currentTheme)) return 0xFF66CCFF;
-        if ("Green".equals(currentTheme)) return 0xFF66FFCC;
-        return 0xFFFF69B4;
+        return switch (currentTheme) {
+            case "Sea" -> 0xFF00FFFF;     // Cyan
+            case "Sun" -> 0xFFFFD700;     // Yellow
+            case "OLED" -> 0xFF666666;    // Lighter Gray outline
+            case "Flash" -> 0xFFCCCCCC;   // Off-White
+            case "Natural" -> 0xFF32CD32; // Lime Green
+            case "Rock" -> 0xFFA9A9A9;    // Dark Gray Rock
+            default -> 0xFFFF69B4;        // Gamer (Pink)
+        };
     }
 
     public static int getBackgroundColor() {
+        if ("OLED".equals(currentTheme)) {
+            return 0xFF000000; // Pure black for OLED
+        }
+        if ("Flash".equals(currentTheme)) {
+            return 0xFF0A0A0A; // Pitch black/dark contrast
+        }
         return 0xCC1a1c23;
     }
 
     public static int getHeaderColor() {
+        if ("OLED".equals(currentTheme)) {
+            return 0xFF111111;
+        }
+        if ("Flash".equals(currentTheme)) {
+            return 0xFF1C1C1C;
+        }
         return 0xCC252836;
     }
 
