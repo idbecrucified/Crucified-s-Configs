@@ -17,7 +17,7 @@ public class SurvivalFlyClient implements ClientModInitializer {
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.survivalfly.open_menu",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RSHIFT,
+                GLFW.GLFW_KEY_RIGHT_SHIFT,
                 "category.survivalfly.general"
         ));
 
