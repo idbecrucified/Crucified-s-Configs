@@ -1,81 +1,46 @@
 package com.example.survivalfly;
 
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import com.example.survivalfly.util.UIUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
-public class HudRenderer implements HudRenderCallback {
-
-    @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
+public class HudRenderer {
+    public static void renderHud(DrawContext context, float delta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.options.hudHidden || client.player == null) {
-            return;
+        if (client.options.hudHidden || client.player == null) return;
+
+        int screenWidth = client.getWindow().getScaledWidth();
+
+        // Render Keystrokes cleanly at top right without excessive spacing
+        if (CrucifiedsConfigs.keystrokes) {
+            int startX = screenWidth - 75;
+            int startY = 10;
+            int size = 20;
+            int gap = 2;
+
+            boolean wPressed = client.options.forwardKey.isPressed();
+            boolean aPressed = client.options.leftKey.isPressed();
+            boolean sPressed = client.options.backKey.isPressed();
+            boolean dPressed = client.options.rightKey.isPressed();
+
+            int bgCol = 0x88000000;
+            int pressCol = 0x88FFFFFF;
+
+            // W Key (Top Center)
+            UIUtils.drawRoundedRect(context, startX + size + gap, startY, size, size, 3, wPressed ? pressCol : bgCol);
+            context.drawCenteredTextWithShadow(client.textRenderer, "W", startX + size + gap + size / 2, startY + 6, 0xFFFFFFFF);
+
+            // A Key (Bottom Left)
+            UIUtils.drawRoundedRect(context, startX, startY + size + gap, size, size, 3, aPressed ? pressCol : bgCol);
+            context.drawCenteredTextWithShadow(client.textRenderer, "A", startX + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
+
+            // S Key (Bottom Middle)
+            UIUtils.drawRoundedRect(context, startX + size + gap, startY + size + gap, size, size, 3, sPressed ? pressCol : bgCol);
+            context.drawCenteredTextWithShadow(client.textRenderer, "S", startX + size + gap + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
+
+            // D Key (Bottom Right)
+            UIUtils.drawRoundedRect(context, startX + (size + gap) * 2, startY + size + gap, size, size, 3, dPressed ? pressCol : bgCol);
+            context.drawCenteredTextWithShadow(client.textRenderer, "D", startX + (size + gap) * 2 + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
         }
-
-        TextRenderer textRenderer = client.textRenderer;
-        int yOffset = 10;
-        int themeAccent = SurvivalFlyClient.getAccentColor();
-
-        // 1. FPS Counter
-        if (SurvivalFlyClient.fpsCounter) {
-            context.drawTextWithShadow(textRenderer, "FPS: " + client.getCurrentFps(), 10, yOffset, themeAccent);
-            yOffset += 12;
-        }
-
-        // 2. CPS Display
-        if (SurvivalFlyClient.cpsDisplay) {
-            context.drawTextWithShadow(textRenderer, "CPS: " + SurvivalFlyClient.getCps(), 10, yOffset, themeAccent);
-            yOffset += 12;
-        }
-
-        // 3. Toggle Sprint Indicator
-        if (SurvivalFlyClient.toggleSprint && client.player.isSprinting()) {
-            context.drawTextWithShadow(textRenderer, "[Sprinting]", 10, yOffset, 0x55FF55);
-            yOffset += 12;
-        }
-
-        // 4. Totem Counter
-        if (SurvivalFlyClient.totemCounter) {
-            int totems = getTotemCount(client);
-            if (totems > 0) {
-                context.drawTextWithShadow(textRenderer, "Totems: " + totems, 10, yOffset, 0xFFA500);
-                yOffset += 12;
-            }
-        }
-
-        // 5. Keystrokes widget display (Top Right)
-        if (SurvivalFlyClient.keystrokes) {
-            int kx = client.getWindow().getScaledWidth() - 70;
-            int ky = 10;
-            context.fill(kx, ky, kx + 60, ky + 60, 0x77000000);
-            
-            boolean w = client.options.forwardKey.isPressed();
-            boolean a = client.options.leftKey.isPressed();
-            boolean s = client.options.backKey.isPressed();
-            boolean d = client.options.rightKey.isPressed();
-
-            context.drawCenteredTextWithShadow(textRenderer, "W", kx + 30, ky + 6, w ? themeAccent : 0xFFFFFF);
-            context.drawTextWithShadow(textRenderer, "A", kx + 10, ky + 26, a ? themeAccent : 0xFFFFFF);
-            context.drawCenteredTextWithShadow(textRenderer, "S", kx + 30, ky + 26, s ? themeAccent : 0xFFFFFF);
-            context.drawTextWithShadow(textRenderer, "D", kx + 50, ky + 26, d ? themeAccent : 0xFFFFFF);
-        }
-    }
-
-    private int getTotemCount(MinecraftClient client) {
-        int count = 0;
-        if (client.player == null) return 0;
-        if (client.player.getMainHandStack().isOf(Items.TOTEM_OF_UNDYING)) count += client.player.getMainHandStack().getCount();
-        if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) count += client.player.getOffHandStack().getCount();
-        for (int i = 0; i < client.player.getInventory().size(); i++) {
-            ItemStack stack = client.player.getInventory().getStack(i);
-            if (stack.isOf(Items.TOTEM_OF_UNDYING)) {
-                count += stack.getCount();
-            }
-        }
-        return count;
     }
 }
