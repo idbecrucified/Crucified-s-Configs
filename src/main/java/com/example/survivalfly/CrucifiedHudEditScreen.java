@@ -1,5 +1,6 @@
 package com.example.survivalfly.screen;
 
+import com.example.survivalfly.SurvivalFlyClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -7,53 +8,120 @@ import net.minecraft.text.Text;
 
 public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
+    private static String selectedCategory = "PvP";
+
+    public CrucifiedHudEditScreen() {
+        this(null);
+    }
 
     public CrucifiedHudEditScreen(Screen parent) {
-        super(Text.literal("Crucified HUD Editor"));
+        super(Text.literal("Crucified's Mod Hub"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
-        int panelWidth = 280;
-        int panelHeight = 220;
-        int panelLeft = (this.width - panelWidth) / 2;
-        int panelTop = (this.height - panelHeight) / 2;
+        super.init();
 
-        // Done / Close Button
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> {
-            if (this.client != null) {
-                this.client.setScreen(this.parent);
-            }
-        }).dimensions(panelLeft + panelWidth - 105, panelTop + panelHeight - 30, 90, 20).build());
+        int panelLeft = (this.width - 340) / 2;
+        int panelTop = (this.height - 220) / 2;
 
-        // Themes Button
+        // Category Buttons (Left Sidebar)
+        int catX = panelLeft + 15;
+        int catY = panelTop + 50;
+        int catWidth = 95;
+        int catHeight = 22;
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("PvP"), b -> {
+            selectedCategory = "PvP";
+            this.clearAndInit();
+        }).dimensions(catX, catY, catWidth, catHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Performance"), b -> {
+            selectedCategory = "Performance";
+            this.clearAndInit();
+        }).dimensions(catX, catY + 28, catWidth, catHeight).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Graphics"), b -> {
+            selectedCategory = "Graphics";
+            this.clearAndInit();
+        }).dimensions(catX, catY + 56, catWidth, catHeight).build());
+
+        // Right Content Area Toggles based on selected category
+        int contentX = panelLeft + 125;
+        int contentY = panelTop + 50;
+        int contentWidth = 200;
+        int contentHeight = 20;
+        int spacing = 24;
+
+        if (selectedCategory.equals("PvP")) {
+            addToggle(contentX, contentY, contentWidth, contentHeight, "Toggle Sprint", SurvivalFlyClient.toggleSprint, val -> SurvivalFlyClient.toggleSprint = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "CPS Display", SurvivalFlyClient.cpsDisplay, val -> SurvivalFlyClient.cpsDisplay = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Keystrokes", SurvivalFlyClient.keystrokes, val -> SurvivalFlyClient.keystrokes = val);
+            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Armor Status", SurvivalFlyClient.armorStatus, val -> SurvivalFlyClient.armorStatus = val);
+            addToggle(contentX, contentY + spacing * 4, contentWidth, contentHeight, "Hit Color", SurvivalFlyClient.hitColor, val -> SurvivalFlyClient.hitColor = val);
+
+        } else if (selectedCategory.equals("Performance")) {
+            addToggle(contentX, contentY, contentWidth, contentHeight, "FPS Counter", SurvivalFlyClient.fpsCounter, val -> SurvivalFlyClient.fpsCounter = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Fast Render", SurvivalFlyClient.fastRender, val -> SurvivalFlyClient.fastRender = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Zoom Toggle", SurvivalFlyClient.zoomToggle, val -> SurvivalFlyClient.zoomToggle = val);
+            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Chunk Animator", SurvivalFlyClient.chunkAnimator, val -> SurvivalFlyClient.chunkAnimator = val);
+
+        } else if (selectedCategory.equals("Graphics")) {
+            addToggle(contentX, contentY, contentWidth, contentHeight, "Fullbright", SurvivalFlyClient.fullbright, val -> SurvivalFlyClient.fullbright = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Totem Counter", SurvivalFlyClient.totemCounter, val -> SurvivalFlyClient.totemCounter = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Custom Sky", SurvivalFlyClient.customSky, val -> SurvivalFlyClient.customSky = val);
+        }
+
+        // Themes Button on Bottom Left
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Themes"), b -> {
             if (this.client != null) {
                 this.client.setScreen(new CrucifiedsThemeScreen(this));
             }
-        }).dimensions(panelLeft + 15, panelTop + panelHeight - 30, 90, 20).build());
+        }).dimensions(panelLeft + 15, panelTop + 185, 95, 20).build());
+
+        // Done Button at bottom right
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> {
+            if (this.client != null) {
+                this.client.setScreen(this.parent);
+            }
+        }).dimensions(panelLeft + 225, panelTop + 185, 100, 20).build());
+    }
+
+    private void addToggle(int x, int y, int width, int height, String label, boolean currentState, java.util.function.Consumer<Boolean> action) {
+        this.addDrawableChild(ButtonWidget.builder(
+            Text.literal(label + ": " + (currentState ? "§aON" : "§cOFF")), b -> {
+                boolean newState = !currentState;
+                action.accept(newState);
+                b.setMessage(Text.literal(label + ": " + (newState ? "§aON" : "§cOFF")));
+            }).dimensions(x, y, width, height).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
 
-        int panelWidth = 280;
-        int panelHeight = 220;
-        int panelLeft = (this.width - panelWidth) / 2;
-        int panelTop = (this.height - panelHeight) / 2;
+        int panelLeft = (this.width - 340) / 2;
+        int panelTop = (this.height - 220) / 2;
 
-        context.fill(panelLeft, panelTop, panelLeft + panelWidth, panelTop + panelHeight, 0xC0101010);
-        context.drawBorder(panelLeft, panelTop, panelWidth, panelHeight, 0xFF555555);
+        // Dark background container box matching active theme
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 220, SurvivalFlyClient.getBackgroundColor());
 
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, panelTop + 12, 0xFFFFFF);
+        // Top Header banner styling matching theme header color
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 35, SurvivalFlyClient.getHeaderColor());
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), panelLeft + 170, panelTop + 8, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 170, panelTop + 20, SurvivalFlyClient.getAccentColor());
+
+        // Theme-colored accent divider line
+        context.fill(panelLeft, panelTop + 35, panelLeft + 340, panelTop + 38, SurvivalFlyClient.getAccentColor());
 
         super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
-    public boolean shouldCloseOnEsc() {
-        return true;
+    public void close() {
+        if (this.client != null) {
+            this.client.setScreen(this.parent);
+        }
     }
 }
