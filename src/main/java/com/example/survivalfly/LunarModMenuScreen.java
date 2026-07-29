@@ -75,7 +75,7 @@ public class LunarModMenuScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         
         // Header title
