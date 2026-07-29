@@ -12,40 +12,50 @@ public class HudRenderer {
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.options.hudHidden || client.player == null) return;
-            renderAllHuds(context, client);
+            renderAllHuds(context, client, false);
         });
     }
 
-    public static void renderAllHuds(DrawContext context, MinecraftClient client) {
+    public static void renderAllHuds(DrawContext context, MinecraftClient client, boolean editing) {
         TextRenderer textRenderer = client.textRenderer;
+        int screenWidth = client.getWindow().getScaledWidth();
+        int screenHeight = client.getWindow().getScaledHeight();
 
         // 1. FPS Counter
         if (CrucifiedsConfigs.fpsCounter) {
             String fpsText = "FPS: " + client.getCurrentFps();
+            if (editing) context.fill(CrucifiedsConfigs.fpsCounterX - 2, CrucifiedsConfigs.fpsCounterY - 2, CrucifiedsConfigs.fpsCounterX + 60, CrucifiedsConfigs.fpsCounterY + 12, 0x55DA70D6);
             context.drawTextWithShadow(textRenderer, fpsText, CrucifiedsConfigs.fpsCounterX, CrucifiedsConfigs.fpsCounterY, 0xFFDA70D6);
         }
 
         // 2. Totem Counter
         if (CrucifiedsConfigs.totemCounter && client.player != null) {
             int totems = getTotemCount(client);
-            if (totems > 0) {
-                context.drawTextWithShadow(textRenderer, "Totems: " + totems, CrucifiedsConfigs.totemCounterX, CrucifiedsConfigs.totemCounterY, 0xFFFF69B4);
+            if (totems > 0 || editing) {
+                String totemText = "Totems: " + (totems > 0 ? totems : 1);
+                if (editing) context.fill(CrucifiedsConfigs.totemCounterX - 2, CrucifiedsConfigs.totemCounterY - 2, CrucifiedsConfigs.totemCounterX + 70, CrucifiedsConfigs.totemCounterY + 12, 0x55DA70D6);
+                context.drawTextWithShadow(textRenderer, totemText, CrucifiedsConfigs.totemCounterX, CrucifiedsConfigs.totemCounterY, 0xFFFF69B4);
             }
         }
 
-        // 3. Keystrokes (W, A, S, D)
+        // 3. Keystrokes
         if (CrucifiedsConfigs.keystrokes) {
-            renderKeystrokes(context, client, textRenderer);
+            if (editing) context.fill(CrucifiedsConfigs.keystrokesX - 2, CrucifiedsConfigs.keystrokesY - 2, CrucifiedsConfigs.keystrokesX + 62, CrucifiedsConfigs.keystrokesY + 42, 0x55DA70D6);
+            renderKeystrokes(context, client, textRenderer, CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY);
         }
 
         // 4. CPS Display
         if (CrucifiedsConfigs.cpsDisplay) {
-            context.drawTextWithShadow(textRenderer, "CPS: 0", 5, 45, 0xFFDA70D6);
+            if (editing) context.fill(CrucifiedsConfigs.cpsDisplayX - 2, CrucifiedsConfigs.cpsDisplayY - 2, CrucifiedsConfigs.cpsDisplayX + 50, CrucifiedsConfigs.cpsDisplayY + 12, 0x55DA70D6);
+            context.drawTextWithShadow(textRenderer, "CPS: 0", CrucifiedsConfigs.cpsDisplayX, CrucifiedsConfigs.cpsDisplayY, 0xFFDA70D6);
         }
 
         // 5. Armor Status
         if (CrucifiedsConfigs.armorStatus && client.player != null) {
-            renderArmorStatus(context, client);
+            int ax = CrucifiedsConfigs.armorStatusX < 0 ? screenWidth + CrucifiedsConfigs.armorStatusX : CrucifiedsConfigs.armorStatusX;
+            int ay = CrucifiedsConfigs.armorStatusY < 0 ? (screenHeight / 2) + CrucifiedsConfigs.armorStatusY : CrucifiedsConfigs.armorStatusY;
+            if (editing) context.fill(ax - 2, ay - 2, ax + 18, ay + 70, 0x55DA70D6);
+            renderArmorStatus(context, client, context, ax, ay);
         }
     }
 
@@ -55,17 +65,12 @@ public class HudRenderer {
         if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) count += client.player.getOffHandStack().getCount();
         for (int i = 0; i < client.player.getInventory().size(); i++) {
             ItemStack stack = client.player.getInventory().getStack(i);
-            if (stack.isOf(Items.TOTEM_OF_UNDYING)) {
-                count += stack.getCount();
-            }
+            if (stack.isOf(Items.TOTEM_OF_UNDYING)) count += stack.getCount();
         }
         return count;
     }
 
-    private static void renderKeystrokes(DrawContext context, MinecraftClient client, TextRenderer textRenderer) {
-        int startX = 5;
-        int startY = 65;
-        
+    private static void renderKeystrokes(DrawContext context, MinecraftClient client, TextRenderer textRenderer, int startX, int startY) {
         boolean w = client.options.forwardKey.isPressed();
         boolean a = client.options.leftKey.isPressed();
         boolean s = client.options.backKey.isPressed();
@@ -84,15 +89,13 @@ public class HudRenderer {
         context.drawCenteredTextWithShadow(textRenderer, "D", startX + 49, startY + 25, 0xFFFFFF);
     }
 
-    private static void renderArmorStatus(DrawContext context, MinecraftClient client) {
-        int x = client.getWindow().getScaledWidth() - 25;
-        int y = client.getWindow().getScaledHeight() / 2 - 50;
-
+    private static void renderArmorStatus(MinecraftClient client, DrawContext context, DrawContext ctx, int x, int y) {
+        int currentY = y;
         for (int i = 3; i >= 0; i--) {
             ItemStack stack = client.player.getInventory().armor.get(i);
             if (!stack.isEmpty()) {
-                context.drawItem(stack, x, y);
-                y += 18;
+                ctx.drawItem(stack, x, currentY);
+                currentY += 18;
             }
         }
     }
