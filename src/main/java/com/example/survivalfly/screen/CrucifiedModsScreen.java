@@ -1,7 +1,8 @@
 package com.example.survivalfly.screen;
 
-import com.example.survivalfly.SurvivalFlyClient;
+import com.example.survivalfly.CrucifiedTheme;
 import com.example.survivalfly.util.UIUtils;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -9,7 +10,6 @@ import net.minecraft.text.Text;
 
 public class CrucifiedModsScreen extends Screen {
     private final Screen parent;
-    private static String selectedCategory = "PvP";
 
     public CrucifiedModsScreen(Screen parent) {
         super(Text.literal("Crucified's Mod Hub"));
@@ -18,99 +18,62 @@ public class CrucifiedModsScreen extends Screen {
 
     @Override
     protected void init() {
-        super.init();
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int panelWidth = 280;
+        int panelHeight = 180;
+        int panelX = centerX - panelWidth / 2;
+        int panelY = centerY - panelHeight / 2;
 
-        int panelLeft = (this.width - 340) / 2;
-        int panelTop = (this.height - 220) / 2;
+        // Back button at the bottom of the panel
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> {
+            this.client.setScreen(parent);
+        }).dimensions(panelX + 160, panelY + panelHeight - 35, 100, 20).build());
 
-        // Category Buttons (Left Sidebar)
-        int catX = panelLeft + 15;
-        int catY = panelTop + 50;
-        int catWidth = 95;
-        int catHeight = 22;
-
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("PvP"), b -> {
-            selectedCategory = "PvP";
-            this.clearAndInit();
-        }).dimensions(catX, catY, catWidth, catHeight).build());
-
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Performance"), b -> {
-            selectedCategory = "Performance";
-            this.clearAndInit();
-        }).dimensions(catX, catY + 28, catWidth, catHeight).build());
-
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Graphics"), b -> {
-            selectedCategory = "Graphics";
-            this.clearAndInit();
-        }).dimensions(catX, catY + 56, catWidth, catHeight).build());
-
-        // Right Content Toggles
-        int contentX = panelLeft + 125;
-        int contentY = panelTop + 50;
-        int contentWidth = 200;
-        int contentHeight = 20;
-        int spacing = 24;
-
-        if (selectedCategory.equals("PvP")) {
-            addToggle(contentX, contentY, contentWidth, contentHeight, "Toggle Sprint", SurvivalFlyClient.toggleSprint, val -> SurvivalFlyClient.toggleSprint = val);
-            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "CPS Display", SurvivalFlyClient.cpsDisplay, val -> SurvivalFlyClient.cpsDisplay = val);
-            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Keystrokes", SurvivalFlyClient.keystrokes, val -> SurvivalFlyClient.keystrokes = val);
-            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Armor Status", SurvivalFlyClient.armorStatus, val -> SurvivalFlyClient.armorStatus = val);
-            addToggle(contentX, contentY + spacing * 4, contentWidth, contentHeight, "Hit Color", SurvivalFlyClient.hitColor, val -> SurvivalFlyClient.hitColor = val);
-
-        } else if (selectedCategory.equals("Performance")) {
-            addToggle(contentX, contentY, contentWidth, contentHeight, "FPS Counter", SurvivalFlyClient.fpsCounter, val -> SurvivalFlyClient.fpsCounter = val);
-            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Fast Render", SurvivalFlyClient.fastRender, val -> SurvivalFlyClient.fastRender = val);
-            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Zoom Toggle", SurvivalFlyClient.zoomToggle, val -> SurvivalFlyClient.zoomToggle = val);
-            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Chunk Animator", SurvivalFlyClient.chunkAnimator, val -> SurvivalFlyClient.chunkAnimator = val);
-
-        } else if (selectedCategory.equals("Graphics")) {
-            addToggle(contentX, contentY, contentWidth, contentHeight, "Fullbright", SurvivalFlyClient.fullbright, val -> SurvivalFlyClient.fullbright = val);
-            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Totem Counter", SurvivalFlyClient.totemCounter, val -> SurvivalFlyClient.totemCounter = val);
-            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Custom Sky", SurvivalFlyClient.customSky, val -> SurvivalFlyClient.customSky = val);
-        }
-
-        // Back Button
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), b -> {
-            if (this.client != null) {
-                this.client.setScreen(this.parent);
-            }
-        }).dimensions(panelLeft + 225, panelTop + 185, 100, 20).build());
-    }
-
-    private void addToggle(int x, int y, int width, int height, String label, boolean currentState, java.util.function.Consumer<Boolean> action) {
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.literal(label + ": " + (currentState ? "§aON" : "§cOFF")), b -> {
-                boolean newState = !currentState;
-                action.accept(newState);
-                b.setMessage(Text.literal(label + ": " + (newState ? "§aON" : "§cOFF")));
-            }).dimensions(x, y, width, height).build());
+        // Add other category/mod toggle buttons here as needed
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
 
-        int panelLeft = (this.width - 340) / 2;
-        int panelTop = (this.height - 220) / 2;
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int panelWidth = 280;
+        int panelHeight = 180;
+        int panelX = centerX - panelWidth / 2;
+        int panelY = centerY - panelHeight / 2;
 
-        // Rounded container box
-        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 340, 220, 10, SurvivalFlyClient.getBackgroundColor());
+        // 1. Draw main background panel
+        UIUtils.drawRoundedRect(context, panelX, panelY, panelWidth, panelHeight, 8, 0xCC1a1c23);
 
-        // Rounded Header banner
-        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 340, 35, 10, SurvivalFlyClient.getHeaderColor());
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), panelLeft + 170, panelTop + 8, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 170, panelTop + 20, SurvivalFlyClient.getAccentColor());
+        // 2. Draw Header with Theme Gradient and top-only rounded corners (flat bottom)
+        int headerHeight = 35;
+        int themeColor1 = CrucifiedTheme.getPrimaryColor(); // Adjust based on your theme implementation
+        int themeColor2 = CrucifiedTheme.getSecondaryColor();
 
-        context.fill(panelLeft, panelTop + 35, panelLeft + 340, panelTop + 38, SurvivalFlyClient.getAccentColor());
+        // Draw top rounded portion and fill the lower part of the header square to prevent corner artifacts
+        context.fillGradient(panelX + 8, panelY, panelX + panelWidth - 8, panelY + headerHeight, themeColor1, themeColor2);
+        context.fill(panelX, panelY + 8, panelX + panelWidth, panelY + headerHeight, themeColor2);
+        // Redraw top rounded caps to preserve smooth top corners
+        UIUtils.drawRoundedRect(context, panelX, panelY, panelWidth, headerHeight, 8, 0x00000000); // handled via gradient fill above
+
+        // 3. Draw Separator Line
+        context.fill(panelX, panelY + headerHeight, panelX + panelWidth, panelY + headerHeight + 2, 0xFFFF007F);
+
+        // 4. Render Larger Header Text (Title)
+        context.getMatrices().push();
+        context.getMatrices().scale(1.25F, 1.25F, 1.0F);
+        String titleText = "Crucified's Mod Hub";
+        int scaledWidth = this.textRenderer.getWidth(titleText);
+        context.drawText(this.textRenderer, titleText, (int)((panelX + (panelWidth / 2) - (scaledWidth * 1.25F / 2)) / 1.25F), (int)((panelY + 6) / 1.25F), 0xFFFFFFFF, true);
+        context.getMatrices().pop();
+
+        // Subtitle text
+        String subtitleText = "Category: PvP";
+        int subWidth = this.textRenderer.getWidth(subtitleText);
+        context.drawText(this.textRenderer, subtitleText, panelX + (panelWidth / 2) - (subWidth / 2), panelY + 22, 0xFFFFB6C1, true);
 
         super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public void close() {
-        if (this.client != null) {
-            this.client.setScreen(this.parent);
-        }
     }
 }
