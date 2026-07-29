@@ -73,6 +73,13 @@ public class CrucifiedHudEditScreen extends Screen {
             addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Custom Sky", SurvivalFlyClient.customSky, val -> SurvivalFlyClient.customSky = val);
         }
 
+        // Themes Button on Bottom Left
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Themes"), b -> {
+            if (this.client != null) {
+                this.client.setScreen(new CrucifiedThemeScreen(this));
+            }
+        }).dimensions(panelLeft + 15, panelTop + 185, 95, 20).build());
+
         // Done Button at bottom right
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> {
             if (this.client != null) {
@@ -97,16 +104,16 @@ public class CrucifiedHudEditScreen extends Screen {
         int panelLeft = (this.width - 340) / 2;
         int panelTop = (this.height - 220) / 2;
 
-        // Dark background container box matching Mod Hub styling
-        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 220, 0xEE1A1A24);
+        // Dark background container box matching active theme
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 220, SurvivalFlyClient.getBackgroundColor());
 
-        // Top Header banner styling
-        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 35, 0xFF8A49F5);
+        // Top Header banner styling matching theme header color
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 35, SurvivalFlyClient.getHeaderColor());
         context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), panelLeft + 170, panelTop + 8, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 170, panelTop + 20, 0xFF55FF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 170, panelTop + 20, SurvivalFlyClient.getAccentColor());
 
-        // Pink accent divider line
-        context.fill(panelLeft, panelTop + 35, panelLeft + 340, panelTop + 38, 0xFFFF55FF);
+        // Theme-colored accent divider line
+        context.fill(panelLeft, panelTop + 35, panelLeft + 340, panelTop + 38, SurvivalFlyClient.getAccentColor());
 
         super.render(context, mouseX, mouseY, delta);
     }
