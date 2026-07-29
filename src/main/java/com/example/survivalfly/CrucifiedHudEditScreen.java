@@ -22,8 +22,8 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
         int buttonWidth = 100;
         int buttonHeight = 22;
-        int buttonX = (this.width - buttonWidth) / 2; // Exact horizontal center
-        int buttonY = (this.height / 2) + 20;         // Cleanly placed near the middle
+        int buttonX = (this.width - buttonWidth) / 2;
+        int buttonY = (this.height / 2) + 20;
 
         this.addDrawableChild(ButtonWidget.builder(
                 Text.literal("MODS"),
@@ -108,7 +108,6 @@ public class CrucifiedHudEditScreen extends Screen {
             HudRenderer.renderAllHuds(context, this.client, true);
         }
 
-        // Render Custom Logo at top center
         int logoWidth = 160;
         int logoHeight = 60;
         int logoX = (this.width - logoWidth) / 2;
@@ -120,7 +119,7 @@ public class CrucifiedHudEditScreen extends Screen {
             context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MODS"), this.width / 2, logoY + 20, 0xFFFFFF);
         }
 
-        super.render(context, mouseX, mouseY, button);
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
