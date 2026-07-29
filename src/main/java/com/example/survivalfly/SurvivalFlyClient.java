@@ -8,8 +8,13 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SurvivalFlyClient implements ClientModInitializer {
     public static KeyBinding openMenuKey;
+    public static final List<Long> clickTimes = new ArrayList<>();
+    private static boolean wasMouseDown = false;
 
     @Override
     public void onInitializeClient() {
@@ -27,6 +32,19 @@ public class SurvivalFlyClient implements ClientModInitializer {
                 client.setScreen(new CrucifiedHudEditScreen());
             }
 
+            // Track live CPS via GLFW mouse state
+            if (client.getWindow() != null) {
+                boolean isMouseDown = GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
+                if (isMouseDown && !wasMouseDown) {
+                    clickTimes.add(System.currentTimeMillis());
+                }
+                wasMouseDown = isMouseDown;
+            }
+
+            // Clean up clicks older than 1 second
+            long now = System.currentTimeMillis();
+            clickTimes.removeIf(time -> now - time > 1000);
+
             if (client.player != null) {
                 // Fullbright Logic
                 if (CrucifiedsConfigs.fullbright) {
@@ -43,5 +61,11 @@ public class SurvivalFlyClient implements ClientModInitializer {
                 }
             }
         });
+    }
+
+    public static int getCps() {
+        long now = System.currentTimeMillis();
+        clickTimes.removeIf(time -> now - time > 1000);
+        return clickTimes.size();
     }
 }
