@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "crucifieds-configs",
+  "version": "${version}",
+  "name": "Crucified's Configs",
+  "description": "Custom client utility and HUD config menu.",
+  "authors": ["idbecrucified"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/crucifieds-configs/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.example.survivalfly.SurvivalFlyClient"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.14.22",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
