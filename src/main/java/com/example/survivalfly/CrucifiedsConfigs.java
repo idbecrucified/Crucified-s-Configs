@@ -1,6 +1,9 @@
 package com.example.survivalfly;
 
 public class CrucifiedsConfigs {
+    // Theme Settings
+    public static String currentTheme = "Gamer";
+
     // PvP & HUD Elements
     public static boolean toggleSprint = true;
     public static boolean totemCounter = true;
@@ -18,8 +21,8 @@ public class CrucifiedsConfigs {
     public static int keystrokesY = 65;
     public static int cpsDisplayX = 5;
     public static int cpsDisplayY = 45;
-    public static int armorStatusX = -25; // Relative to right side by default
-    public static int armorStatusY = -50; // Relative to center by default
+    public static int armorStatusX = -25;
+    public static int armorStatusY = -50;
 
     // Performance
     public static boolean entityCulling = true;
