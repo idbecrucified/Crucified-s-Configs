@@ -1,8 +1,10 @@
 package com.example.survivalfly.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -55,9 +57,9 @@ public class CrucifiedHudEditScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, delta);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
 
         // Draw Logo at the top
         int logoWidth = 48;
@@ -65,21 +67,16 @@ public class CrucifiedHudEditScreen extends Screen {
         int logoX = (this.width - logoWidth) / 2;
         int logoY = 10;
         
-        graphics.drawTexture(
-            Identifier.of("survivalfly", "textures/gui/logo.png"), 
-            logoX, logoY, 
-            0, 0, 
-            logoWidth, logoHeight, 
-            logoWidth, logoHeight
-        );
+        RenderSystem.setShaderTexture(0, new Identifier("survivalfly", "textures/gui/logo.png"));
+        DrawableHelper.drawTexture(matrices, logoX, logoY, 0, 0, logoWidth, logoHeight, logoWidth, logoHeight);
 
         // Draw Title below the logo
-        graphics.drawCenteredString(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
+        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
 
         // Fixed description section positioned safely at the bottom of the screen
         int descY = this.height - 35;
-        graphics.drawCenteredString(this.textRenderer, "[Descriptions]", this.width / 2, descY, 0xAAAAAA);
-        graphics.drawCenteredString(this.textRenderer, this.currentDescription, this.width / 2, descY + 12, 0xFFFFFF);
+        drawCenteredText(matrices, this.textRenderer, Text.literal("[Descriptions]"), this.width / 2, descY, 0xAAAAAA);
+        drawCenteredText(matrices, this.textRenderer, Text.literal(this.currentDescription), this.width / 2, descY + 12, 0xFFFFFF);
     }
 
     @Override
