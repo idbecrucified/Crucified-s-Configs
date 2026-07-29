@@ -9,19 +9,19 @@ public class CrucifiedTheme {
         String theme = getCurrentTheme();
         switch (theme) {
             case "Sea":
-                return 0xFF00BFFF;     // Blue
+                return 0xFF00BFFF;
             case "Sun":
-                return 0xFFFF7F00;     // Orange
+                return 0xFFFF7F00;
             case "OLED":
-                return 0xFF444444;    // Gray accent
+                return 0xFF444444;
             case "Flash":
-                return 0xFFFFFFFF;   // White
+                return 0xFFFFFFFF;
             case "Natural":
-                return 0xFF228B22; // Forest Green
+                return 0xFF228B22;
             case "Rock":
-                return 0xFF708090;    // Slate Gray
+                return 0xFF708090;
             default:
-                return 0xFFFF007F;        // Gamer (Hot Pink)
+                return 0xFFFF007F;
         }
     }
 
@@ -29,29 +29,29 @@ public class CrucifiedTheme {
         String theme = getCurrentTheme();
         switch (theme) {
             case "Sea":
-                return 0xFF00FFFF;     // Cyan
+                return 0xFF00FFFF;
             case "Sun":
-                return 0xFFFFD700;     // Yellow
+                return 0xFFFFD700;
             case "OLED":
-                return 0xFF666666;    // Lighter Gray outline
+                return 0xFF666666;
             case "Flash":
-                return 0xFFCCCCCC;   // Off-White
+                return 0xFFCCCCCC;
             case "Natural":
-                return 0xFF32CD32; // Lime Green
+                return 0xFF32CD32;
             case "Rock":
-                return 0xFFA9A9A9;    // Dark Gray Rock
+                return 0xFFA9A9A9;
             default:
-                return 0xFFFF69B4;        // Gamer (Pink)
+                return 0xFFFF69B4;
         }
     }
 
     public static int getBackgroundColor() {
         String theme = getCurrentTheme();
         if ("OLED".equals(theme)) {
-            return 0xFF000000; // Pure black for OLED
+            return 0xFF000000;
         }
         if ("Flash".equals(theme)) {
-            return 0xFF0A0A0A; // Pitch black/dark contrast
+            return 0xFF0A0A0A;
         }
         return 0xCC1a1c23;
     }
