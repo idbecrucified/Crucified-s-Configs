@@ -14,11 +14,11 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Register keybinding (defaults to 'R') to open the HUD edit screen
+        // Register keybinding to open the HUD edit screen using Right Shift
         editScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.survivalfly.editscreen",
             InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_R,
+            GLFW.GLFW_KEY_RIGHT_SHIFT,
             "category.survivalfly"
         ));
 
