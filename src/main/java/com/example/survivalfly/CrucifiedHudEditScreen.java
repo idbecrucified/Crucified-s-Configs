@@ -1,5 +1,6 @@
 package com.example.survivalfly.screen;
 
+import com.example.survivalfly.SurvivalFlyClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -7,20 +8,7 @@ import net.minecraft.text.Text;
 
 public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
-    private String selectedCategory = "PvP";
-
-    // Mod Toggle States across multiple categories
-    private boolean toggleSprint = true;
-    private boolean cpsDisplay = true;
-    private boolean keystrokes = true;
-    
-    private boolean fpsCounter = true;
-    private boolean fastRender = false;
-    private boolean zoomToggle = true;
-
-    private boolean fullbright = true;
-    private boolean armorStatus = true;
-    private boolean totemCounter = true;
+    private static String selectedCategory = "PvP";
 
     public CrucifiedHudEditScreen() {
         this(null);
@@ -66,52 +54,52 @@ public class CrucifiedHudEditScreen extends Screen {
         int contentHeight = 20;
 
         if (selectedCategory.equals("PvP")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Toggle Sprint: " + (toggleSprint ? "ON" : "OFF")), b -> {
-                toggleSprint = !toggleSprint;
-                b.setMessage(Text.literal("Toggle Sprint: " + (toggleSprint ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Toggle Sprint: " + (SurvivalFlyClient.toggleSprint ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.toggleSprint = !SurvivalFlyClient.toggleSprint;
+                b.setMessage(Text.literal("Toggle Sprint: " + (SurvivalFlyClient.toggleSprint ? "ON" : "OFF")));
             }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
 
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("CPS Display: " + (cpsDisplay ? "ON" : "OFF")), b -> {
-                cpsDisplay = !cpsDisplay;
-                b.setMessage(Text.literal("CPS Display: " + (cpsDisplay ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("CPS Display: " + (SurvivalFlyClient.cpsDisplay ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.cpsDisplay = !SurvivalFlyClient.cpsDisplay;
+                b.setMessage(Text.literal("CPS Display: " + (SurvivalFlyClient.cpsDisplay ? "ON" : "OFF")));
             }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
 
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Keystrokes: " + (keystrokes ? "ON" : "OFF")), b -> {
-                keystrokes = !keystrokes;
-                b.setMessage(Text.literal("Keystrokes: " + (keystrokes ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Keystrokes: " + (SurvivalFlyClient.keystrokes ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.keystrokes = !SurvivalFlyClient.keystrokes;
+                b.setMessage(Text.literal("Keystrokes: " + (SurvivalFlyClient.keystrokes ? "ON" : "OFF")));
             }).dimensions(contentX, contentY + 50, contentWidth, contentHeight).build());
 
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Armor Status: " + (SurvivalFlyClient.armorStatus ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.armorStatus = !SurvivalFlyClient.armorStatus;
+                b.setMessage(Text.literal("Armor Status: " + (SurvivalFlyClient.armorStatus ? "ON" : "OFF")));
+            }).dimensions(contentX, contentY + 75, contentWidth, contentHeight).build());
+
         } else if (selectedCategory.equals("Performance")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("FPS Counter: " + (fpsCounter ? "ON" : "OFF")), b -> {
-                fpsCounter = !fpsCounter;
-                b.setMessage(Text.literal("FPS Counter: " + (fpsCounter ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("FPS Counter: " + (SurvivalFlyClient.fpsCounter ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.fpsCounter = !SurvivalFlyClient.fpsCounter;
+                b.setMessage(Text.literal("FPS Counter: " + (SurvivalFlyClient.fpsCounter ? "ON" : "OFF")));
             }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
 
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fast Render: " + (fastRender ? "ON" : "OFF")), b -> {
-                fastRender = !fastRender;
-                b.setMessage(Text.literal("Fast Render: " + (fastRender ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fast Render: " + (SurvivalFlyClient.fastRender ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.fastRender = !SurvivalFlyClient.fastRender;
+                b.setMessage(Text.literal("Fast Render: " + (SurvivalFlyClient.fastRender ? "ON" : "OFF")));
             }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
 
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Zoom Toggle: " + (zoomToggle ? "ON" : "OFF")), b -> {
-                zoomToggle = !zoomToggle;
-                b.setMessage(Text.literal("Zoom Toggle: " + (zoomToggle ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Zoom Toggle: " + (SurvivalFlyClient.zoomToggle ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.zoomToggle = !SurvivalFlyClient.zoomToggle;
+                b.setMessage(Text.literal("Zoom Toggle: " + (SurvivalFlyClient.zoomToggle ? "ON" : "OFF")));
             }).dimensions(contentX, contentY + 50, contentWidth, contentHeight).build());
 
         } else if (selectedCategory.equals("Graphics")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fullbright: " + (fullbright ? "ON" : "OFF")), b -> {
-                fullbright = !fullbright;
-                b.setMessage(Text.literal("Fullbright: " + (fullbright ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fullbright: " + (SurvivalFlyClient.fullbright ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.fullbright = !SurvivalFlyClient.fullbright;
+                b.setMessage(Text.literal("Fullbright: " + (SurvivalFlyClient.fullbright ? "ON" : "OFF")));
             }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
 
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Armor Status: " + (armorStatus ? "ON" : "OFF")), b -> {
-                armorStatus = !armorStatus;
-                b.setMessage(Text.literal("Armor Status: " + (armorStatus ? "ON" : "OFF")));
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Totem Counter: " + (SurvivalFlyClient.totemCounter ? "ON" : "OFF")), b -> {
+                SurvivalFlyClient.totemCounter = !SurvivalFlyClient.totemCounter;
+                b.setMessage(Text.literal("Totem Counter: " + (SurvivalFlyClient.totemCounter ? "ON" : "OFF")));
             }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Totem Counter: " + (totemCounter ? "ON" : "OFF")), b -> {
-                totemCounter = !totemCounter;
-                b.setMessage(Text.literal("Totem Counter: " + (totemCounter ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 50, contentWidth, contentHeight).build());
         }
 
         // Done Button at bottom right
@@ -129,7 +117,7 @@ public class CrucifiedHudEditScreen extends Screen {
         int panelLeft = (this.width - 320) / 2;
         int panelTop = (this.height - 200) / 2;
 
-        // Dark background container box matching your layout style
+        // Dark background container box matching your menu style
         context.fill(panelLeft, panelTop, panelLeft + 320, panelTop + 200, 0xEE1A1A24);
 
         // Top Header banner styling
