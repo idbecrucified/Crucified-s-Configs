@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
-    private static final Identifier LOGO_TEXTURE = new Identifier("survivalfly", "textures/gui/icon.png");
+    private static final Identifier LOGO_TEXTURE = new Identifier("survivalfly", "textures/gui/logo.png");
     
     private String draggingHud = null;
     private int dragOffsetX = 0;
