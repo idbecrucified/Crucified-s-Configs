@@ -1,8 +1,10 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
+    public static String currentTheme = "Gamer";
+
     public static String getCurrentTheme() {
-        return CrucifiedsConfigs.currentTheme != null ? CrucifiedsConfigs.currentTheme : "Gamer";
+        return currentTheme != null ? currentTheme : "Gamer";
     }
 
     public static int getPrimaryColor() {
