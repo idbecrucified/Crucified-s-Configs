@@ -1,90 +1,101 @@
 package com.example.survivalfly;
 
-import com.example.survivalfly.util.UIUtils;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 
-public class HudRenderer {
-    public static void renderHud(DrawContext context, float delta) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.options.hudHidden || client.player == null) return;
+public class HudEditorScreen extends Screen {
+    private String selectedHud = null;
+    private int dragOffsetX = 0;
+    private int dragOffsetY = 0;
 
-        int screenWidth = client.getWindow().getScaledWidth();
-        int screenHeight = client.getWindow().getScaledHeight();
+    public HudEditorScreen() {
+        super(Text.literal("HUD Editor"));
+    }
 
-        // 1. Keystrokes HUD
-        if (CrucifiedsConfigs.keystrokes) {
-            int startX = screenWidth - 75;
-            int startY = 10;
-            int size = 20;
-            int gap = 2;
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context, mouseX, mouseY, delta);
 
-            boolean wPressed = client.options.forwardKey.isPressed();
-            boolean aPressed = client.options.leftKey.isPressed();
-            boolean sPressed = client.options.backKey.isPressed();
-            boolean dPressed = client.options.rightKey.isPressed();
-
-            int bgCol = 0x88000000;
-            int pressCol = 0x88FFFFFF;
-
-            UIUtils.drawRoundedRect(context, startX + size + gap, startY, size, size, 3, wPressed ? pressCol : bgCol);
-            context.drawCenteredTextWithShadow(client.textRenderer, "W", startX + size + gap + size / 2, startY + 6, 0xFFFFFFFF);
-
-            UIUtils.drawRoundedRect(context, startX, startY + size + gap, size, size, 3, aPressed ? pressCol : bgCol);
-            context.drawCenteredTextWithShadow(client.textRenderer, "A", startX + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
-
-            UIUtils.drawRoundedRect(context, startX + size + gap, startY + size + gap, size, size, 3, sPressed ? pressCol : bgCol);
-            context.drawCenteredTextWithShadow(client.textRenderer, "S", startX + size + gap + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
-
-            UIUtils.drawRoundedRect(context, startX + (size + gap) * 2, startY + size + gap, size, size, 3, dPressed ? pressCol : bgCol);
-            context.drawCenteredTextWithShadow(client.textRenderer, "D", startX + (size + gap) * 2 + size / 2, startY + size + gap + 6, 0xFFFFFFFF);
-        }
-
-        // 2. CPS Display HUD
-        if (CrucifiedsConfigs.cpsDisplay) {
-            String cpsText = "CPS: 0";
-            UIUtils.drawRoundedRect(context, 10, 10, 60, 18, 3, 0x88000000);
-            context.drawTextWithShadow(client.textRenderer, cpsText, 15, 15, 0xFFFFFFFF);
-        }
-
-        // 3. Toggle Sprint Status HUD
-        if (CrucifiedsConfigs.toggleSprint) {
-            String sprintText = client.player.isSprinting() ? "[Sprinting]" : "[Sprint: Off]";
-            context.drawTextWithShadow(client.textRenderer, sprintText, 10, 35, 0xFF55FF55);
-        }
-
-        // 4. Armor Status HUD
-        if (CrucifiedsConfigs.armorStatus) {
-            int x = 10;
-            int y = screenHeight - 60;
-            for (ItemStack stack : client.player.getArmorItems()) {
-                if (!stack.isEmpty()) {
-                    context.drawItem(stack, x, y);
-                    y -= 20;
-                }
+        if (selectedHud != null) {
+            if (GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_RELEASE) {
+                selectedHud = null;
+            } else {
+                updateHudPosition(selectedHud, mouseX - dragOffsetX, mouseY - dragOffsetY);
             }
         }
 
-        // 5. Totem Counter HUD
-        if (CrucifiedsConfigs.totemCounter) {
-            int totemCount = 0;
-            for (ItemStack stack : client.player.getInventory().main) {
-                if (stack.isOf(Items.TOTEM_OF_UNDYING)) {
-                    totemCount += stack.getCount();
-                }
-            }
-            if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
-                totemCount += client.player.getOffHandStack().getCount();
-            }
+        // Render draggable interactive previews using config colors
+        drawHudBox(context, "FPS: 60", CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY, "fps");
+        drawHudBox(context, "Keystrokes", CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY, "keystrokes");
+        drawHudBox(context, "Armor Status", CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY, "armor");
+        drawHudBox(context, "CPS: 0", CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY, "cps");
+        drawHudBox(context, "Totem: 0", CrucifiedsConfigs.totemX, CrucifiedsConfigs.totemY, "totem");
 
-            int totemX = screenWidth / 2 - 10;
-            int totemY = screenHeight - 65;
-            
-            UIUtils.drawRoundedRect(context, totemX - 25, totemY - 4, 60, 24, 4, 0x88000000);
-            context.drawItem(new ItemStack(Items.TOTEM_OF_UNDYING), totemX - 20, totemY);
-            context.drawTextWithShadow(client.textRenderer, "x" + totemCount, totemX + 2, totemY + 6, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Drag HUD elements to reposition. Press Right Shift or ESC to exit.", this.width / 2, 20, CrucifiedTheme.getPrimaryColor());
+        super.render(context, mouseX, mouseY, delta);
+    }
+
+    private void drawHudBox(DrawContext context, String text, int x, int y, String id) {
+        int w = textRenderer.getWidth(text) + 6;
+        int h = 14;
+        double scaledMouseX = client.mouse.getX() * (double)client.getWindow().getScaledWidth() / (double)client.getWindow().getWidth();
+        double scaledMouseY = client.mouse.getY() * (double)client.getWindow().getScaledHeight() / (double)client.getWindow().getHeight();
+        boolean hovered = scaledMouseX >= x && scaledMouseX <= x + w && scaledMouseY >= y && scaledMouseY <= y + h;
+
+        if (CrucifiedsConfigs.hudBackground) {
+            context.fill(x, y, x + w, y + h, CrucifiedsConfigs.hudBackgroundColor);
         }
+        context.drawBorder(x, y, w, h, hovered ? CrucifiedTheme.getPrimaryColor() : 0xFFFFFFFF);
+        context.drawText(this.textRenderer, text, x + 3, y + 3, CrucifiedsConfigs.hudTextColor, true);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            if (isHovered(CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY, "FPS: 60", mouseX, mouseY)) {
+                selectedHud = "fps"; dragOffsetX = (int)(mouseX - CrucifiedsConfigs.fpsX); dragOffsetY = (int)(mouseY - CrucifiedsConfigs.fpsY);
+            } else if (isHovered(CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY, "Keystrokes", mouseX, mouseY)) {
+                selectedHud = "keystrokes"; dragOffsetX = (int)(mouseX - CrucifiedsConfigs.keystrokesX); dragOffsetY = (int)(mouseY - CrucifiedsConfigs.keystrokesY);
+            } else if (isHovered(CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY, "Armor Status", mouseX, mouseY)) {
+                selectedHud = "armor"; dragOffsetX = (int)(mouseX - CrucifiedsConfigs.armorX); dragOffsetY = (int)(mouseY - CrucifiedsConfigs.armorY);
+            } else if (isHovered(CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY, "CPS: 0", mouseX, mouseY)) {
+                selectedHud = "cps"; dragOffsetX = (int)(mouseX - CrucifiedsConfigs.cpsX); dragOffsetY = (int)(mouseY - CrucifiedsConfigs.cpsY);
+            } else if (isHovered(CrucifiedsConfigs.totemX, CrucifiedsConfigs.totemY, "Totem: 0", mouseX, mouseY)) {
+                selectedHud = "totem"; dragOffsetX = (int)(mouseX - CrucifiedsConfigs.totemX); dragOffsetY = (int)(mouseY - CrucifiedsConfigs.totemY);
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private boolean isHovered(int x, int y, String text, double mouseX, double mouseY) {
+        int w = textRenderer.getWidth(text) + 6;
+        int h = 14;
+        return mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
+    }
+
+    private void updateHudPosition(String id, int x, int y) {
+        switch(id) {
+            case "fps": CrucifiedsConfigs.fpsX = x; CrucifiedsConfigs.fpsY = y; break;
+            case "keystrokes": CrucifiedsConfigs.keystrokesX = x; CrucifiedsConfigs.keystrokesY = y; break;
+            case "armor": CrucifiedsConfigs.armorX = x; CrucifiedsConfigs.armorY = y; break;
+            case "cps": CrucifiedsConfigs.cpsX = x; CrucifiedsConfigs.cpsY = y; break;
+            case "totem": CrucifiedsConfigs.totemX = x; CrucifiedsConfigs.totemY = y; break;
+        }
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT || keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            this.close();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
     }
 }
