@@ -18,11 +18,11 @@ public class HudRenderer {
 
         // 1. FPS Counter
         if (CrucifiedsConfigs.fpsCounter) {
-            String fpsText = "FPS: " + MinecraftClient.getCurrentFps();
+            String fpsText = "FPS: " + client.getCurrentFps();
             drawElement(context, textRenderer, fpsText, CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY);
         }
 
-        // 2. Keystrokes (Placeholder layout for W, A, S, D)
+        // 2. Keystrokes
         if (CrucifiedsConfigs.keystrokes) {
             drawElement(context, textRenderer, "[W] [A] [S] [D]", CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY);
         }
@@ -35,7 +35,7 @@ public class HudRenderer {
 
         // 4. CPS Display
         if (CrucifiedsConfigs.cpsDisplay) {
-            String cpsText = "CPS: 0"; // Hook up to your actual CPS tracker if available
+            String cpsText = "CPS: 0";
             drawElement(context, textRenderer, cpsText, CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY);
         }
 
@@ -51,12 +51,10 @@ public class HudRenderer {
         int width = textRenderer.getWidth(text) + 6;
         int height = 14;
 
-        // Render background if enabled in configs
         if (CrucifiedsConfigs.hudBackground) {
             context.fill(x, y, x + width, y + height, CrucifiedsConfigs.hudBackgroundColor);
         }
 
-        // Render text using config text color
         context.drawText(textRenderer, text, x + 3, y + 3, CrucifiedsConfigs.hudTextColor, true);
     }
 
