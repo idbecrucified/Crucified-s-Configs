@@ -10,7 +10,6 @@ public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
     private final String currentDescription = "Hover over or toggle settings to see descriptions here.";
 
-    // No-argument constructor to match SurvivalFlyClient.java call
     public CrucifiedHudEditScreen() {
         this(null);
     }
@@ -25,7 +24,7 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
 
         int centerX = this.width / 2;
-        int startY = 65;
+        int startY = 90; // Pushed down to prevent overlapping with the title/logo
         int buttonWidth = 200;
         int buttonHeight = 20;
         int spacing = 4;
@@ -57,7 +56,7 @@ public class CrucifiedHudEditScreen extends Screen {
             if (this.client != null) {
                 this.client.setScreen(this.parent);
             }
-        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 10, buttonWidth, buttonHeight).build());
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 6, buttonWidth, buttonHeight).build());
     }
 
     @Override
@@ -65,11 +64,11 @@ public class CrucifiedHudEditScreen extends Screen {
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
-        // Draw Logo at the top
+        // Draw Logo at the top (Make sure survivalfly/textures/gui/logo.png exists in your resources)
         int logoWidth = 48;
         int logoHeight = 48;
         int logoX = (this.width - logoWidth) / 2;
-        int logoY = 10;
+        int logoY = 15;
         
         context.drawTexture(
             new Identifier("survivalfly", "textures/gui/logo.png"), 
@@ -80,7 +79,7 @@ public class CrucifiedHudEditScreen extends Screen {
         );
 
         // Draw Title below the logo
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 6, 0xFF55FF);
 
         // Description section at the bottom of the screen
         int descY = this.height - 35;
