@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LunarModMenuScreen extends Screen {
-    public final Screen parent;
+    private final Screen parent;
     private String currentCategory = "PvP";
 
     public LunarModMenuScreen(Screen parent) {
@@ -53,12 +53,12 @@ public class LunarModMenuScreen extends Screen {
             int cardX = gridStartX + col * (cardWidth + spacingX);
             int cardY = gridStartY + row * (cardHeight + spacingY);
 
-            // Toggle button for each mod card (refreshes screen safely on click)
+            // Toggle button for each mod card
             this.addDrawableChild(ButtonWidget.builder(
                     Text.literal(mod.getState() ? "§dENABLED" : "§7DISABLED"),
                     button -> {
                         mod.toggle();
-                        this.client.setScreen(new LunarModMenuScreen(this.parent));
+                        this.clearAndInit();
                     }
             ).dimensions(cardX, cardY + cardHeight - 22, cardWidth, 20).build());
 
@@ -72,7 +72,7 @@ public class LunarModMenuScreen extends Screen {
                 Text.literal((selected ? "§d> " : "§7") + category),
                 button -> {
                     this.currentCategory = category;
-                    this.client.setScreen(new LunarModMenuScreen(this.parent));
+                    this.clearAndInit();
                 }
         ).dimensions(x, y, 100, 20).build());
     }
