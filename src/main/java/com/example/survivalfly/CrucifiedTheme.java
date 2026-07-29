@@ -1,42 +1,31 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
+    public static String currentTheme = "Default";
+
     public static int getPrimaryColor() {
-        switch (CrucifiedsConfigs.currentTheme) {
-            case "Sea": return 0xFF00BFFF;     // Deep Sky Blue
-            case "Sun": return 0xFFFF8C00;     // Dark Orange
-            case "OLED": return 0xFF444444;    // Dark Gray Accent
-            case "Flash": return 0xFFFFFFFF;   // White
-            case "Natural": return 0xFF32CD32; // Lime Green
-            case "Rock": return 0xFF8A8A8A;    // Stone Gray
-            case "Gamer":
-            default: return 0xFFDA70D6;        // Orchid/Pink
-        }
+        if ("Purple".equals(currentTheme)) return 0xFF9933FF;
+        if ("Blue".equals(currentTheme)) return 0xFF3399FF;
+        if ("Green".equals(currentTheme)) return 0xFF33FF99;
+        return 0xFFFF007F;
     }
 
     public static int getSecondaryColor() {
-        switch (CrucifiedsConfigs.currentTheme) {
-            case "Sea": return 0xFF00FFFF;     // Cyan
-            case "Sun": return 0xFFFFD700;     // Gold/Yellow
-            case "OLED": return 0xFF222222;    // Darker Gray
-            case "Flash": return 0xFF000000;   // Black
-            case "Natural": return 0xFF006400; // Dark Green
-            case "Rock": return 0xFF555555;    // Dark Rock Gray
-            case "Gamer":
-            default: return 0xFFFF69B4;        // Hot Pink
-        }
+        if ("Purple".equals(currentTheme)) return 0xFFCC66FF;
+        if ("Blue".equals(currentTheme)) return 0xFF66CCFF;
+        if ("Green".equals(currentTheme)) return 0xFF66FFCC;
+        return 0xFFFF69B4;
     }
 
-    public static int getFillColor() {
-        switch (CrucifiedsConfigs.currentTheme) {
-            case "Sea": return 0x5500BFFF;
-            case "Sun": return 0x55FF8C00;
-            case "OLED": return 0xCC000000;    // Deep Black Background
-            case "Flash": return 0x88FFFFFF;
-            case "Natural": return 0x5532CD32;
-            case "Rock": return 0x55708090;
-            case "Gamer":
-            default: return 0x55DA70D6;
-        }
+    public static int getBackgroundColor() {
+        return 0xCC1a1c23;
+    }
+
+    public static int getHeaderColor() {
+        return 0xCC252836;
+    }
+
+    public static int getAccentColor() {
+        return getPrimaryColor();
     }
 }
