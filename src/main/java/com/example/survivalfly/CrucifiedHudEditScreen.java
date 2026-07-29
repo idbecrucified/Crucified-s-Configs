@@ -1,6 +1,6 @@
 package com.example.survivalfly.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
-    private String currentDescription = "Hover over or toggle settings to see descriptions here.";
+    private final String currentDescription = "Hover over or toggle settings to see descriptions here.";
 
     public CrucifiedHudEditScreen(Screen parent) {
         super(Text.literal("Crucified's Mods Manager"));
@@ -20,14 +20,13 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
 
         int centerX = this.width / 2;
-        int startY = 65; // Pushed down to leave space for the logo at the top
+        int startY = 65;
         int buttonWidth = 200;
         int buttonHeight = 20;
         int spacing = 4;
 
         // Configuration Toggles
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Toggle Sprint: ON"), button -> {
-            // Your toggle logic here
         }).dimensions(centerX - (buttonWidth / 2), startY, buttonWidth, buttonHeight).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Totem Counter: ON"), button -> {
@@ -48,16 +47,16 @@ public class CrucifiedHudEditScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Fullbright: ON"), button -> {
         }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 6, buttonWidth, buttonHeight).build());
 
-        // Back Button safely pushed down below the grid
+        // Back Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back to HUD Editor"), button -> {
             this.client.setScreen(this.parent);
         }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 10, buttonWidth, buttonHeight).build());
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-        this.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
 
         // Draw Logo at the top
         int logoWidth = 48;
@@ -65,8 +64,8 @@ public class CrucifiedHudEditScreen extends Screen {
         int logoX = (this.width - logoWidth) / 2;
         int logoY = 10;
         
-        graphics.drawTexture(
-            Identifier.of("survivalfly", "textures/gui/logo.png"), 
+        context.drawTexture(
+            new Identifier("survivalfly", "textures/gui/logo.png"), 
             logoX, logoY, 
             0, 0, 
             logoWidth, logoHeight, 
@@ -74,12 +73,12 @@ public class CrucifiedHudEditScreen extends Screen {
         );
 
         // Draw Title below the logo
-        graphics.drawCenteredString(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 4, 0xFF55FF);
 
-        // Fixed description section positioned safely at the bottom of the screen
+        // Description section at the bottom of the screen
         int descY = this.height - 35;
-        graphics.drawCenteredString(this.textRenderer, "[Descriptions]", this.width / 2, descY, 0xAAAAAA);
-        graphics.drawCenteredString(this.textRenderer, this.currentDescription, this.width / 2, descY + 12, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("[Descriptions]"), this.width / 2, descY, 0xAAAAAA);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal(this.currentDescription), this.width / 2, descY + 12, 0xFFFFFF);
     }
 
     @Override
