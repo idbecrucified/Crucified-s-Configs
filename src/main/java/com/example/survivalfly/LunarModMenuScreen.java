@@ -5,6 +5,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LunarModMenuScreen extends Screen {
     private final Screen parent;
     private String currentCategory = "PvP";
@@ -16,75 +19,157 @@ public class LunarModMenuScreen extends Screen {
 
     @Override
     protected void init() {
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
+        int panelWidth = 440;
+        int panelHeight = 240;
+        int left = (this.width - panelWidth) / 2;
+        int top = (this.height - panelHeight) / 2;
 
-        // Category Selection Buttons (Left side)
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("PvP"), button -> {
-            this.currentCategory = "PvP";
-            this.clearAndInit();
-        }).dimensions(centerX - 140, centerY - 60, 80, 20).build());
+        // Category Sidebar Buttons (Left)
+        int sidebarX = left + 12;
+        int sidebarY = top + 55;
+        
+        addCategoryButton(sidebarX, sidebarY, "PvP");
+        addCategoryButton(sidebarX, sidebarY + 25, "Performance");
+        addCategoryButton(sidebarX, sidebarY + 50, "Graphics");
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Performance"), button -> {
-            this.currentCategory = "Performance";
-            this.clearAndInit();
-        }).dimensions(centerX - 140, centerY - 35, 80, 20).build());
-
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Graphics"), button -> {
-            this.currentCategory = "Graphics";
-            this.clearAndInit();
-        }).dimensions(centerX - 140, centerY - 10, 80, 20).build());
-
-        // Dynamic Config Buttons based on selected category (Right side)
-        int rightX = centerX - 50;
-        int startY = centerY - 60;
-
-        if (currentCategory.equals("PvP")) {
-            addToggleButton(rightX, startY, "Toggle Sprint", CrucifiedsConfigs.toggleSprint, val -> CrucifiedsConfigs.toggleSprint = val);
-            addToggleButton(rightX, startY + 25, "Totem Counter", CrucifiedsConfigs.totemCounter, val -> CrucifiedsConfigs.totemCounter = val);
-            addToggleButton(rightX, startY + 50, "Armor Status", CrucifiedsConfigs.armorStatus, val -> CrucifiedsConfigs.armorStatus = val);
-            addToggleButton(rightX, startY + 75, "CPS Display", CrucifiedsConfigs.cpsDisplay, val -> CrucifiedsConfigs.cpsDisplay = val);
-            addToggleButton(rightX, startY + 100, "Keystrokes", CrucifiedsConfigs.keystrokes, val -> CrucifiedsConfigs.keystrokes = val);
-        } else if (currentCategory.equals("Performance")) {
-            addToggleButton(rightX, startY, "Entity Culling", CrucifiedsConfigs.entityCulling, val -> CrucifiedsConfigs.entityCulling = val);
-            addToggleButton(rightX, startY + 25, "FPS Booster", CrucifiedsConfigs.fpsBooster, val -> CrucifiedsConfigs.fpsBooster = val);
-            addToggleButton(rightX, startY + 50, "Chunk Animator", CrucifiedsConfigs.chunkAnimator, val -> CrucifiedsConfigs.chunkAnimator = val);
-            addToggleButton(rightX, startY + 75, "Particle Multiplier", CrucifiedsConfigs.particleMultiplier, val -> CrucifiedsConfigs.particleMultiplier = val);
-        } else if (currentCategory.equals("Graphics")) {
-            addToggleButton(rightX, startY, "Fullbright", CrucifiedsConfigs.fullbright, val -> CrucifiedsConfigs.fullbright = val);
-            addToggleButton(rightX, startY + 25, "Dynamic Lighting", CrucifiedsConfigs.dynamicLighting, val -> CrucifiedsConfigs.dynamicLighting = val);
-            addToggleButton(rightX, startY + 50, "Minimal HUD", CrucifiedsConfigs.minimalHud, val -> CrucifiedsConfigs.minimalHud = val);
-            addToggleButton(rightX, startY + 75, "Weather Changer", CrucifiedsConfigs.weatherChanger, val -> CrucifiedsConfigs.weatherChanger = val);
-        }
-
-        // Done Button at the bottom
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> {
+        // Done / Close Button at bottom left of sidebar
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("§dBack / Done"), button -> {
             this.client.setScreen(parent);
-        }).dimensions(centerX + 30, centerY + 80, 100, 20).build());
+        }).dimensions(sidebarX, top + panelHeight - 30, 100, 20).build());
+
+        // Mod Cards Grid (Right side)
+        int gridStartX = left + 125;
+        int gridStartY = top + 55;
+        int cardWidth = 95;
+        int cardHeight = 75;
+        int spacingX = 8;
+        int spacingY = 8;
+
+        List<ModItem> mods = getModsForCategory(currentCategory);
+        int index = 0;
+        for (ModItem mod : mods) {
+            int col = index % 3;
+            int row = index / 3;
+            int cardX = gridStartX + col * (cardWidth + spacingX);
+            int cardY = gridStartY + row * (cardHeight + spacingY);
+
+            // Toggle button for each mod card
+            this.addDrawableChild(ButtonWidget.builder(
+                    Text.literal(mod.getState() ? "§dENABLED" : "§7DISABLED"),
+                    button -> {
+                        mod.toggle();
+                        this.clearAndInit();
+                    }
+            ).dimensions(cardX, cardY + cardHeight - 22, cardWidth, 20).build());
+
+            index++;
+        }
     }
 
-    private void addToggleButton(int x, int y, String label, boolean currentState, java.util.function.Consumer<Boolean> toggler) {
+    private void addCategoryButton(int x, int y, String category) {
+        boolean selected = this.currentCategory.equals(category);
         this.addDrawableChild(ButtonWidget.builder(
-                Text.literal(label + ": " + (currentState ? "§aON" : "§cOFF")),
+                Text.literal((selected ? "§d> " : "§7") + category),
                 button -> {
-                    toggler.accept(!currentState);
-                    this.clearAndInit(); // Refresh UI to update text color/state
+                    this.currentCategory = category;
+                    this.clearAndInit();
                 }
-        ).dimensions(x, y, 180, 20).build());
+        ).dimensions(x, y, 100, 20).build());
+    }
+
+    private List<ModItem> getModsForCategory(String category) {
+        List<ModItem> list = new ArrayList<>();
+        if (category.equals("PvP")) {
+            list.add(new ModItem("Toggle Sprint", () -> CrucifiedsConfigs.toggleSprint, val -> CrucifiedsConfigs.toggleSprint = val));
+            list.add(new ModItem("Totem Counter", () -> CrucifiedsConfigs.totemCounter, val -> CrucifiedsConfigs.totemCounter = val));
+            list.add(new ModItem("Armor Status", () -> CrucifiedsConfigs.armorStatus, val -> CrucifiedsConfigs.armorStatus = val));
+            list.add(new ModItem("CPS Display", () -> CrucifiedsConfigs.cpsDisplay, val -> CrucifiedsConfigs.cpsDisplay = val));
+            list.add(new ModItem("Keystrokes", () -> CrucifiedsConfigs.keystrokes, val -> CrucifiedsConfigs.keystrokes = val));
+            list.add(new ModItem("FPS Counter", () -> CrucifiedsConfigs.fpsCounter, val -> CrucifiedsConfigs.fpsCounter = val));
+        } else if (category.equals("Performance")) {
+            list.add(new ModItem("Entity Culling", () -> CrucifiedsConfigs.entityCulling, val -> CrucifiedsConfigs.entityCulling = val));
+            list.add(new ModItem("FPS Booster", () -> CrucifiedsConfigs.fpsBooster, val -> CrucifiedsConfigs.fpsBooster = val));
+            list.add(new ModItem("Chunk Animator", () -> CrucifiedsConfigs.chunkAnimator, val -> CrucifiedsConfigs.chunkAnimator = val));
+            list.add(new ModItem("Particle Mult.", () -> CrucifiedsConfigs.particleMultiplier, val -> CrucifiedsConfigs.particleMultiplier = val));
+        } else if (category.equals("Graphics")) {
+            list.add(new ModItem("Fullbright", () -> CrucifiedsConfigs.fullbright, val -> CrucifiedsConfigs.fullbright = val));
+            list.add(new ModItem("Dynamic Light", () -> CrucifiedsConfigs.dynamicLighting, val -> CrucifiedsConfigs.dynamicLighting = val));
+            list.add(new ModItem("Minimal HUD", () -> CrucifiedsConfigs.minimalHud, val -> CrucifiedsConfigs.minimalHud = val));
+            list.add(new ModItem("Weather Change", () -> CrucifiedsConfigs.weatherChanger, val -> CrucifiedsConfigs.weatherChanger = val));
+        }
+        return list;
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
+
+        int panelWidth = 440;
+        int panelHeight = 240;
+        int left = (this.width - panelWidth) / 2;
+        int top = (this.height - panelHeight) / 2;
+
+        // Dark Window Background
+        context.fill(left, top, left + panelWidth, top + panelHeight, 0xEE1A111E); // Deep dark purple-tinted bg
+        // Outer border line
+        context.drawBorder(left, top, panelWidth, panelHeight, 0xFF9370DB);
+
+        // Top Header Bar
+        context.fill(left, top, left + panelWidth, top + 35, 0xFF4B0082); // Indigo/Purple header
+        context.drawTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MOD HUB"), left + 15, top + 12, 0xFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, Text.literal("Category: §f" + currentCategory), left + 280, top + 12, 0xFFC0CB);
+
+        // Render Mod Cards backgrounds & titles
+        int gridStartX = left + 125;
+        int gridStartY = top + 55;
+        int cardWidth = 95;
+        int cardHeight = 75;
+        int spacingX = 8;
+        int spacingY = 8;
+
+        List<ModItem> mods = getModsForCategory(currentCategory);
+        int index = 0;
+        for (ModItem mod : mods) {
+            int col = index % 3;
+            int row = index / 3;
+            int cardX = gridStartX + col * (cardWidth + spacingX);
+            int cardY = gridStartY + row * (cardHeight + spacingY);
+
+            // Card box
+            context.fill(cardX, cardY, cardX + cardWidth, cardY + cardHeight, 0xFF2D1B36);
+            context.drawBorder(cardX, cardY, cardWidth, cardHeight, mod.getState() ? 0xFFDA70D6 : 0xFF4A3b5C);
+
+            // Mod Title inside card
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal(mod.name), cardX + (cardWidth / 2), cardY + 18, 0xFFFFFF);
+
+            index++;
+        }
+
         super.render(context, mouseX, mouseY, delta);
-        
-        // Header title
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, this.height / 2 - 95, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: §d" + currentCategory), this.width / 2, this.height / 2 - 80, 0xFFFFFF);
     }
 
     @Override
     public boolean shouldCloseOnEsc() {
         return true;
+    }
+
+    private static class ModItem {
+        private final String name;
+        private final java.util.function.Supplier<Boolean> getter;
+        private final java.util.function.Consumer<Boolean> setter;
+
+        public ModItem(String name, java.util.function.Supplier<Boolean> getter, java.util.function.Consumer<Boolean> setter) {
+            this.name = name;
+            this.getter = getter;
+            this.setter = setter;
+        }
+
+        public boolean getState() {
+            return getter.get();
+        }
+
+        public void toggle() {
+            setter.accept(!getter.get());
+        }
     }
 }
