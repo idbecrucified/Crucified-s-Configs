@@ -4,7 +4,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class CrucifiedHudEditScreen extends Screen {
     private final Screen parent;
@@ -24,8 +23,8 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
 
         int centerX = this.width / 2;
-        int startY = 90; // Pushed down to prevent overlapping with the title/logo
-        int buttonWidth = 200;
+        int startY = 70;
+        int buttonWidth = 220;
         int buttonHeight = 20;
         int spacing = 4;
 
@@ -56,7 +55,7 @@ public class CrucifiedHudEditScreen extends Screen {
             if (this.client != null) {
                 this.client.setScreen(this.parent);
             }
-        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 6, buttonWidth, buttonHeight).build());
+        }).dimensions(centerX - (buttonWidth / 2), startY + (buttonHeight + spacing) * 7 + 10, buttonWidth, buttonHeight).build());
     }
 
     @Override
@@ -64,22 +63,9 @@ public class CrucifiedHudEditScreen extends Screen {
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
-        // Draw Logo at the top (Make sure survivalfly/textures/gui/logo.png exists in your resources)
-        int logoWidth = 48;
-        int logoHeight = 48;
-        int logoX = (this.width - logoWidth) / 2;
-        int logoY = 15;
-        
-        context.drawTexture(
-            new Identifier("survivalfly", "textures/gui/logo.png"), 
-            logoX, logoY, 
-            0, 0, 
-            logoWidth, logoHeight, 
-            logoWidth, logoHeight
-        );
-
-        // Draw Title below the logo
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 6, 0xFF55FF);
+        // Draw Clean Custom Header text instead of a missing image texture
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§lCRUCIFIED'S MODS"), this.width / 2, 22, 0xFF55FF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 36, 0xAAAAAA);
 
         // Description section at the bottom of the screen
         int descY = this.height - 35;
