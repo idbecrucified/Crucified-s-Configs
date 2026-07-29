@@ -13,7 +13,6 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Register HUD renderer elements
         HudRenderer.register();
 
         openMenuKey = net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -25,11 +24,11 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
-                client.setScreen(new LunarModMenuScreen(client.currentScreen));
+                client.setScreen(new CrucifiedHudEditScreen());
             }
 
             if (client.player != null) {
-                // Fullbright Logic (Applies night vision if on, removes immediately if turned off)
+                // Fullbright Logic
                 if (CrucifiedsConfigs.fullbright) {
                     client.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0, false, false));
                 } else {
