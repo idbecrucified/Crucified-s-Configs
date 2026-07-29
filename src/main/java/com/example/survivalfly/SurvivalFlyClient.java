@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class SurvivalFlyClient implements ClientModInitializer {
     private static KeyBinding editScreenKey;
+    private static int cps = 0;
 
     @Override
     public void onInitializeClient() {
@@ -26,5 +27,9 @@ public class SurvivalFlyClient implements ClientModInitializer {
                 client.setScreen(new CrucifiedHudEditScreen());
             }
         });
+    }
+
+    public static int getCps() {
+        return cps;
     }
 }
