@@ -1,25 +1,29 @@
 {
-  "schema_version": 1,
-  "id": "crucifieds-configs",
+  "schemaVersion": 1,
+  "id": "survivalfly",
   "version": "${version}",
-  "name": "Crucified's Configs",
-  "description": "Custom client utility and HUD config menu.",
-  "authors": ["idbecrucified"],
-  "contact": {},
+  "name": "Survival Fly",
+  "description": "A survival fly and config mod.",
+  "authors": [
+    "Crucified"
+  ],
+  "contact": {
+    "sources": "https://github.com/"
+  },
   "license": "MIT",
-  "environment": "client",
+  "icon": "assets/survivalfly/icon.png",
+  "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.survivalfly.SurvivalFlyMod"
-    ],
-    "client": [
-      "com.example.survivalfly.SurvivalFlyClient"
+      "com.example.survivalfly.ExampleMod"
     ]
   },
-  "mixins": [],
+  "mixins": [
+    "survivalfly.mixins.json"
+  ],
   "depends": {
-    "fabricloader": ">=0.14.22",
-    "minecraft": "~1.20.1",
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
     "java": ">=17",
     "fabric-api": "*"
   }
