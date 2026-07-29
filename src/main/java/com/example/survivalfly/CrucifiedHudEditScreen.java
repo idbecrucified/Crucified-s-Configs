@@ -23,14 +23,14 @@ public class CrucifiedHudEditScreen extends Screen {
     protected void init() {
         super.init();
 
-        int panelLeft = (this.width - 320) / 2;
-        int panelTop = (this.height - 200) / 2;
+        int panelLeft = (this.width - 340) / 2;
+        int panelTop = (this.height - 220) / 2;
 
         // Category Buttons (Left Sidebar)
         int catX = panelLeft + 15;
         int catY = panelTop + 50;
-        int catWidth = 90;
-        int catHeight = 20;
+        int catWidth = 95;
+        int catHeight = 22;
 
         this.addDrawableChild(ButtonWidget.builder(Text.literal("PvP"), b -> {
             selectedCategory = "PvP";
@@ -40,66 +40,37 @@ public class CrucifiedHudEditScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Performance"), b -> {
             selectedCategory = "Performance";
             this.clearAndInit();
-        }).dimensions(catX, catY + 25, catWidth, catHeight).build());
+        }).dimensions(catX, catY + 28, catWidth, catHeight).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Graphics"), b -> {
             selectedCategory = "Graphics";
             this.clearAndInit();
-        }).dimensions(catX, catY + 50, catWidth, catHeight).build());
+        }).dimensions(catX, catY + 56, catWidth, catHeight).build());
 
         // Right Content Area Toggles based on selected category
-        int contentX = panelLeft + 120;
+        int contentX = panelLeft + 125;
         int contentY = panelTop + 50;
-        int contentWidth = 185;
+        int contentWidth = 200;
         int contentHeight = 20;
+        int spacing = 24;
 
         if (selectedCategory.equals("PvP")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Toggle Sprint: " + (SurvivalFlyClient.toggleSprint ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.toggleSprint = !SurvivalFlyClient.toggleSprint;
-                b.setMessage(Text.literal("Toggle Sprint: " + (SurvivalFlyClient.toggleSprint ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("CPS Display: " + (SurvivalFlyClient.cpsDisplay ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.cpsDisplay = !SurvivalFlyClient.cpsDisplay;
-                b.setMessage(Text.literal("CPS Display: " + (SurvivalFlyClient.cpsDisplay ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Keystrokes: " + (SurvivalFlyClient.keystrokes ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.keystrokes = !SurvivalFlyClient.keystrokes;
-                b.setMessage(Text.literal("Keystrokes: " + (SurvivalFlyClient.keystrokes ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 50, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Armor Status: " + (SurvivalFlyClient.armorStatus ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.armorStatus = !SurvivalFlyClient.armorStatus;
-                b.setMessage(Text.literal("Armor Status: " + (SurvivalFlyClient.armorStatus ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 75, contentWidth, contentHeight).build());
+            addToggle(contentX, contentY, contentWidth, contentHeight, "Toggle Sprint", SurvivalFlyClient.toggleSprint, val -> SurvivalFlyClient.toggleSprint = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "CPS Display", SurvivalFlyClient.cpsDisplay, val -> SurvivalFlyClient.cpsDisplay = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Keystrokes", SurvivalFlyClient.keystrokes, val -> SurvivalFlyClient.keystrokes = val);
+            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Armor Status", SurvivalFlyClient.armorStatus, val -> SurvivalFlyClient.armorStatus = val);
+            addToggle(contentX, contentY + spacing * 4, contentWidth, contentHeight, "Hit Color", SurvivalFlyClient.hitColor, val -> SurvivalFlyClient.hitColor = val);
 
         } else if (selectedCategory.equals("Performance")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("FPS Counter: " + (SurvivalFlyClient.fpsCounter ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.fpsCounter = !SurvivalFlyClient.fpsCounter;
-                b.setMessage(Text.literal("FPS Counter: " + (SurvivalFlyClient.fpsCounter ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fast Render: " + (SurvivalFlyClient.fastRender ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.fastRender = !SurvivalFlyClient.fastRender;
-                b.setMessage(Text.literal("Fast Render: " + (SurvivalFlyClient.fastRender ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Zoom Toggle: " + (SurvivalFlyClient.zoomToggle ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.zoomToggle = !SurvivalFlyClient.zoomToggle;
-                b.setMessage(Text.literal("Zoom Toggle: " + (SurvivalFlyClient.zoomToggle ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 50, contentWidth, contentHeight).build());
+            addToggle(contentX, contentY, contentWidth, contentHeight, "FPS Counter", SurvivalFlyClient.fpsCounter, val -> SurvivalFlyClient.fpsCounter = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Fast Render", SurvivalFlyClient.fastRender, val -> SurvivalFlyClient.fastRender = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Zoom Toggle", SurvivalFlyClient.zoomToggle, val -> SurvivalFlyClient.zoomToggle = val);
+            addToggle(contentX, contentY + spacing * 3, contentWidth, contentHeight, "Chunk Animator", SurvivalFlyClient.chunkAnimator, val -> SurvivalFlyClient.chunkAnimator = val);
 
         } else if (selectedCategory.equals("Graphics")) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Fullbright: " + (SurvivalFlyClient.fullbright ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.fullbright = !SurvivalFlyClient.fullbright;
-                b.setMessage(Text.literal("Fullbright: " + (SurvivalFlyClient.fullbright ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY, contentWidth, contentHeight).build());
-
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Totem Counter: " + (SurvivalFlyClient.totemCounter ? "ON" : "OFF")), b -> {
-                SurvivalFlyClient.totemCounter = !SurvivalFlyClient.totemCounter;
-                b.setMessage(Text.literal("Totem Counter: " + (SurvivalFlyClient.totemCounter ? "ON" : "OFF")));
-            }).dimensions(contentX, contentY + 25, contentWidth, contentHeight).build());
+            addToggle(contentX, contentY, contentWidth, contentHeight, "Fullbright", SurvivalFlyClient.fullbright, val -> SurvivalFlyClient.fullbright = val);
+            addToggle(contentX, contentY + spacing, contentWidth, contentHeight, "Totem Counter", SurvivalFlyClient.totemCounter, val -> SurvivalFlyClient.totemCounter = val);
+            addToggle(contentX, contentY + spacing * 2, contentWidth, contentHeight, "Custom Sky", SurvivalFlyClient.customSky, val -> SurvivalFlyClient.customSky = val);
         }
 
         // Done Button at bottom right
@@ -107,26 +78,35 @@ public class CrucifiedHudEditScreen extends Screen {
             if (this.client != null) {
                 this.client.setScreen(this.parent);
             }
-        }).dimensions(panelLeft + 205, panelTop + 165, 100, 20).build());
+        }).dimensions(panelLeft + 225, panelTop + 185, 100, 20).build());
+    }
+
+    private void addToggle(int x, int y, int width, int height, String label, boolean currentState, java.util.function.Consumer<Boolean> action) {
+        this.addDrawableChild(ButtonWidget.builder(
+            Text.literal(label + ": " + (currentState ? "§aON" : "§cOFF")), b -> {
+                boolean newState = !currentState;
+                action.accept(newState);
+                b.setMessage(Text.literal(label + ": " + (newState ? "§aON" : "§cOFF")));
+            }).dimensions(x, y, width, height).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
 
-        int panelLeft = (this.width - 320) / 2;
-        int panelTop = (this.height - 200) / 2;
+        int panelLeft = (this.width - 340) / 2;
+        int panelTop = (this.height - 220) / 2;
 
-        // Dark background container box matching your menu style
-        context.fill(panelLeft, panelTop, panelLeft + 320, panelTop + 200, 0xEE1A1A24);
+        // Dark background container box matching Mod Hub styling
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 220, 0xEE1A1A24);
 
         // Top Header banner styling
-        context.fill(panelLeft, panelTop, panelLeft + 320, panelTop + 35, 0xFF8A49F5);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), panelLeft + 160, panelTop + 8, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 160, panelTop + 20, 0xFF55FF);
+        context.fill(panelLeft, panelTop, panelLeft + 340, panelTop + 35, 0xFF8A49F5);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), panelLeft + 170, panelTop + 8, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + selectedCategory), panelLeft + 170, panelTop + 20, 0xFF55FF);
 
         // Pink accent divider line
-        context.fill(panelLeft, panelTop + 35, panelLeft + 320, panelTop + 38, 0xFFFF55FF);
+        context.fill(panelLeft, panelTop + 35, panelLeft + 340, panelTop + 38, 0xFFFF55FF);
 
         super.render(context, mouseX, mouseY, delta);
     }
