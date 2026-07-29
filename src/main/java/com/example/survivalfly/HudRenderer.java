@@ -21,15 +21,13 @@ public class HudRenderer implements HudRenderCallback {
 
         // 1. FPS Counter
         if (SurvivalFlyClient.fpsCounter) {
-            String fpsText = "FPS: " + client.getCurrentFps();
-            context.drawTextWithShadow(textRenderer, fpsText, 10, yOffset, 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "FPS: " + client.getCurrentFps(), 10, yOffset, 0xFFFFFF);
             yOffset += 12;
         }
 
         // 2. CPS Display
         if (SurvivalFlyClient.cpsDisplay) {
-            String cpsText = "CPS: " + SurvivalFlyClient.getCps();
-            context.drawTextWithShadow(textRenderer, cpsText, 10, yOffset, 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "CPS: " + SurvivalFlyClient.getCps(), 10, yOffset, 0xFFFFFF);
             yOffset += 12;
         }
 
