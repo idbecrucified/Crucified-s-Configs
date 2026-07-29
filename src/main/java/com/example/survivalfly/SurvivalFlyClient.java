@@ -4,6 +4,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import org.lwjgl.glfw.GLFW;
 
 public class SurvivalFlyClient implements ClientModInitializer {
@@ -24,13 +26,9 @@ public class SurvivalFlyClient implements ClientModInitializer {
             }
 
             if (client.player != null) {
-                // Fullbright Logic
+                // Fullbright Logic (Using silent Night Vision effect to bypass 1.20.1 gamma limits)
                 if (CrucifiedsConfigs.fullbright) {
-                    client.options.gamma.setValue(12.0D);
-                } else {
-                    if (client.options.gamma.getValue() > 1.0D) {
-                        client.options.gamma.setValue(0.5D);
-                    }
+                    client.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0, false, false));
                 }
 
                 // Toggle Sprint Logic
