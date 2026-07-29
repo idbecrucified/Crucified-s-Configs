@@ -13,9 +13,12 @@
   "license": "MIT",
   "icon": "assets/survivalfly/icon.png",
   "environment": "*",
-  "entrypoints": {
+"entrypoints": {
     "main": [
       "com.example.survivalfly.SurvivalFlyMod"
+    ],
+    "client": [
+      "com.example.survivalfly.SurvivalFlyClient"
     ]
   },
   "mixins": [
