@@ -18,16 +18,17 @@ public class HudRenderer implements HudRenderCallback {
 
         TextRenderer textRenderer = client.textRenderer;
         int yOffset = 10;
+        int themeAccent = SurvivalFlyClient.getAccentColor();
 
         // 1. FPS Counter
         if (SurvivalFlyClient.fpsCounter) {
-            context.drawTextWithShadow(textRenderer, "FPS: " + client.getCurrentFps(), 10, yOffset, 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "FPS: " + client.getCurrentFps(), 10, yOffset, themeAccent);
             yOffset += 12;
         }
 
         // 2. CPS Display
         if (SurvivalFlyClient.cpsDisplay) {
-            context.drawTextWithShadow(textRenderer, "CPS: " + SurvivalFlyClient.getCps(), 10, yOffset, 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "CPS: " + SurvivalFlyClient.getCps(), 10, yOffset, themeAccent);
             yOffset += 12;
         }
 
@@ -57,10 +58,10 @@ public class HudRenderer implements HudRenderCallback {
             boolean s = client.options.backKey.isPressed();
             boolean d = client.options.rightKey.isPressed();
 
-            context.drawCenteredTextWithShadow(textRenderer, "W", kx + 30, ky + 6, w ? 0xFF55FF : 0xFFFFFF);
-            context.drawTextWithShadow(textRenderer, "A", kx + 10, ky + 26, a ? 0xFF55FF : 0xFFFFFF);
-            context.drawCenteredTextWithShadow(textRenderer, "S", kx + 30, ky + 26, s ? 0xFF55FF : 0xFFFFFF);
-            context.drawTextWithShadow(textRenderer, "D", kx + 50, ky + 26, d ? 0xFF55FF : 0xFFFFFF);
+            context.drawCenteredTextWithShadow(textRenderer, "W", kx + 30, ky + 6, w ? themeAccent : 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "A", kx + 10, ky + 26, a ? themeAccent : 0xFFFFFF);
+            context.drawCenteredTextWithShadow(textRenderer, "S", kx + 30, ky + 26, s ? themeAccent : 0xFFFFFF);
+            context.drawTextWithShadow(textRenderer, "D", kx + 50, ky + 26, d ? themeAccent : 0xFFFFFF);
         }
     }
 
