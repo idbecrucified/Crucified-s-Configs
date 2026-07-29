@@ -29,6 +29,45 @@ public class SurvivalFlyClient implements ClientModInitializer {
     public static boolean totemCounter = true;
     public static boolean customSky = false;
 
+    // Theme Configuration ("Gamer", "Sea", "Sun", "OLED", "Flash", "Natural", "Rock")
+    public static String currentTheme = "Gamer";
+
+    public static int getHeaderColor() {
+        return switch (currentTheme) {
+            case "Sea" -> 0xFF0077BE;
+            case "Sun" -> 0xFFFF8C00;
+            case "OLED" -> 0xFF111111;
+            case "Flash" -> 0xFFFFFFFF;
+            case "Natural" -> 0xFF2E8B57;
+            case "Rock" -> 0xFF708090;
+            default -> 0xFF8A49F5; // Gamer (Default)
+        };
+    }
+
+    public static int getAccentColor() {
+        return switch (currentTheme) {
+            case "Sea" -> 0xFF00FFFF;
+            case "Sun" -> 0xFFFFD700;
+            case "OLED" -> 0xFF888888;
+            case "Flash" -> 0xFFCCCCCC;
+            case "Natural" -> 0xFF98FB98;
+            case "Rock" -> 0xFFC0C0C0;
+            default -> 0xFFFF55FF; // Gamer
+        };
+    }
+
+    public static int getBackgroundColor() {
+        return switch (currentTheme) {
+            case "Sea" -> 0xEE0A1118;
+            case "Sun" -> 0xEE1A1408;
+            case "OLED" -> 0xFF000000;
+            case "Flash" -> 0xFF000000;
+            case "Natural" -> 0xEE0F1C12;
+            case "Rock" -> 0xEE1C1E21;
+            default -> 0xEE1A1A24; // Gamer
+        };
+    }
+
     @Override
     public void onInitializeClient() {
         editScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
