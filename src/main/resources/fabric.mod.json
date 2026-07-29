@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.survivalfly.ExampleMod"
+      "com.example.survivalfly.SurvivalFlyMod"
     ]
   },
   "mixins": [
