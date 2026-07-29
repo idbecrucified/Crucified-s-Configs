@@ -19,10 +19,10 @@ public class CrucifiedsThemeScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int panelLeft = centerX - 150;
-        int panelTop = centerY - 120;
+        int panelTop = centerY - 145;
 
-        String[] themes = {"Default", "Purple", "Blue", "Green"};
-        int yOffset = panelTop + 60;
+        String[] themes = {"Gamer", "Sea", "Sun", "OLED", "Flash", "Natural", "Rock"};
+        int yOffset = panelTop + 45;
 
         for (String themeName : themes) {
             boolean isSelected = CrucifiedTheme.currentTheme.equals(themeName);
@@ -30,12 +30,12 @@ public class CrucifiedsThemeScreen extends Screen {
                 CrucifiedTheme.currentTheme = themeName;
                 this.client.setScreen(new CrucifiedsThemeScreen(parent));
             }).dimensions(panelLeft + 50, yOffset, 200, 20).build());
-            yOffset += 30;
+            yOffset += 24;
         }
 
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> {
             this.client.setScreen(parent);
-        }).dimensions(panelLeft + 50, panelTop + 240 - 40, 200, 20).build());
+        }).dimensions(panelLeft + 50, panelTop + 270 - 35, 200, 20).build());
     }
 
     @Override
@@ -45,9 +45,9 @@ public class CrucifiedsThemeScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int panelLeft = centerX - 150;
-        int panelTop = centerY - 120;
+        int panelTop = centerY - 145;
 
-        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 300, 280, 10, CrucifiedTheme.getBackgroundColor());
+        UIUtils.drawRoundedRect(context, panelLeft, panelTop, 300, 270, 10, CrucifiedTheme.getBackgroundColor());
         UIUtils.drawRoundedRect(context, panelLeft, panelTop, 300, 35, 10, CrucifiedTheme.getHeaderColor());
 
         context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Theme Settings"), panelLeft + 150, panelTop + 12, 0xFFFFFFFF);
