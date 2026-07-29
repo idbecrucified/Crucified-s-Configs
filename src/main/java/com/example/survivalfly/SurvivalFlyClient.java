@@ -13,6 +13,9 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // Register HUD renderer elements
+        HudRenderer.register();
+
         openMenuKey = net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.survivalfly.open_menu",
                 InputUtil.Type.KEYSYM,
@@ -26,9 +29,13 @@ public class SurvivalFlyClient implements ClientModInitializer {
             }
 
             if (client.player != null) {
-                // Fullbright Logic (Using silent Night Vision effect to bypass 1.20.1 gamma limits)
+                // Fullbright Logic (Applies night vision if on, removes immediately if turned off)
                 if (CrucifiedsConfigs.fullbright) {
                     client.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0, false, false));
+                } else {
+                    if (client.player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+                        client.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                    }
                 }
 
                 // Toggle Sprint Logic
