@@ -62,7 +62,6 @@ public class HudRenderer {
             for (ItemStack stack : client.player.getArmorItems()) {
                 if (!stack.isEmpty()) {
                     context.drawItem(stack, x, y);
-                    context.drawItemInSlot(client.textRenderer, stack, x, y);
                     y -= 20;
                 }
             }
