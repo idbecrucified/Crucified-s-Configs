@@ -76,7 +76,7 @@ public class CrucifiedHudEditScreen extends Screen {
         // Themes Button on Bottom Left
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Themes"), b -> {
             if (this.client != null) {
-                this.client.setScreen(new CrucifiedThemeScreen(this));
+                this.client.setScreen(new CrucifiedsThemeScreen(this));
             }
         }).dimensions(panelLeft + 15, panelTop + 185, 95, 20).build());
 
@@ -99,7 +99,7 @@ public class CrucifiedHudEditScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
 
         int panelLeft = (this.width - 340) / 2;
         int panelTop = (this.height - 220) / 2;
