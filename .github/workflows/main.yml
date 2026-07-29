@@ -19,9 +19,10 @@ jobs:
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.3-bin.zip
           jar xf gradle-8.3-bin.zip
+          chmod +x gradle-8.3/bin/gradle
 
       - name: Build Mod
-        run: gradle-8.3/bin/gradle build --no-daemon
+        run: ./gradle-8.3/bin/gradle build --no-daemon
 
       - name: Upload Mod Artifact
         uses: actions/upload-artifact@v4
