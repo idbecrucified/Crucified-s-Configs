@@ -25,10 +25,17 @@ public class CrucifiedHudEditScreen extends Screen {
         int buttonX = (this.width - buttonWidth) / 2;
         int buttonY = (this.height / 2) + 20;
 
+        // Center MODS button
         this.addDrawableChild(ButtonWidget.builder(
                 Text.literal("MODS"),
                 button -> this.client.setScreen(new LunarModMenuScreen(this))
         ).dimensions(buttonX, buttonY, buttonWidth, buttonHeight).build());
+
+        // Bottom-Left Themes button
+        this.addDrawableChild(ButtonWidget.builder(
+                Text.literal("Themes"),
+                button -> this.client.setScreen(new ThemeSelectionScreen(this))
+        ).dimensions(20, this.height - 35, 80, 20).build());
     }
 
     @Override
@@ -116,7 +123,7 @@ public class CrucifiedHudEditScreen extends Screen {
         try {
             context.drawTexture(LOGO_TEXTURE, logoX, logoY, 0, 0, logoWidth, logoHeight, logoWidth, logoHeight);
         } catch (Exception e) {
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MODS"), this.width / 2, logoY + 20, 0xFFFFFF);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("§d§lCRUCIFIED'S MODS"), this.width / 2, logoY + 20, CrucifiedTheme.getPrimaryColor());
         }
 
         super.render(context, mouseX, mouseY, delta);
