@@ -6,10 +6,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
-public class CrucifiedThemeScreen extends Screen {
+public class CrucifiedsThemeScreen extends Screen {
     private final Screen parent;
 
-    public CrucifiedThemeScreen(Screen parent) {
+    public CrucifiedsThemeScreen(Screen parent) {
         super(Text.literal("Theme Selector"));
         this.parent = parent;
     }
@@ -48,7 +48,7 @@ public class CrucifiedThemeScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
 
         int panelLeft = (this.width - 300) / 2;
         int panelTop = (this.height - 240) / 2;
