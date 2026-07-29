@@ -14,6 +14,12 @@ public class CrucifiedsConfigs {
     public static int fpsCounterY = 5;
     public static int totemCounterX = 100;
     public static int totemCounterY = 100;
+    public static int keystrokesX = 5;
+    public static int keystrokesY = 65;
+    public static int cpsDisplayX = 5;
+    public static int cpsDisplayY = 45;
+    public static int armorStatusX = -25; // Relative to right side by default
+    public static int armorStatusY = -50; // Relative to center by default
 
     // Performance
     public static boolean entityCulling = true;
