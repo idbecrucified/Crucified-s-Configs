@@ -24,7 +24,7 @@ public class CrucifiedHudEditScreen extends Screen {
         super.init();
 
         int centerX = this.width / 2;
-        int startY = 90; // Spacing to clear the logo and title safely
+        int startY = 90; // Balanced spacing below the header/logo
         int buttonWidth = 200;
         int buttonHeight = 20;
         int spacing = 4;
@@ -64,7 +64,7 @@ public class CrucifiedHudEditScreen extends Screen {
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
-        // Draw Logo at the top (Requires logo.png in resources)
+        // Draw Logo at the top (Make sure logo.png is placed in resources if you want it to show)
         int logoWidth = 48;
         int logoHeight = 48;
         int logoX = (this.width - logoWidth) / 2;
@@ -78,7 +78,7 @@ public class CrucifiedHudEditScreen extends Screen {
             logoWidth, logoHeight
         );
 
-        // Draw Title below the logo
+        // Draw Vibrant Pink Title below the logo
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, logoY + logoHeight + 6, 0xFF55FF);
 
         // Description section at the bottom of the screen
