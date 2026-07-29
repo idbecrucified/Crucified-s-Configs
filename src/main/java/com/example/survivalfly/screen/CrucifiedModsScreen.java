@@ -29,13 +29,11 @@ public class CrucifiedModsScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> {
             this.client.setScreen(parent);
         }).dimensions(panelX + 160, panelY + panelHeight - 35, 100, 20).build());
-
-        // Add other category/mod toggle buttons here as needed
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
 
         int centerX = this.width / 2;
         int centerY = this.height / 2;
@@ -49,14 +47,12 @@ public class CrucifiedModsScreen extends Screen {
 
         // 2. Draw Header with Theme Gradient and top-only rounded corners (flat bottom)
         int headerHeight = 35;
-        int themeColor1 = CrucifiedTheme.getPrimaryColor(); // Adjust based on your theme implementation
+        int themeColor1 = CrucifiedTheme.getPrimaryColor();
         int themeColor2 = CrucifiedTheme.getSecondaryColor();
 
-        // Draw top rounded portion and fill the lower part of the header square to prevent corner artifacts
         context.fillGradient(panelX + 8, panelY, panelX + panelWidth - 8, panelY + headerHeight, themeColor1, themeColor2);
         context.fill(panelX, panelY + 8, panelX + panelWidth, panelY + headerHeight, themeColor2);
-        // Redraw top rounded caps to preserve smooth top corners
-        UIUtils.drawRoundedRect(context, panelX, panelY, panelWidth, headerHeight, 8, 0x00000000); // handled via gradient fill above
+        UIUtils.drawRoundedRect(context, panelX, panelY, panelWidth, headerHeight, 8, 0x00000000);
 
         // 3. Draw Separator Line
         context.fill(panelX, panelY + headerHeight, panelX + panelWidth, panelY + headerHeight + 2, 0xFFFF007F);
