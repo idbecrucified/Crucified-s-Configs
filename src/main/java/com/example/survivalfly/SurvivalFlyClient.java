@@ -11,7 +11,6 @@ public class SurvivalFlyClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Register Right Shift keybinding to open the menu
         openMenuKey = net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.survivalfly.open_menu",
                 InputUtil.Type.KEYSYM,
@@ -20,7 +19,6 @@ public class SurvivalFlyClient implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            // Open menu on Right Shift press
             while (openMenuKey.wasPressed()) {
                 client.setScreen(new LunarModMenuScreen(client.currentScreen));
             }
@@ -28,10 +26,10 @@ public class SurvivalFlyClient implements ClientModInitializer {
             if (client.player != null) {
                 // Fullbright Logic
                 if (CrucifiedsConfigs.fullbright) {
-                    client.options.getGamma().setValue(12.0D);
+                    client.options.gamma.setValue(12.0D);
                 } else {
-                    if (client.options.getGamma().getValue() > 1.0D) {
-                        client.options.getGamma().setValue(0.5D);
+                    if (client.options.gamma.getValue() > 1.0D) {
+                        client.options.gamma.setValue(0.5D);
                     }
                 }
 
