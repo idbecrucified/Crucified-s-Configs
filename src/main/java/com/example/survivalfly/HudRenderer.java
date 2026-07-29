@@ -11,7 +11,8 @@ public class HudRenderer {
     public static void register() {
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
-            if (client.options.hudHidden || client.player == null) return;
+            // Hide HUDs if F1 (hudHidden) or F3 (debugEnabled) is active, or player is null
+            if (client.options.hudHidden || client.options.debugEnabled || client.player == null) return;
             renderAllHuds(context, client, false);
         });
     }
@@ -55,7 +56,7 @@ public class HudRenderer {
             int ax = CrucifiedsConfigs.armorStatusX < 0 ? screenWidth + CrucifiedsConfigs.armorStatusX : CrucifiedsConfigs.armorStatusX;
             int ay = CrucifiedsConfigs.armorStatusY < 0 ? (screenHeight / 2) + CrucifiedsConfigs.armorStatusY : CrucifiedsConfigs.armorStatusY;
             if (editing) context.fill(ax - 2, ay - 2, ax + 18, ay + 70, 0x55DA70D6);
-            renderArmorStatus(context, client, context, ax, ay);
+            renderArmorStatus(client, context, ax, ay);
         }
     }
 
@@ -89,12 +90,12 @@ public class HudRenderer {
         context.drawCenteredTextWithShadow(textRenderer, "D", startX + 49, startY + 25, 0xFFFFFF);
     }
 
-    private static void renderArmorStatus(MinecraftClient client, DrawContext context, DrawContext ctx, int x, int y) {
+    private static void renderArmorStatus(MinecraftClient client, DrawContext context, int x, int y) {
         int currentY = y;
         for (int i = 3; i >= 0; i--) {
             ItemStack stack = client.player.getInventory().armor.get(i);
             if (!stack.isEmpty()) {
-                ctx.drawItem(stack, x, currentY);
+                context.drawItem(stack, x, currentY);
                 currentY += 18;
             }
         }
