@@ -1,10 +1,13 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
-    public static String currentTheme = "Gamer";
+    public static String getCurrentTheme() {
+        return CrucifiedsConfigs.currentTheme != null ? CrucifiedsConfigs.currentTheme : "Gamer";
+    }
 
     public static int getPrimaryColor() {
-        switch (currentTheme) {
+        String theme = getCurrentTheme();
+        switch (theme) {
             case "Sea":
                 return 0xFF00BFFF;     // Blue
             case "Sun":
@@ -23,7 +26,8 @@ public class CrucifiedTheme {
     }
 
     public static int getSecondaryColor() {
-        switch (currentTheme) {
+        String theme = getCurrentTheme();
+        switch (theme) {
             case "Sea":
                 return 0xFF00FFFF;     // Cyan
             case "Sun":
@@ -42,20 +46,22 @@ public class CrucifiedTheme {
     }
 
     public static int getBackgroundColor() {
-        if ("OLED".equals(currentTheme)) {
+        String theme = getCurrentTheme();
+        if ("OLED".equals(theme)) {
             return 0xFF000000; // Pure black for OLED
         }
-        if ("Flash".equals(currentTheme)) {
+        if ("Flash".equals(theme)) {
             return 0xFF0A0A0A; // Pitch black/dark contrast
         }
         return 0xCC1a1c23;
     }
 
     public static int getHeaderColor() {
-        if ("OLED".equals(currentTheme)) {
+        String theme = getCurrentTheme();
+        if ("OLED".equals(theme)) {
             return 0xFF111111;
         }
-        if ("Flash".equals(currentTheme)) {
+        if ("Flash".equals(theme)) {
             return 0xFF1C1C1C;
         }
         return 0xCC252836;
