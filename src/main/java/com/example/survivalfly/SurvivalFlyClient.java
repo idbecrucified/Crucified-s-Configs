@@ -13,20 +13,24 @@ public class SurvivalFlyClient implements ClientModInitializer {
     private static KeyBinding editScreenKey;
     private static int cps = 0;
 
-    // Global Mod Toggle States
+    // Expanded Mod Toggle States
     public static boolean toggleSprint = true;
-    public static boolean totemCounter = true;
-    public static boolean armorStatus = true;
     public static boolean cpsDisplay = true;
     public static boolean keystrokes = true;
+    public static boolean armorStatus = true;
+    public static boolean hitColor = true;
+
     public static boolean fpsCounter = true;
-    public static boolean fullbright = true;
     public static boolean fastRender = false;
     public static boolean zoomToggle = true;
+    public static boolean chunkAnimator = true;
+
+    public static boolean fullbright = true;
+    public static boolean totemCounter = true;
+    public static boolean customSky = false;
 
     @Override
     public void onInitializeClient() {
-        // Register keybinding to open the HUD edit screen using Right Shift
         editScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.survivalfly.editscreen",
             InputUtil.Type.KEYSYM,
@@ -34,14 +38,12 @@ public class SurvivalFlyClient implements ClientModInitializer {
             "category.survivalfly"
         ));
 
-        // Listen for client ticks to open the edit screen when Right Shift is pressed
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (editScreenKey.wasPressed()) {
                 client.setScreen(new CrucifiedHudEditScreen());
             }
         });
 
-        // Register the HUD renderer
         HudRenderCallback.EVENT.register(new HudRenderer());
     }
 
