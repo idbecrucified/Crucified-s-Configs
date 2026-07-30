@@ -1,61 +1,37 @@
 package com.example.survivalfly;
 
 public class CrucifiedTheme {
-    public static String currentTheme = "Gamer";
+    private static String currentTheme = "Gamer";
+
+    public static void setTheme(String theme) {
+        currentTheme = theme;
+    }
 
     public static String getCurrentTheme() {
-        return currentTheme != null ? currentTheme : "Gamer";
+        return currentTheme;
     }
 
     public static int getPrimaryColor() {
-        String theme = getCurrentTheme();
-        switch (theme) {
-            case "Sea": return 0xFF00BFFF;     // Blue
-            case "Sun": return 0xFFFF7F00;     // Orange
-            case "OLED": return 0xFF444444;    // Gray accent
-            case "Flash": return 0xFFFFFFFF;   // White
-            case "Natural": return 0xFF228B22; // Forest Green
-            case "Rock": return 0xFF708090;    // Slate Gray
-            default: return 0xFFFF007F;        // Gamer (Hot Pink)
-        }
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0x00AAFF;     // Blue/Cyan
+            case "sun" -> 0xFF8800;     // Orange
+            case "oled" -> 0x1A1A1A;    // Dark gray / black
+            case "flash" -> 0xFFFFFF;   // White
+            case "natural" -> 0x228B22; // Forest Green
+            case "rock" -> 0x777777;    // Rock Gray
+            default -> 0xFF3355;        // Gamer (Default vibrant pink/red)
+        };
     }
 
     public static int getSecondaryColor() {
-        String theme = getCurrentTheme();
-        switch (theme) {
-            case "Sea": return 0xFF00FFFF;     // Cyan
-            case "Sun": return 0xFFFFD700;     // Yellow
-            case "OLED": return 0xFF666666;    // Lighter Gray outline
-            case "Flash": return 0xFFCCCCCC;   // Off-White
-            case "Natural": return 0xFF32CD32; // Lime Green
-            case "Rock": return 0xFFA9A9A9;    // Dark Gray Rock
-            default: return 0xFFFF69B4;        // Gamer (Pink)
-        }
-    }
-
-    public static int getBackgroundColor() {
-        String theme = getCurrentTheme();
-        if ("OLED".equals(theme)) return 0xFF000000; 
-        if ("Flash".equals(theme)) return 0xFF0A0A0A; 
-        return 0xCC1a1c23;
-    }
-
-    public static int getHeaderColor() {
-        String theme = getCurrentTheme();
-        if ("OLED".equals(theme)) return 0xFF111111;
-        if ("Flash".equals(theme)) return 0xFF1C1C1C;
-        return 0xCC252836;
-    }
-
-    public static int getAccentColor() {
-        return getPrimaryColor();
-    }
-
-    public static int getGradientStart() {
-        return getBackgroundColor();
-    }
-
-    public static int getGradientEnd() {
-        return getHeaderColor();
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0x00FFFF;     // Cyan
+            case "sun" -> 0xFFFF00;     // Yellow
+            case "oled" -> 0x555555;    // Gray accents
+            case "flash" -> 0x000000;   // Black
+            case "natural" -> 0x00FF00; // Lime Green
+            case "rock" -> 0x444444;    // Dark Rock Gray
+            default -> 0x9900CC;        // Gamer secondary (Purple)
+        };
     }
 }
