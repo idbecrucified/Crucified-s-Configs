@@ -11,12 +11,11 @@ public class CrucifiedModsScreen extends Screen {
     private final Screen parent;
     private static String currentCategory = "PvP";
 
-    // Mod states
+    // Mod states (Hit Color removed)
     private static boolean toggleSprint = true;
     private static boolean cpsDisplay = true;
     private static boolean keystrokes = true;
     private static boolean armorStatus = true;
-    private static boolean hitColor = true;
     
     private static boolean zoom = true;
     private static boolean fpsDisplay = true;
@@ -41,7 +40,7 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2 + 10;
 
-        // Category selection buttons on the left (Only PvP and Graphics)
+        // Category selection buttons on the left
         String[] categories = {"PvP", "Graphics"};
         int catX = panelX + 15;
         int catStartY = panelY + 48;
@@ -65,7 +64,6 @@ public class CrucifiedModsScreen extends Screen {
             addModToggle(modX, modStartY, 1, "CPS Display", cpsDisplay, val -> cpsDisplay = val);
             addModToggle(modX, modStartY, 2, "Keystrokes", keystrokes, val -> keystrokes = val);
             addModToggle(modX, modStartY, 3, "Armor Status", armorStatus, val -> armorStatus = val);
-            addModToggle(modX, modStartY, 4, "Hit Color", hitColor, val -> hitColor = val);
         } else if (currentCategory.equals("Graphics")) {
             // Zoom toggle button with gear configuration icon
             String zoomText = "Zoom: " + (zoom ? "§aON" : "§cOFF");
@@ -83,10 +81,22 @@ public class CrucifiedModsScreen extends Screen {
             ).dimensions(modX + 164, modStartY, 26, 20).build());
 
             addModToggle(modX, modStartY, 1, "FPS Display", fpsDisplay, val -> fpsDisplay = val);
-            addModToggle(modX, modStartY, 2, "Fullbright", fullbright, val -> fullbright = val);
+            
+            // Fullbright toggle with immediate game option application fix
+            String fbText = "Fullbright: " + (fullbright ? "§aON" : "§cOFF");
+            this.addDrawableChild(ButtonWidget.builder(
+                Text.literal(fbText),
+                button -> {
+                    fullbright = !fullbright;
+                    try {
+                        MinecraftClient.getInstance().options.getGamma().setValue(fullbright ? 100.0D : 1.0D);
+                    } catch (Exception ignored) {}
+                    MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
+                }
+            ).dimensions(modX, modStartY + (2 * 26), 190, 20).build());
         }
 
-        // Back button
+        // Back button positioned cleanly away from other buttons
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
@@ -106,8 +116,6 @@ public class CrucifiedModsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Transparent background so the world behind remains fully visible
-
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int panelWidth = 320;
@@ -115,12 +123,15 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2 + 10;
 
-        // Header Banner background and bottom accent line
+        // Rectangle background restored around the menu container
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+
+        // Header Banner background and bottom accent line dynamically tinted by Theme
         int headerHeight = 35;
         context.fill(panelX + 10, panelY + 8, panelX + panelWidth - 10, panelY + headerHeight, CrucifiedTheme.getSecondaryColor());
         context.fill(panelX + 10, panelY + headerHeight, panelX + panelWidth - 10, panelY + headerHeight + 3, CrucifiedTheme.getPrimaryColor());
 
-        // Header text elements
+        // Header text elements using theme colors
         context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 12, 0xFFFFFF);
         context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 24, CrucifiedTheme.getPrimaryColor());
 
