@@ -1,6 +1,7 @@
 package com.example.survivalfly.screen;
 
 import com.example.survivalfly.CrucifiedTheme;
+import com.example.survivalfly.CrucifiedsThemeScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
