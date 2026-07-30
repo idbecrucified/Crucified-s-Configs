@@ -11,7 +11,7 @@ public class CrucifiedModsScreen extends Screen {
     private final Screen parent;
     private static String currentCategory = "PvP";
 
-    // Mod states (Hit Color removed)
+    // Mod states
     private static boolean toggleSprint = true;
     private static boolean cpsDisplay = true;
     private static boolean keystrokes = true;
@@ -82,21 +82,18 @@ public class CrucifiedModsScreen extends Screen {
 
             addModToggle(modX, modStartY, 1, "FPS Display", fpsDisplay, val -> fpsDisplay = val);
             
-            // Fullbright toggle with immediate game option application fix
+            // Fullbright toggle
             String fbText = "Fullbright: " + (fullbright ? "§aON" : "§cOFF");
             this.addDrawableChild(ButtonWidget.builder(
                 Text.literal(fbText),
                 button -> {
                     fullbright = !fullbright;
-                    try {
-                        MinecraftClient.getInstance().options.getGamma().setValue(fullbright ? 100.0D : 1.0D);
-                    } catch (Exception ignored) {}
                     MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
                 }
             ).dimensions(modX, modStartY + (2 * 26), 190, 20).build());
         }
 
-        // Back button positioned cleanly away from other buttons
+        // Back button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
@@ -123,15 +120,15 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2 + 10;
 
-        // Rectangle background restored around the menu container
+        // Rectangle background around menu container
         context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
 
-        // Header Banner background and bottom accent line dynamically tinted by Theme
+        // Header Banner background as a gradient between the 2 colors in the theme
         int headerHeight = 35;
-        context.fill(panelX + 10, panelY + 8, panelX + panelWidth - 10, panelY + headerHeight, CrucifiedTheme.getSecondaryColor());
+        context.fillGradient(panelX + 10, panelY + 8, panelX + panelWidth - 10, panelY + headerHeight, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
         context.fill(panelX + 10, panelY + headerHeight, panelX + panelWidth - 10, panelY + headerHeight + 3, CrucifiedTheme.getPrimaryColor());
 
-        // Header text elements using theme colors
+        // Header text elements using theme primary color
         context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 12, 0xFFFFFF);
         context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 24, CrucifiedTheme.getPrimaryColor());
 
@@ -142,9 +139,14 @@ public class CrucifiedModsScreen extends Screen {
     public boolean shouldPause() {
         return false;
     }
+
+    public static boolean isZoomEnabled() { return zoom; }
+    public static boolean isFpsEnabled() { return fpsDisplay; }
+    public static boolean isFullbrightEnabled() { return fullbright; }
+    public static boolean isKeystrokesEnabled() { return keystrokes; }
 }
 
-// Sub-screen for configuring Zoom Intensity and Keybind
+// Sub-screen for configuring Zoom Intensity and Keybind with gradient panel background
 class ZoomSettingsScreen extends Screen {
     private final Screen parent;
 
@@ -189,8 +191,18 @@ class ZoomSettingsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fillGradient(0, 0, this.width, this.height, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
-        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", this.width / 2, this.height / 2 - 70, CrucifiedTheme.getPrimaryColor());
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int panelWidth = 260;
+        int panelHeight = 160;
+        int panelX = centerX - panelWidth / 2;
+        int panelY = centerY - panelHeight / 2;
+
+        // Square panel with gradient of the 2 theme colors around the config
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 30, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
+        
+        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", centerX, panelY + 10, CrucifiedTheme.getPrimaryColor());
         super.render(context, mouseX, mouseY, delta);
     }
 
