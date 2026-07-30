@@ -18,11 +18,13 @@ public class CrucifiedModsScreen extends Screen {
     private static boolean armorStatus = true;
     private static boolean hitColor = true;
     
+    private static boolean zoom = true;
     private static boolean fpsDisplay = true;
     private static boolean fullbright = true;
 
-    private static boolean zoom = true;
-    private static boolean customSky = true;
+    // Zoom settings
+    public static float zoomIntensity = 4.0f;
+    public static String zoomKey = "C";
 
     public CrucifiedModsScreen(Screen parent) {
         super(Text.literal("Crucified's Mod Hub"));
@@ -39,8 +41,8 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2 + 10;
 
-        // Category selection buttons on the left
-        String[] categories = {"PvP", "Performance", "Graphics"};
+        // Category selection buttons on the left (Only PvP and Graphics)
+        String[] categories = {"PvP", "Graphics"};
         int catX = panelX + 15;
         int catStartY = panelY + 48;
         for (int i = 0; i < categories.length; i++) {
@@ -64,12 +66,24 @@ public class CrucifiedModsScreen extends Screen {
             addModToggle(modX, modStartY, 2, "Keystrokes", keystrokes, val -> keystrokes = val);
             addModToggle(modX, modStartY, 3, "Armor Status", armorStatus, val -> armorStatus = val);
             addModToggle(modX, modStartY, 4, "Hit Color", hitColor, val -> hitColor = val);
-        } else if (currentCategory.equals("Performance")) {
-            addModToggle(modX, modStartY, 0, "FPS Display", fpsDisplay, val -> fpsDisplay = val);
-            addModToggle(modX, modStartY, 1, "Fullbright", fullbright, val -> fullbright = val);
         } else if (currentCategory.equals("Graphics")) {
-            addModToggle(modX, modStartY, 0, "Zoom", zoom, val -> zoom = val);
-            addModToggle(modX, modStartY, 1, "Custom Sky", customSky, val -> customSky = val);
+            // Zoom toggle button with gear configuration icon
+            String zoomText = "Zoom: " + (zoom ? "§aON" : "§cOFF");
+            this.addDrawableChild(ButtonWidget.builder(
+                Text.literal(zoomText),
+                button -> {
+                    zoom = !zoom;
+                    MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
+                }
+            ).dimensions(modX, modStartY, 160, 20).build());
+
+            this.addDrawableChild(ButtonWidget.builder(
+                Text.literal("⚙"),
+                button -> MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(this))
+            ).dimensions(modX + 164, modStartY, 26, 20).build());
+
+            addModToggle(modX, modStartY, 1, "FPS Display", fpsDisplay, val -> fpsDisplay = val);
+            addModToggle(modX, modStartY, 2, "Fullbright", fullbright, val -> fullbright = val);
         }
 
         // Back button
@@ -92,8 +106,7 @@ public class CrucifiedModsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient background
-        context.fillGradient(0, 0, this.width, this.height, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
+        // Transparent background so the world behind remains fully visible
 
         int centerX = this.width / 2;
         int centerY = this.height / 2;
@@ -101,9 +114,6 @@ public class CrucifiedModsScreen extends Screen {
         int panelHeight = 200;
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2 + 10;
-
-        // Main dark container box
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
 
         // Header Banner background and bottom accent line
         int headerHeight = 35;
@@ -114,6 +124,62 @@ public class CrucifiedModsScreen extends Screen {
         context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 12, 0xFFFFFF);
         context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 24, CrucifiedTheme.getPrimaryColor());
 
+        super.render(context, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
+}
+
+// Sub-screen for configuring Zoom Intensity and Keybind
+class ZoomSettingsScreen extends Screen {
+    private final Screen parent;
+
+    protected ZoomSettingsScreen(Screen parent) {
+        super(Text.literal("Zoom Settings"));
+        this.parent = parent;
+    }
+
+    @Override
+    protected void init() {
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+
+        this.addDrawableChild(ButtonWidget.builder(
+            Text.literal("Zoom Intensity: " + CrucifiedModsScreen.zoomIntensity + "x"),
+            button -> {
+                if (CrucifiedModsScreen.zoomIntensity == 2.0f) CrucifiedModsScreen.zoomIntensity = 3.0f;
+                else if (CrucifiedModsScreen.zoomIntensity == 3.0f) CrucifiedModsScreen.zoomIntensity = 4.0f;
+                else if (CrucifiedModsScreen.zoomIntensity == 4.0f) CrucifiedModsScreen.zoomIntensity = 6.0f;
+                else if (CrucifiedModsScreen.zoomIntensity == 6.0f) CrucifiedModsScreen.zoomIntensity = 8.0f;
+                else CrucifiedModsScreen.zoomIntensity = 2.0f;
+                MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
+            }
+        ).dimensions(centerX - 100, centerY - 30, 200, 20).build());
+
+        this.addDrawableChild(ButtonWidget.builder(
+            Text.literal("Zoom Key: " + CrucifiedModsScreen.zoomKey),
+            button -> {
+                if (CrucifiedModsScreen.zoomKey.equals("C")) CrucifiedModsScreen.zoomKey = "Z";
+                else if (CrucifiedModsScreen.zoomKey.equals("Z")) CrucifiedModsScreen.zoomKey = "V";
+                else if (CrucifiedModsScreen.zoomKey.equals("V")) CrucifiedModsScreen.zoomKey = "LEFT_ALT";
+                else CrucifiedModsScreen.zoomKey = "C";
+                MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
+            }
+        ).dimensions(centerX - 100, centerY, 200, 20).build());
+
+        this.addDrawableChild(ButtonWidget.builder(
+            Text.literal("Done"),
+            button -> MinecraftClient.getInstance().setScreen(parent)
+        ).dimensions(centerX - 100, centerY + 40, 200, 20).build());
+    }
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.fillGradient(0, 0, this.width, this.height, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
+        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", this.width / 2, this.height / 2 - 70, CrucifiedTheme.getPrimaryColor());
         super.render(context, mouseX, mouseY, delta);
     }
 
