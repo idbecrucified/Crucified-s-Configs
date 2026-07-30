@@ -26,7 +26,7 @@ public class CrucifiedsThemeScreen extends Screen {
 
         for (int i = 0; i < themes.length; i++) {
             String themeName = themes[i];
-            boolean isActive = CrucifiedTheme.getCurrentThemeName().equalsIgnoreCase(themeName);
+            boolean isActive = CrucifiedTheme.getCurrentTheme().equalsIgnoreCase(themeName);
             String label = themeName + (isActive ? " [Active]" : "");
 
             this.addDrawableChild(ButtonWidget.builder(
@@ -38,7 +38,7 @@ public class CrucifiedsThemeScreen extends Screen {
             ).dimensions(centerX - 100, startY + (i * 22), 200, 18).build());
         }
 
-        // Back button at bottom of box
+        // Back button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
@@ -54,13 +54,13 @@ public class CrucifiedsThemeScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Container box (replaces full-screen background)
+        // Container box
         context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
 
-        // Header gradient spanning the full width of the box
+        // Themed header gradient bar
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
 
-        // Header title text inside top gradient box
+        // Header text inside top gradient box
         context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", centerX, panelY + 14, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
