@@ -34,4 +34,28 @@ public class CrucifiedTheme {
             default -> 0x9900CC;        // Gamer secondary (Purple)
         };
     }
+
+    public static int getGradientStart() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0xFF003366;
+            case "sun" -> 0xFF663300;
+            case "oled" -> 0xFF0A0A0A;
+            case "flash" -> 0xFF222222;
+            case "natural" -> 0xFF0A2E0A;
+            case "rock" -> 0xFF2A2A2A;
+            default -> 0xFF220011;
+        };
+    }
+
+    public static int getGradientEnd() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0xFF001122;
+            case "sun" -> 0xFF221100;
+            case "oled" -> 0xFF000000;
+            case "flash" -> 0xFF000000;
+            case "natural" -> 0xFF020A02;
+            case "rock" -> 0xFF111111;
+            default -> 0xFF0D0008;
+        };
+    }
 }
