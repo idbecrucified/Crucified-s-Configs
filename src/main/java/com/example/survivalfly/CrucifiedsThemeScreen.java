@@ -10,20 +10,23 @@ public class CrucifiedsThemeScreen extends Screen {
     private final Screen parent;
 
     public CrucifiedsThemeScreen(Screen parent) {
-        super(Text.literal("Theme Selection"));
+        super(Text.literal("Select Client Theme"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int startY = this.height / 2 - 90;
-        int spacing = 22;
+        int centerY = this.height / 2;
+        int panelHeight = 250;
+        int panelY = centerY - panelHeight / 2;
 
         String[] themes = {"Gamer", "Sea", "Sun", "OLED", "Flash", "Natural", "Rock"};
+        int startY = panelY + 44;
+
         for (int i = 0; i < themes.length; i++) {
             String themeName = themes[i];
-            boolean isActive = CrucifiedTheme.getCurrentTheme().equalsIgnoreCase(themeName);
+            boolean isActive = CrucifiedTheme.getCurrentThemeName().equalsIgnoreCase(themeName);
             String label = themeName + (isActive ? " [Active]" : "");
 
             this.addDrawableChild(ButtonWidget.builder(
@@ -32,20 +35,34 @@ public class CrucifiedsThemeScreen extends Screen {
                     CrucifiedTheme.setTheme(themeName);
                     MinecraftClient.getInstance().setScreen(new CrucifiedsThemeScreen(parent));
                 }
-            ).dimensions(centerX - 100, startY + (i * spacing), 200, 20).build());
+            ).dimensions(centerX - 100, startY + (i * 22), 200, 18).build());
         }
 
-        // Back button
+        // Back button at bottom of box
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
-        ).dimensions(centerX - 100, startY + (themes.length * spacing) + 8, 200, 20).build());
+        ).dimensions(centerX - 100, startY + (themes.length * 22) + 6, 200, 18).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fillGradient(0, 0, this.width, this.height, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
-        context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", this.width / 2, 20, CrucifiedTheme.getPrimaryColor());
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int panelWidth = 240;
+        int panelHeight = 250;
+        int panelX = centerX - panelWidth / 2;
+        int panelY = centerY - panelHeight / 2;
+
+        // Container box (replaces full-screen background)
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+
+        // Header gradient spanning the full width of the box
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+
+        // Header title text inside top gradient box
+        context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", centerX, panelY + 14, 0xFFFFFF);
+
         super.render(context, mouseX, mouseY, delta);
     }
 
