@@ -1,7 +1,7 @@
 package com.example.survivalfly;
 
 import com.example.survivalfly.renderer.HudRenderer;
-import com.example.survivalfly.screen.CrucifiedModsScreen;
+import com.example.survivalfly.screen.CrucifiedRootMenuScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -17,7 +17,6 @@ public class SurvivalFlyClient implements ClientModInitializer {
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(HudRenderer::render);
 
-        // Register Right Shift key binding to open the Mod Hub
         modHubKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.survivalfly.modhub",
             InputUtil.Type.KEYSYM,
@@ -25,10 +24,9 @@ public class SurvivalFlyClient implements ClientModInitializer {
             "category.survivalfly.general"
         ));
 
-        // Check if the key is pressed every tick
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (modHubKey.wasPressed()) {
-                client.setScreen(new CrucifiedModsScreen(null));
+                client.setScreen(new CrucifiedRootMenuScreen(null));
             }
         });
     }
