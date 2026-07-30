@@ -47,7 +47,7 @@ public class HudRenderer {
     private static void handleZoom(MinecraftClient client) {
         if (!CrucifiedModsScreen.isZoomEnabled()) {
             if (isZooming) {
-                client.options.getFov().setValue(originalFov);
+                client.options.getFov().setValue((int) originalFov);
                 isZooming = false;
             }
             return;
@@ -61,10 +61,10 @@ public class HudRenderer {
                 originalFov = client.options.getFov().getValue();
                 isZooming = true;
             }
-            client.options.getFov().setValue(originalFov / CrucifiedModsScreen.zoomIntensity);
+            client.options.getFov().setValue((int) (originalFov / CrucifiedModsScreen.zoomIntensity));
         } else {
             if (isZooming) {
-                client.options.getFov().setValue(originalFov);
+                client.options.getFov().setValue((int) originalFov);
                 isZooming = false;
             }
         }
@@ -111,7 +111,7 @@ public class HudRenderer {
     }
 
     private static void renderFps(DrawContext context, MinecraftClient client, int primaryColor, int secondaryColor) {
-        String fpsText = "FPS: " + MinecraftClient.getCurrentFps();
+        String fpsText = "FPS: " + client.getCurrentFps();
         int x = 10;
         int y = 80;
         int width = client.textRenderer.getWidth(fpsText) + 8;
