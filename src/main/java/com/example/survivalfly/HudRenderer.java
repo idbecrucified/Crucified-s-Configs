@@ -60,7 +60,7 @@ public class HudRenderer {
         boolean sPressed = client.options.backKey.isPressed();
         boolean dPressed = client.options.rightKey.isPressed();
 
-        int bgActive = CrucifiedsTheme.getPrimaryColor();
+        int bgActive = CrucifiedTheme.getPrimaryColor();
         int bgNormal = CrucifiedsConfigs.hudBackgroundColor;
 
         // Key W (Top Center)
@@ -78,7 +78,7 @@ public class HudRenderer {
         if (CrucifiedsConfigs.hudBackground) {
             context.fill(x, y, x + size, y + size, pressed ? activeBg : normalBg);
         }
-        context.drawBorder(x, y, size, size, CrucifiedsTheme.getSecondaryColor());
+        context.drawBorder(x, y, size, size, CrucifiedTheme.getSecondaryColor());
         int textWidth = textRenderer.getWidth(label);
         context.drawText(textRenderer, label, x + (size - textWidth) / 2, y + 4, CrucifiedsConfigs.hudTextColor, true);
     }
@@ -86,7 +86,6 @@ public class HudRenderer {
     private static void renderArmorStatus(DrawContext context, MinecraftClient client, int x, int y) {
         if (client.player == null) return;
         int offsetX = 0;
-        // Iterate through armor items: Boots, Leggings, Chestplate, Helmet
         for (ItemStack stack : client.player.getArmorItems()) {
             if (!stack.isEmpty()) {
                 context.drawItem(stack, x + offsetX, y);
