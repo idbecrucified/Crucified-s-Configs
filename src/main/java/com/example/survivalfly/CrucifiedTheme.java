@@ -1,58 +1,61 @@
 package com.example.survivalfly;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
+public class CrucifiedTheme {
+    private static String currentTheme = "Gamer";
 
-public class CrucifiedsThemeScreen extends Screen {
-    private final Screen parent;
-
-    public CrucifiedsThemeScreen(Screen parent) {
-        super(Text.literal("Theme Selection"));
-        this.parent = parent;
+    public static void setTheme(String theme) {
+        currentTheme = theme;
     }
 
-    @Override
-    protected void init() {
-        int centerX = this.width / 2;
-        int startY = this.height / 2 - 90;
-        int spacing = 22;
-
-        String[] themes = {"Gamer", "Sea", "Sun", "OLED", "Flash", "Natural", "Rock"};
-        for (int i = 0; i < themes.length; i++) {
-            String themeName = themes[i];
-            boolean isActive = CrucifiedTheme.getCurrentTheme().equalsIgnoreCase(themeName);
-            String label = themeName + (isActive ? " [Active]" : "");
-
-            this.addDrawableChild(ButtonWidget.builder(
-                Text.literal(label),
-                button -> {
-                    // Fix: Use the public setter method instead of direct field assignment
-                    CrucifiedTheme.setTheme(themeName);
-                    MinecraftClient.getInstance().setScreen(new CrucifiedsThemeScreen(parent));
-                }
-            ).dimensions(centerX - 100, startY + (i * spacing), 200, 20).build());
-        }
-
-        // Back button
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.literal("Back"),
-            button -> MinecraftClient.getInstance().setScreen(parent)
-        ).dimensions(centerX - 100, startY + (themes.length * spacing) + 8, 200, 20).build());
+    public static String getCurrentTheme() {
+        return currentTheme;
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Safe gradient rendering using the methods defined in CrucifiedTheme
-        context.fillGradient(0, 0, this.width, this.height, CrucifiedTheme.getGradientStart(), CrucifiedTheme.getGradientEnd());
-        context.drawCenteredTextWithShadow(this.textRenderer, "Select Theme", this.width / 2, this.height / 2 - 115, CrucifiedTheme.getPrimaryColor());
-        super.render(context, mouseX, mouseY, delta);
+    public static int getPrimaryColor() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0x00AAFF;     // Blue/Cyan
+            case "sun" -> 0xFF8800;     // Orange
+            case "oled" -> 0x1A1A1A;    // Dark gray / black
+            case "flash" -> 0xFFFFFF;   // White
+            case "natural" -> 0x228B22; // Forest Green
+            case "rock" -> 0x777777;    // Rock Gray
+            default -> 0xFF3355;        // Gamer (Default vibrant pink/red)
+        };
     }
 
-    @Override
-    public boolean shouldPause() {
-        return false;
+    public static int getSecondaryColor() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0x00FFFF;     // Cyan
+            case "sun" -> 0xFFFF00;     // Yellow
+            case "oled" -> 0x555555;    // Gray accents
+            case "flash" -> 0x000000;   // Black
+            case "natural" -> 0x00FF00; // Lime Green
+            case "rock" -> 0x444444;    // Dark Rock Gray
+            default -> 0x9900CC;        // Gamer secondary (Purple)
+        };
+    }
+
+    public static int getGradientStart() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0xFF003366;
+            case "sun" -> 0xFF663300;
+            case "oled" -> 0xFF0A0A0A;
+            case "flash" -> 0xFF222222;
+            case "natural" -> 0xFF0A2E0A;
+            case "rock" -> 0xFF2A2A2A;
+            default -> 0xFF220011;
+        };
+    }
+
+    public static int getGradientEnd() {
+        return switch (currentTheme.toLowerCase()) {
+            case "sea" -> 0xFF001122;
+            case "sun" -> 0xFF221100;
+            case "oled" -> 0xFF000000;
+            case "flash" -> 0xFF000000;
+            case "natural" -> 0xFF020A02;
+            case "rock" -> 0xFF111111;
+            default -> 0xFF0D0008;
+        };
     }
 }
