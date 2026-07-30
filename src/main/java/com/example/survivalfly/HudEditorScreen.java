@@ -23,7 +23,7 @@ public class HudEditorScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
         context.drawCenteredTextWithShadow(this.textRenderer, "HUD Editor - Click and drag elements to move them", this.width / 2, 10, 0xFFFFFFFF);
         
         drawHudOutline(context, "FPS", CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY, 60, 16, mouseX, mouseY);
