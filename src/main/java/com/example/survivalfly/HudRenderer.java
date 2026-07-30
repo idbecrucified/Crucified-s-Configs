@@ -3,8 +3,12 @@ package com.example.survivalfly;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 public class HudRenderer {
+    public static int cps = 0;
+
     public static void renderHud(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.options.hudHidden || client.player == null) {
@@ -18,7 +22,7 @@ public class HudRenderer {
             drawHudBox(context, tr, text, CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY);
         }
         if (CrucifiedsConfigs.cpsDisplay) {
-            String text = "CPS: " + CrucifiedsMod.cps;
+            String text = "CPS: " + cps;
             drawHudBox(context, tr, text, CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY);
         }
         if (CrucifiedsConfigs.totemCounter) {
@@ -30,7 +34,7 @@ public class HudRenderer {
             drawHudBox(context, tr, text, CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY);
         }
         if (CrucifiedsConfigs.keystrokes) {
-            renderKeystrokes(context, tr, CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY);
+            renderKeystrokes(context, tr, CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY, client);
         }
     }
 
@@ -44,12 +48,12 @@ public class HudRenderer {
         context.drawText(tr, text, x + 3, y + 3, CrucifiedsConfigs.hudTextColor, true);
     }
 
-    private static void renderKeystrokes(DrawContext context, TextRenderer tr, int x, int y) {
+    private static void renderKeystrokes(DrawContext context, TextRenderer tr, int x, int y, MinecraftClient client) {
         int bg = CrucifiedsConfigs.hudBackgroundColor;
-        boolean w = clientKey(net.minecraft.client.option.KeyBinding.W_KEY);
-        boolean a = clientKey(net.minecraft.client.option.KeyBinding.A_KEY);
-        boolean s = clientKey(net.minecraft.client.option.KeyBinding.S_KEY);
-        boolean d = clientKey(net.minecraft.client.option.KeyBinding.D_KEY);
+        boolean w = client.options.forwardKey.isPressed();
+        boolean a = client.options.leftKey.isPressed();
+        boolean s = client.options.backKey.isPressed();
+        boolean d = client.options.rightKey.isPressed();
 
         drawKeyBox(context, tr, "W", x + 18, y, w, bg);
         drawKeyBox(context, tr, "A", x, y + 18, a, bg);
@@ -70,19 +74,14 @@ public class HudRenderer {
     private static int getTotemCount(MinecraftClient client) {
         int count = 0;
         if (client.player == null) return 0;
-        for (net.minecraft.item.ItemStack stack : client.player.getInventory().main) {
-            if (stack.isOf(net.minecraft.item.Items.TOTEM_OF_UNDYING)) {
+        for (ItemStack stack : client.player.getInventory().main) {
+            if (stack.isOf(Items.TOTEM_OF_UNDYING)) {
                 count += stack.getCount();
             }
         }
-        if (client.player.getOffHandStack().isOf(net.minecraft.item.Items.TOTEM_OF_UNDYING)) {
+        if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
             count += client.player.getOffHandStack().getCount();
         }
         return count;
-    }
-
-    private static boolean clientKey(net.minecraft.client.util.InputUtil.Key key) {
-        // Fallback key state checker if needed, or handled via keybindings
-        return false; 
     }
 }
