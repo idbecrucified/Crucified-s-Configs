@@ -66,7 +66,6 @@ public class HudRenderer {
         if (CrucifiedsConfigs.hudBackground) {
             context.fill(x, y, x + size, y + size, pressed ? CrucifiedTheme.getPrimaryColor() : bg);
         }
-        context.drawBorder(x, y, size, size, CrucifiedTheme.getSecondaryColor());
         int tw = tr.getWidth(label);
         context.drawText(tr, label, x + (size - tw) / 2, y + 4, CrucifiedsConfigs.hudTextColor, true);
     }
