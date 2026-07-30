@@ -18,28 +18,36 @@ public class ThemeSelectionScreen extends Screen {
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int centerY = this.height / 2;
+        int startY = this.height / 2 - 90;
+        int spacing = 22;
 
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.literal("Red Theme"),
-            button -> CrucifiedTheme.setTheme("Red")
-        ).dimensions(centerX - 100, centerY - 40, 200, 20).build());
+        String[] themes = {"Gamer", "Sea", "Sun", "OLED", "Flash", "Natural", "Rock"};
+        for (int i = 0; i < themes.length; i++) {
+            String theme = themes[i];
+            boolean isActive = CrucifiedTheme.getCurrentTheme().equalsIgnoreCase(theme);
+            String label = theme + (isActive ? " [Active]" : "");
 
-        this.addDrawableChild(ButtonWidget.builder(
-            Text.literal("Blue Theme"),
-            button -> CrucifiedTheme.setTheme("Blue")
-        ).dimensions(centerX - 100, centerY - 10, 200, 20).build());
+            this.addDrawableChild(ButtonWidget.builder(
+                Text.literal(label),
+                button -> {
+                    CrucifiedTheme.setTheme(theme);
+                    // Refresh screen to update active indicators
+                    MinecraftClient.getInstance().setScreen(new ThemeSelectionScreen(parent));
+                }
+            ).dimensions(centerX - 100, startY + (i * spacing), 200, 20).build());
+        }
 
+        // Back button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
-        ).dimensions(centerX - 100, centerY + 30, 200, 20).build());
+        ).dimensions(centerX - 100, startY + (themes.length * spacing) + 8, 200, 20).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.textRenderer, "Select Theme", this.width / 2, this.height / 2 - 70, CrucifiedTheme.getPrimaryColor());
+        context.drawCenteredTextWithShadow(this.textRenderer, "Select Theme", this.width / 2, this.height / 2 - 115, CrucifiedTheme.getPrimaryColor());
         super.render(context, mouseX, mouseY, delta);
     }
 
