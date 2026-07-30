@@ -34,25 +34,25 @@ public class HudEditorScreen extends Screen {
         TextRenderer tr = client.textRenderer;
 
         if (CrucifiedsConfigs.fpsCounter) {
-            drawInteractiveHud(context, tr, "FPS: 60", CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY, mouseX, mouseY, "FPS");
+            drawInteractiveHud(context, tr, "FPS: 60", CrucifiedsConfigs.fpsX, CrucifiedsConfigs.fpsY);
         }
         if (CrucifiedsConfigs.keystrokes) {
             drawInteractiveKeystrokes(context, tr, CrucifiedsConfigs.keystrokesX, CrucifiedsConfigs.keystrokesY);
         }
         if (CrucifiedsConfigs.armorStatus) {
-            drawInteractiveHud(context, tr, "[Armor Status]", CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY, mouseX, mouseY, "Armor");
+            drawInteractiveHud(context, tr, "[Armor Status]", CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY);
         }
         if (CrucifiedsConfigs.cpsDisplay) {
-            drawInteractiveHud(context, tr, "CPS: 10", CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY, mouseX, mouseY, "CPS");
+            drawInteractiveHud(context, tr, "CPS: 10", CrucifiedsConfigs.cpsX, CrucifiedsConfigs.cpsY);
         }
         if (CrucifiedsConfigs.totemCounter) {
-            drawInteractiveHud(context, tr, "Totems: 1", CrucifiedsConfigs.totemX, CrucifiedsConfigs.totemY, mouseX, mouseY, "Totems");
+            drawInteractiveHud(context, tr, "Totems: 1", CrucifiedsConfigs.totemX, CrucifiedsConfigs.totemY);
         }
 
         super.render(context, mouseX, mouseY, delta);
     }
 
-    private void drawInteractiveHud(DrawContext context, TextRenderer textRenderer, String text, int x, int y, int mouseX, int mouseY, String id) {
+    private void drawInteractiveHud(DrawContext context, TextRenderer textRenderer, String text, int x, int y) {
         int width = textRenderer.getWidth(text) + 6;
         int height = 14;
         
@@ -60,7 +60,6 @@ public class HudEditorScreen extends Screen {
             context.fill(x, y, x + width, y + height, CrucifiedsConfigs.hudBackgroundColor);
         }
         context.drawText(textRenderer, text, x + 3, y + 3, CrucifiedsConfigs.hudTextColor, true);
-        // Overlay/outline border completely removed
     }
 
     private void drawInteractiveKeystrokes(DrawContext context, TextRenderer textRenderer, int x, int y) {
@@ -71,7 +70,6 @@ public class HudEditorScreen extends Screen {
         drawKeyBox(context, textRenderer, "A", x, y + 18, false, bgNormal, bgActive);
         drawKeyBox(context, textRenderer, "S", x + 18, y + 18, false, bgNormal, bgActive);
         drawKeyBox(context, textRenderer, "D", x + 36, y + 18, false, bgNormal, bgActive);
-        // Outline border completely removed
     }
 
     private void drawKeyBox(DrawContext context, TextRenderer textRenderer, String label, int x, int y, boolean pressed, int normalBg, int activeBg) {
@@ -79,7 +77,6 @@ public class HudEditorScreen extends Screen {
         if (CrucifiedsConfigs.hudBackground) {
             context.fill(x, y, x + size, y + size, pressed ? activeBg : normalBg);
         }
-        context.drawBorder(x, y, size, size, CrucifiedTheme.getSecondaryColor());
         int textWidth = textRenderer.getWidth(label);
         context.drawText(textRenderer, label, x + (size - textWidth) / 2, y + 4, CrucifiedsConfigs.hudTextColor, true);
     }
@@ -95,7 +92,7 @@ public class HudEditorScreen extends Screen {
                 selectedHud = "Keystrokes";
                 dragOffsetX = (int) mouseX - CrucifiedsConfigs.keystrokesX;
                 dragOffsetY = (int) mouseY - CrucifiedsConfigs.keystrokesY;
-            } else if (CrucifiedsConfigs.armorStatus && isInside(mouseX, mouseY, CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY, this.textRenderer.getWidth("[Armor Status]") + 6, 16)) {
+            } else if (CrucifiedsConfigs.armorStatus && isInside(mouseX, mouseY, CrucifiedsConfigs.armorX, CrucifiedsConfigs.armorY, this.textRenderer.getWidth("[Armor Status]") + 6, 14)) {
                 selectedHud = "Armor";
                 dragOffsetX = (int) mouseX - CrucifiedsConfigs.armorX;
                 dragOffsetY = (int) mouseY - CrucifiedsConfigs.armorY;
