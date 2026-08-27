@@ -3,7 +3,6 @@ package com.example.survivalfly;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class CrucifiedsThemeScreen extends Screen {
@@ -29,19 +28,21 @@ public class CrucifiedsThemeScreen extends Screen {
             boolean isActive = CrucifiedTheme.getCurrentTheme().equalsIgnoreCase(themeName);
             String label = themeName + (isActive ? " [Active]" : "");
 
-            this.addDrawableChild(ButtonWidget.builder(
+            this.addDrawableChild(new ThemedButtonWidget(
+                centerX - 100, startY + (i * 22), 200, 18,
                 Text.literal(label),
                 button -> {
                     CrucifiedTheme.setTheme(themeName);
                     MinecraftClient.getInstance().setScreen(new CrucifiedsThemeScreen(parent));
                 }
-            ).dimensions(centerX - 100, startY + (i * 22), 200, 18).build());
+            ));
         }
 
-        this.addDrawableChild(ButtonWidget.builder(
+        this.addDrawableChild(new ThemedButtonWidget(
+            centerX - 100, startY + (themes.length * 22) + 6, 200, 18,
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
-        ).dimensions(centerX - 100, startY + (themes.length * 22) + 6, 200, 18).build());
+        ));
     }
 
     @Override
@@ -53,11 +54,10 @@ public class CrucifiedsThemeScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Black 1px border outline
         context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
-
-        // Entire panel gradient from Primary (top) to Secondary (bottom)
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+        context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
+        CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
 
         context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", centerX, panelY + 14, 0xFFFFFF);
 
@@ -65,7 +65,5 @@ public class CrucifiedsThemeScreen extends Screen {
     }
 
     @Override
-    public boolean shouldPause() {
-        return false;
-    }
+    public boolean shouldPause() { return false; }
 }
