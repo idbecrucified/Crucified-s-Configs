@@ -16,7 +16,7 @@ public class HudRenderer {
         int primary = CrucifiedTheme.getPrimaryColor();
         int secondary = CrucifiedTheme.getSecondaryColor();
 
-        // 1. Keystrokes HUD
+        // Keystrokes HUD
         if (CrucifiedModsScreen.isKeystrokesEnabled() && client.getWindow() != null) {
             long handle = client.getWindow().getHandle();
             int startX = 20;
@@ -29,7 +29,7 @@ public class HudRenderer {
             renderKey(context, "D", startX + (boxSize * 2) + 4, startY + boxSize + 2, boxSize, boxSize, InputUtil.isKeyPressed(handle, GLFW.GLFW_KEY_D), primary, secondary);
         }
 
-        // 2. FPS HUD
+        // FPS HUD
         if (CrucifiedModsScreen.isFpsEnabled()) {
             String fpsText = "FPS: " + client.getCurrentFps();
             int textWidth = client.textRenderer.getWidth(fpsText);
@@ -37,11 +37,8 @@ public class HudRenderer {
             int fpsY = 75;
             int padding = 6;
 
-            // Black 1px border
             context.fill(fpsX - 1, fpsY - 1, fpsX + textWidth + (padding * 2) + 1, fpsY + 14 + 1, 0xFF000000);
-            // Theme Gradient Background
             context.fillGradient(fpsX, fpsY, fpsX + textWidth + (padding * 2), fpsY + 14, primary, secondary);
-            // Text shadow render with explicit Text object
             context.drawTextWithShadow(client.textRenderer, Text.literal(fpsText), fpsX + padding, fpsY + 3, 0xFFFFFF);
         }
     }
