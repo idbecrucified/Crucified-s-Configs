@@ -84,7 +84,7 @@ public class CrucifiedHudLayoutScreen extends Screen {
             draggedElement.y = Math.max(0, Math.min(this.height - draggedElement.height, targetY));
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button);
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
@@ -99,7 +99,6 @@ public class CrucifiedHudLayoutScreen extends Screen {
 
         HudRenderer.renderHud(context);
 
-        // Render sleek hollow vector outlines around HUD elements
         for (HudRenderer.HudElement element : HudRenderer.ELEMENTS) {
             if (element.isEnabled()) {
                 boolean active = element.isHovered(mouseX, mouseY) || element == draggedElement;
