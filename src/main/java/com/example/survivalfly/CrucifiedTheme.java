@@ -21,7 +21,7 @@ public class CrucifiedTheme {
             case "sun": return 0xEEFF8C00;     // Dark Orange
             case "oled": return 0xEE333333;    // Dark Gray
             case "flash": return 0xFFFFFFFF;   // White
-            case "natural": return 0xEE2E7D32; // Green
+            case "natural": return 0xEE4CAF50; // Vibrant Light Emerald
             case "rock": return 0xEECCCCCC;    // Light Gray
             case "gamer":
             default:
@@ -35,7 +35,7 @@ public class CrucifiedTheme {
             case "sun": return 0xEEB22222;     // Dark Red
             case "oled": return 0xFF000000;    // Pure Black
             case "flash": return 0xFF000000;   // Black
-            case "natural": return 0xEE1B5E20; // Dark Green
+            case "natural": return 0xEE0B2E0B; // Deep Dark Forest Green
             case "rock": return 0xEE555555;    // Gray
             case "gamer":
             default:
