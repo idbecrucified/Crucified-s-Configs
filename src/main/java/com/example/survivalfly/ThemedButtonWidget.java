@@ -8,7 +8,10 @@ import net.minecraft.text.Text;
 public class ThemedButtonWidget extends ButtonWidget {
 
     public ThemedButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress) {
-        super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
+        super(x, y, width, height, message, button -> {
+            SoundHelper.playClick();
+            onPress.onPress(button);
+        }, DEFAULT_NARRATION_SUPPLIER);
     }
 
     @Override
@@ -25,13 +28,8 @@ public class ThemedButtonWidget extends ButtonWidget {
             primary = (primary & 0xFF000000) | ((primary & 0x00FEFEFE) >> 1) + 0x007F7F7F;
         }
 
-        // 1px Black Border
         context.fill(x - 1, y - 1, x + w + 1, y + h + 1, 0xFF000000);
-
-        // Theme Gradient Background
         context.fillGradient(x, y, x + w, y + h, primary, secondary);
-
-        // Glass highlight line
         context.fill(x, y, x + w, y + 1, 0x44FFFFFF);
 
         int textColor = this.active ? (this.isHovered() ? 0xFFFF00 : 0xFFFFFF) : 0xA0A0A0;
