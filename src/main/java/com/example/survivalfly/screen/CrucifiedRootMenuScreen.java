@@ -21,19 +21,16 @@ public class CrucifiedRootMenuScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
 
-        // Mods button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Mods"),
             button -> MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(this))
         ).dimensions(centerX - 100, centerY - 15, 200, 20).build());
 
-        // Themes button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Themes"),
             button -> MinecraftClient.getInstance().setScreen(new CrucifiedsThemeScreen(this))
         ).dimensions(centerX - 100, centerY + 10, 200, 20).build());
 
-        // Back button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
@@ -49,13 +46,12 @@ public class CrucifiedRootMenuScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Main container background box
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+        // Container box under header text covered by theme secondary color
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
 
-        // Header gradient spanning the full width of the box using theme primary and secondary colors
+        // Header title box gradient
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
 
-        // Centered header text inside the gradient box
         context.drawCenteredTextWithShadow(this.textRenderer, "Crucified Client Hub", centerX, panelY + 14, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
