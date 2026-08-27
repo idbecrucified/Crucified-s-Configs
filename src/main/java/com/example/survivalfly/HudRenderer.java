@@ -16,11 +16,14 @@ public class HudRenderer {
     public static class HudElement {
         public String name;
         public int x, y, width, height;
+        public final int defaultX, defaultY;
 
-        public HudElement(String name, int x, int y, int width, int height) {
+        public HudElement(String name, int defaultX, int defaultY, int width, int height) {
             this.name = name;
-            this.x = x;
-            this.y = y;
+            this.defaultX = defaultX;
+            this.defaultY = defaultY;
+            this.x = defaultX;
+            this.y = defaultY;
             this.width = width;
             this.height = height;
         }
@@ -55,6 +58,13 @@ public class HudRenderer {
         ELEMENTS.add(new HudElement("Sprint", 20, 190, 100, 16));
     }
 
+    public static void resetToDefaults() {
+        for (HudElement el : ELEMENTS) {
+            el.x = el.defaultX;
+            el.y = el.defaultY;
+        }
+    }
+
     public static void updateCpsTrackers() {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getWindow() == null) return;
@@ -85,21 +95,11 @@ public class HudRenderer {
             if (!element.isEnabled()) continue;
 
             switch (element.name) {
-                case "Keystrokes":
-                    renderKeystrokes(context, element, primary, secondary);
-                    break;
-                case "FPS":
-                    renderFps(context, element, primary, secondary);
-                    break;
-                case "CPS":
-                    renderCps(context, element, primary, secondary);
-                    break;
-                case "Armor":
-                    renderArmor(context, element, primary, secondary);
-                    break;
-                case "Sprint":
-                    renderSprint(context, element, primary, secondary);
-                    break;
+                case "Keystrokes": renderKeystrokes(context, element, primary, secondary); break;
+                case "FPS": renderFps(context, element, primary, secondary); break;
+                case "CPS": renderCps(context, element, primary, secondary); break;
+                case "Armor": renderArmor(context, element, primary, secondary); break;
+                case "Sprint": renderSprint(context, element, primary, secondary); break;
             }
         }
     }
@@ -125,13 +125,11 @@ public class HudRenderer {
 
     private static void renderFps(DrawContext context, HudElement el, int primary, int secondary) {
         MinecraftClient client = MinecraftClient.getInstance();
-        String text = "FPS: " + client.getCurrentFps();
-        renderBoxWithText(context, el.x, el.y, el.width, el.height, text, primary, secondary);
+        renderBoxWithText(context, el.x, el.y, el.width, el.height, "FPS: " + client.getCurrentFps(), primary, secondary);
     }
 
     private static void renderCps(DrawContext context, HudElement el, int primary, int secondary) {
-        String text = "CPS: " + leftClicks.size() + " | " + rightClicks.size();
-        renderBoxWithText(context, el.x, el.y, el.width, el.height, text, primary, secondary);
+        renderBoxWithText(context, el.x, el.y, el.width, el.height, "CPS: " + leftClicks.size() + " | " + rightClicks.size(), primary, secondary);
     }
 
     private static void renderSprint(DrawContext context, HudElement el, int primary, int secondary) {
