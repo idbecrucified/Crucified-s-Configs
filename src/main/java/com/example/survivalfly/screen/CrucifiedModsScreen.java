@@ -141,6 +141,9 @@ public class CrucifiedModsScreen extends Screen {
     public static boolean isFpsEnabled() { return fpsDisplay; }
     public static boolean isFullbrightEnabled() { return fullbright; }
     public static boolean isKeystrokesEnabled() { return keystrokes; }
+    public static boolean isToggleSprintEnabled() { return toggleSprint; }
+    public static boolean isCpsEnabled() { return cpsDisplay; }
+    public static boolean isArmorEnabled() { return armorStatus; }
 
     public static class ZoomSettingsScreen extends Screen {
         private final Screen parent;
