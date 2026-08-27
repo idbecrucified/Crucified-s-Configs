@@ -1,17 +1,33 @@
 package com.example.survivalfly;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 
-public class ThemedButtonWidget extends ButtonWidget {
+public class ThemedButtonWidget extends ClickableWidget {
+    private final PressAction onPress;
+
+    @FunctionalInterface
+    public interface PressAction {
+        void onPress(ThemedButtonWidget button);
+    }
 
     public ThemedButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress) {
-        super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
+        super(x, y, width, height, message);
+        this.onPress = onPress;
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void onClick(double mouseX, double mouseY) {
+        if (this.onPress != null) {
+            this.onPress.onPress(this);
+        }
+    }
+
+    @Override
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         int x = this.getX();
         int y = this.getY();
         int w = this.getWidth();
@@ -20,7 +36,6 @@ public class ThemedButtonWidget extends ButtonWidget {
         int primary = CrucifiedTheme.getPrimaryColor();
         int secondary = CrucifiedTheme.getSecondaryColor();
 
-        // Hover effect lighting adjustment
         if (this.isHovered()) {
             primary = (primary & 0xFF000000) | ((primary & 0x00FEFEFE) >> 1) + 0x007F7F7F;
         }
@@ -31,10 +46,15 @@ public class ThemedButtonWidget extends ButtonWidget {
         // Theme Gradient Button Background
         context.fillGradient(x, y, x + w, y + h, primary, secondary);
 
-        // Inner border highlight line for a 3D modern glass aesthetic
+        // Inner highlight line for glass feel
         context.fill(x, y, x + w, y + 1, 0x44FFFFFF);
 
         int textColor = this.active ? (this.isHovered() ? 0xFFFF00 : 0xFFFFFF) : 0xA0A0A0;
-        context.drawCenteredTextWithShadow(net.minecraft.client.MinecraftClient.getInstance().textRenderer, this.getMessage(), x + w / 2, y + (h - 8) / 2, textColor);
+        context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, this.getMessage(), x + w / 2, y + (h - 8) / 2, textColor);
+    }
+
+    @Override
+    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+        this.appendDefaultNarrations(builder);
     }
 }
