@@ -59,7 +59,7 @@ public class CrucifiedsThemeScreen extends Screen {
         context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
         CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
 
-        context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", centerX, panelY + 14, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Select Client Theme"), centerX, panelY + 14, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
     }
