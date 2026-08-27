@@ -12,7 +12,7 @@ public class ThemedButtonWidget extends ButtonWidget {
     }
 
     @Override
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         int x = this.getX();
         int y = this.getY();
         int w = this.getWidth();
