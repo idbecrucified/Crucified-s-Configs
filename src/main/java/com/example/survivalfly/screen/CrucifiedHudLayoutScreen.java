@@ -61,13 +61,11 @@ public class CrucifiedHudLayoutScreen extends Screen {
             int targetX = (int) mouseX - dragOffsetX;
             int targetY = (int) mouseY - dragOffsetY;
 
-            // Screen Corner / Edge Snapping
             if (Math.abs(targetX) < SNAP_DIST) targetX = 0;
             if (Math.abs(targetX + draggedElement.width - this.width) < SNAP_DIST) targetX = this.width - draggedElement.width;
             if (Math.abs(targetY) < SNAP_DIST) targetY = 0;
             if (Math.abs(targetY + draggedElement.height - this.height) < SNAP_DIST) targetY = this.height - draggedElement.height;
 
-            // Element-to-Element Snapping
             for (HudRenderer.HudElement other : HudRenderer.ELEMENTS) {
                 if (other == draggedElement || !other.isEnabled()) continue;
 
@@ -86,7 +84,7 @@ public class CrucifiedHudLayoutScreen extends Screen {
             draggedElement.y = Math.max(0, Math.min(this.height - draggedElement.height, targetY));
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(mouseX, mouseY, button);
     }
 
     @Override
@@ -99,23 +97,22 @@ public class CrucifiedHudLayoutScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
 
-        // Render actual HUD content first
         HudRenderer.renderHud(context);
 
-        // Render HOLLOW outlines around HUD elements (No dark filled gray boxes)
+        // Render sleek hollow vector outlines around HUD elements
         for (HudRenderer.HudElement element : HudRenderer.ELEMENTS) {
             if (element.isEnabled()) {
-                boolean isHoveredOrDragged = element.isHovered(mouseX, mouseY) || element == draggedElement;
-                int outlineColor = isHoveredOrDragged ? 0xFF00FF00 : 0xFFFFFFFF;
-                drawHollowRect(context, element.x - 2, element.y - 2, element.width + 4, element.height + 4, outlineColor);
+                boolean active = element.isHovered(mouseX, mouseY) || element == draggedElement;
+                int outlineColor = active ? 0xFF60A5FA : 0x44FFFFFF;
+                drawModernOutline(context, element.x - 2, element.y - 2, element.width + 4, element.height + 4, outlineColor);
             }
         }
 
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Drag elements to move. They snap to edges and each other."), this.width / 2, 12, 0xFFFF00);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Drag elements to position. Edges snap automatically."), this.width / 2, 12, 0xFF9CA3AF);
         super.render(context, mouseX, mouseY, delta);
     }
 
-    private void drawHollowRect(DrawContext context, int x, int y, int w, int h, int color) {
+    private void drawModernOutline(DrawContext context, int x, int y, int w, int h, int color) {
         context.fill(x, y, x + w, y + 1, color);
         context.fill(x, y + h - 1, x + w, y + h, color);
         context.fill(x, y, x + 1, y + h, color);
