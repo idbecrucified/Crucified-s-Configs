@@ -17,29 +17,29 @@ public class CrucifiedTheme {
 
     public static int getPrimaryColor() {
         switch (currentTheme.toLowerCase()) {
-            case "sea": return 0xFF006699;
-            case "sun": return 0xFFCC6600;
-            case "oled": return 0xFF111111;
-            case "flash": return 0xFF999900;
-            case "natural": return 0xFF2E7D32;
-            case "rock": return 0xFF4E342E;
+            case "sea": return 0xEE008080;     // Teal
+            case "sun": return 0xEEFF8C00;     // Dark Orange
+            case "oled": return 0xEE333333;    // Dark Gray
+            case "flash": return 0xFFFFFFFF;   // White
+            case "natural": return 0xEE2E7D32; // Green
+            case "rock": return 0xEECCCCCC;    // Light Gray
             case "gamer":
             default:
-                return 0xFF800020;
+                return 0xEEFF1493;             // Pink
         }
     }
 
     public static int getSecondaryColor() {
         switch (currentTheme.toLowerCase()) {
-            case "sea": return 0xFF003366;
-            case "sun": return 0xFF993300;
-            case "oled": return 0xFF000000;
-            case "flash": return 0xFF666600;
-            case "natural": return 0xFF1B5E20;
-            case "rock": return 0xFF3E2723;
+            case "sea": return 0xEE000080;     // Navy
+            case "sun": return 0xEEB22222;     // Dark Red
+            case "oled": return 0xFF000000;    // Pure Black
+            case "flash": return 0xFF000000;   // Black
+            case "natural": return 0xEE1B5E20; // Dark Green
+            case "rock": return 0xEE555555;    // Gray
             case "gamer":
             default:
-                return 0xFF4A0010;
+                return 0xEE8A2BE2;             // Purple
         }
     }
 }
