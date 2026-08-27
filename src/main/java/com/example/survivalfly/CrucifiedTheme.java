@@ -13,24 +13,24 @@ public class CrucifiedTheme {
 
     public static int getPrimaryColor() {
         switch (currentTheme.toLowerCase()) {
-            case "gamer": return 0xFF180E29;
-            case "sea": return 0xFF0B1329;
-            case "sun": return 0xFF241407;
+            case "gamer": return 0xFF0F172A;
+            case "sea": return 0xFF0A192F;
+            case "sun": return 0xFF1C1008;
             case "oled": return 0xFF000000;
-            case "flash": return 0xFF121215;
-            case "natural": return 0xFF052014;
-            case "rock": return 0xFF181C24;
-            default: return 0xFF0B1329;
+            case "flash": return 0xFF18181B;
+            case "natural": return 0xFF062016;
+            case "rock": return 0xFF0F172A;
+            default: return 0xFF0F172A;
         }
     }
 
     public static int getSecondaryColor() {
         switch (currentTheme.toLowerCase()) {
             case "gamer": return 0xFFA855F7;
-            case "sea": return 0xFF0284C7;
+            case "sea": return 0xFF38BDF8;
             case "sun": return 0xFFF59E0B;
             case "oled": return 0xFFFFFFFF;
-            case "flash": return 0xFFE4E4E7;
+            case "flash": return 0xFFF4F4F5;
             case "natural": return 0xFF10B981;
             case "rock": return 0xFF38BDF8;
             default: return 0xFF38BDF8;
@@ -49,111 +49,69 @@ public class CrucifiedTheme {
         }
     }
 
-    // Modern Seamless Slate & Multi-Ore Backdrop (Vector Crystalline Aesthetics)
+    // Modern Multi-Ore Slate Vector Theme (No pixel art, no grid tiles)
     private static void renderModernMultiOreBackground(DrawContext context, int x, int y, int w, int h) {
-        int tileSize = 40;
-        int[] oreColors = {
-            0xFF00F0FF, // Diamond
-            0xFFFFD700, // Gold
-            0xFF10B981, // Emerald
-            0xFFEF4444, // Redstone
-            0xFF3B82F6, // Lapis
-            0xFFA855F7, // Amethyst
-            0xFFF97316, // Copper
-            0xFFE2E8F0  // Iron
+        // Deep modern dark slate base gradient
+        context.fillGradient(x, y, x + w, y + h, 0xF20F172A, 0xF21E293B);
+
+        // Continuous ambient lighting bands representing ore spectrums (Diamond, Gold, Emerald, Amethyst, Redstone, Lapis, Copper)
+        int[] oreGlows = {
+            0x3000F0FF, // Diamond Blue
+            0x25FFD700, // Gold Yellow
+            0x2510B981, // Emerald Green
+            0x25A855F7, // Amethyst Purple
+            0x25EF4444, // Redstone Red
+            0x253B82F6, // Lapis Blue
+            0x25F97316  // Copper Orange
         };
 
-        for (int ty = y; ty < y + h; ty += tileSize) {
-            for (int tx = x; tx < x + w; tx += tileSize) {
-                int right = Math.min(tx + tileSize, x + w);
-                int bottom = Math.min(ty + tileSize, y + h);
+        int bandWidth = Math.max(1, w / oreGlows.length);
+        for (int i = 0; i < oreGlows.length; i++) {
+            int bx = x + (i * bandWidth);
+            int bw = (i == oreGlows.length - 1) ? (x + w - bx) : bandWidth;
+            int color = oreGlows[i];
 
-                // Smooth modern slate base gradient with micro-borders
-                context.fillGradient(tx, ty, right, bottom, 0xEE222A38, 0xEE141923);
-                context.fill(tx, ty, right, ty + 1, 0x1AFFFFFF);
-                context.fill(tx, ty, tx + 1, bottom, 0x1AFFFFFF);
-
-                int hash = Math.abs((tx * 31 + ty * 17) ^ 0x55555555);
-                int oreColor = oreColors[hash % oreColors.length];
-
-                int vx = tx + (hash % (tileSize - 16)) + 4;
-                int vy = ty + ((hash / 11) % (tileSize - 16)) + 4;
-
-                if (vx + 14 < right && vy + 14 < bottom) {
-                    // Modern glowing geometric ore crystal clusters (No blocky pixels)
-                    int glowColor = (oreColor & 0x00FFFFFF) | 0x33000000;
-                    context.fill(vx - 2, vy - 2, vx + 14, vy + 10, glowColor);
-
-                    // Angular crystal facet shapes
-                    context.fillGradient(vx, vy, vx + 8, vy + 5, oreColor, (oreColor & 0x00FFFFFF) | 0xAA000000);
-                    context.fillGradient(vx + 4, vy + 3, vx + 12, vy + 8, oreColor, 0xEEFFFFFF);
-                    context.fill(vx + 2, vy + 1, vx + 5, vy + 3, 0xFFFFFFFF); // Specular highlight
-                }
-            }
+            // Smooth top-to-bottom volumetric gradient sweep
+            context.fillGradient(bx, y, bx + bw, y + h, color, 0x00000000);
+            
+            // Modern vector accent light line on top edge
+            context.fill(bx, y, bx + bw, y + 2, (color & 0x00FFFFFF) | 0xDD000000);
         }
+
+        // Sleek top/bottom glassmorphic edge highlights
+        context.fill(x, y, x + w, y + 1, 0x33FFFFFF);
+        context.fill(x, y + h - 1, x + w, y + h, 0x1AFFFFFF);
     }
 
-    // Modern Deep Ocean Backdrop with Layered Volumetric Light Rays & Wave Vectors
     private static void renderModernSea(DrawContext context, int x, int y, int w, int h) {
-        context.fillGradient(x, y, x + w, y + h, 0xEE0B1329, 0xEE0369A1);
-
-        // Translucent light beam accents
-        for (int i = 0; i < w; i += 60) {
-            context.fillGradient(x + i, y, x + i + 25, y + h, 0x1500F0FF, 0x0000F0FF);
-        }
-
-        // Layered sleek wave lines
-        context.fill(x, y + (h / 3), x + w, y + (h / 3) + 1, 0x2238BDF8);
-        context.fill(x, y + ((h * 2) / 3), x + w, y + ((h * 2) / 3) + 1, 0x1138BDF8);
+        context.fillGradient(x, y, x + w, y + h, 0xF20A192F, 0xF20284C7);
+        context.fillGradient(x, y, x + w, y + 4, 0xAA38BDF8, 0x0038BDF8);
     }
 
-    // Modern Cyberpunk / RGB Gamer Graphics with Diagonal Laser Accents & Neon Glow
     private static void renderModernGamer(DrawContext context, int x, int y, int w, int h) {
-        context.fillGradient(x, y, x + w, y + h, 0xEE180E29, 0xEE2E1052);
-
-        // Neon edge ambient glow
-        context.fillGradient(x, y, x + w, y + 4, 0xAAC084FC, 0x00C084FC);
-        context.fillGradient(x, y + h - 4, x + w, y + h, 0x00EC4899, 0xAAEC4899);
-
-        // Modern geometric matrix lines
-        for (int i = 0; i < h; i += 16) {
-            context.fill(x, y + i, x + w, y + i + 1, 0x0AFFFFFF);
-        }
+        context.fillGradient(x, y, x + w, y + h, 0xF20F172A, 0xF23B0764);
+        context.fillGradient(x, y, x + w, y + 3, 0xFFA855F7, 0x00A855F7);
+        context.fillGradient(x, y + h - 3, x + w, y + h, 0x00EC4899, 0xFFEC4899);
     }
 
-    // Modern Emerald Forest Backdrop with Angular Geometric Leaf Overlay
     private static void renderModernNatural(DrawContext context, int x, int y, int w, int h) {
-        context.fillGradient(x, y, x + w, y + h, 0xEE052014, 0xEE064E3B);
-
-        // Geometric leaf shapes
-        for (int i = 0; i < w; i += 45) {
-            int leafY = y + ((i * 7) % Math.max(1, h - 20));
-            context.fillGradient(x + i, leafY, x + i + 16, leafY + 16, 0x2210B981, 0x0510B981);
-            context.fill(x + i + 2, leafY + 2, x + i + 14, leafY + 3, 0x3334D399);
-        }
+        context.fillGradient(x, y, x + w, y + h, 0xF2062016, 0xF2064E3B);
+        context.fillGradient(x, y, x + w, y + 3, 0xFF10B981, 0x0010B981);
     }
 
-    // Modern Sunset Graphics with Radial-Style Layered Gradient Rays
     private static void renderModernSun(DrawContext context, int x, int y, int w, int h) {
-        context.fillGradient(x, y, x + w, y + h, 0xEE451A03, 0xEE78350F);
-
-        // Radiant twilight accent bars
-        context.fillGradient(x, y, x + w, y + 6, 0xAAF59E0B, 0x00F59E0B);
-        context.fillGradient(x, y + (h / 2) - 10, x + w, y + (h / 2) + 10, 0x15F97316, 0x00F97316);
+        context.fillGradient(x, y, x + w, y + h, 0xF21C1008, 0xF278350F);
+        context.fillGradient(x, y, x + w, y + 4, 0xFFF59E0B, 0x00F59E0B);
     }
 
-    // Ultra-Sleek OLED Pure Black Frame with Crisp Wireframe Highlights
     private static void renderModernOled(DrawContext context, int x, int y, int w, int h) {
         context.fill(x, y, x + w, y + h, 0xFF000000);
-        context.fill(x, y, x + w, y + 1, 0x44FFFFFF);
-        context.fill(x, y + h - 1, x + w, y + h, 0x44FFFFFF);
-        context.fill(x, y, x + 1, y + h, 0x44FFFFFF);
-        context.fill(x + w - 1, y, x + w, y + h, 0x44FFFFFF);
+        context.fill(x, y, x + w, y + 1, 0x33FFFFFF);
+        context.fill(x, y + h - 1, x + w, y + h, 0x33FFFFFF);
     }
 
-    // Modern High-Contrast Silver Studio Backdrop with Specular Lines
     private static void renderModernFlash(DrawContext context, int x, int y, int w, int h) {
-        context.fillGradient(x, y, x + w, y + h, 0xEE27272A, 0xEE18181B);
+        context.fillGradient(x, y, x + w, y + h, 0xF227272A, 0xF218181B);
         context.fill(x, y, x + w, y + 2, 0xFFFFFFFF);
         context.fill(x, y + h - 2, x + w, y + h, 0xFFE4E4E7);
     }
