@@ -2,31 +2,17 @@ package com.example.survivalfly;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.PressableWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
-public class ThemedButtonWidget extends PressableWidget {
-    private final PressAction onPress;
-
-    @FunctionalInterface
-    public interface PressAction {
-        void onPress(ThemedButtonWidget button);
-    }
+public class ThemedButtonWidget extends ButtonWidget {
 
     public ThemedButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress) {
-        super(x, y, width, height, message);
-        this.onPress = onPress;
+        super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
     }
 
     @Override
-    public void onPress() {
-        if (this.onPress != null) {
-            this.onPress.onPress(this);
-        }
-    }
-
-    @Override
-    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         int x = this.getX();
         int y = this.getY();
         int w = this.getWidth();
