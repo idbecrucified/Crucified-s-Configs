@@ -113,16 +113,14 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Container background
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+        // Container box under header text covered by theme secondary color
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
 
-        // Header Banner background expanded flush to the entire container width (panelX to panelX + panelWidth)
-        int headerHeight = 40;
-        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + headerHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+        // Header title box gradient
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 40, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
 
-        // Vertically centered title texts inside header box
         context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 10, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 23, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 24, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
     }
@@ -189,10 +187,10 @@ class ZoomSettingsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
-        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 35, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
         
-        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", centerX, panelY + 12, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", centerX, panelY + 14, 0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
     }
 
