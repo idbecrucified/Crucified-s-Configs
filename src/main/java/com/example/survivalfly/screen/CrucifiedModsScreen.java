@@ -119,19 +119,14 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Outer 1px Solid Black Outline
         context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
-
-        // Entire Panel Theme Gradient
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
-
-        // Decorative Glass Highlight Lines & Theme Graphics
         context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
-        context.fill(panelX + 110, panelY + 45, panelX + 111, panelY + panelHeight - 15, 0x44FFFFFF); // Category divider line
+        context.fill(panelX + 110, panelY + 45, panelX + 111, panelY + panelHeight - 15, 0x44FFFFFF);
         CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
 
-        context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 12, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 26, 0xDDDDDD);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), centerX, panelY + 12, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Category: " + currentCategory), centerX, panelY + 26, 0xDDDDDD);
 
         super.render(context, mouseX, mouseY, delta);
     }
@@ -204,7 +199,7 @@ class ZoomSettingsScreen extends Screen {
         context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
         CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
         
-        context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", centerX, panelY + 14, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Zoom Configuration"), centerX, panelY + 14, 0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
     }
 
