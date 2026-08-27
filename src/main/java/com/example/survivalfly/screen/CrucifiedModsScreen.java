@@ -112,6 +112,8 @@ public class CrucifiedModsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         int panelWidth = 320;
@@ -123,6 +125,7 @@ public class CrucifiedModsScreen extends Screen {
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
         context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
         context.fill(panelX + 110, panelY + 45, panelX + 111, panelY + panelHeight - 15, 0x44FFFFFF);
+        
         CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
 
         context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Crucified's Mod Hub"), centerX, panelY + 12, 0xFFFFFF);
@@ -186,6 +189,8 @@ public class CrucifiedModsScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            this.renderBackground(context);
+
             int centerX = this.width / 2;
             int centerY = this.height / 2;
             int panelWidth = 260;
@@ -196,6 +201,7 @@ public class CrucifiedModsScreen extends Screen {
             context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
             context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
             context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
+            
             CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
             
             context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Zoom Configuration"), centerX, panelY + 14, 0xFFFFFF);
