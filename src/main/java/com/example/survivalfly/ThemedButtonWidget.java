@@ -21,18 +21,21 @@ public class ThemedButtonWidget extends ButtonWidget {
         int w = this.getWidth();
         int h = this.getHeight();
 
-        int primary = CrucifiedTheme.getPrimaryColor();
-        int secondary = CrucifiedTheme.getSecondaryColor();
+        int baseBg = 0xDD111827;
+        int hoverBg = 0xDD1F2937;
+        int activeBg = this.isHovered() ? hoverBg : baseBg;
+        int accent = CrucifiedTheme.getSecondaryColor();
 
+        // Sleek outer border & backdrop
+        context.fill(x, y, x + w, y + h, activeBg);
+        context.fill(x, y, x + w, y + 1, 0x33FFFFFF);
+        
+        // Left accent indicator bar
         if (this.isHovered()) {
-            primary = (primary & 0xFF000000) | ((primary & 0x00FEFEFE) >> 1) + 0x007F7F7F;
+            context.fill(x, y, x + 2, y + h, accent);
         }
 
-        context.fill(x - 1, y - 1, x + w + 1, y + h + 1, 0xFF000000);
-        context.fillGradient(x, y, x + w, y + h, primary, secondary);
-        context.fill(x, y, x + w, y + 1, 0x44FFFFFF);
-
-        int textColor = this.active ? (this.isHovered() ? 0xFFFF00 : 0xFFFFFF) : 0xA0A0A0;
+        int textColor = this.active ? (this.isHovered() ? 0xFFFFFFFF : 0xFFD1D5DB) : 0xFF6B7280;
         context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, this.getMessage(), x + w / 2, y + (h - 8) / 2, textColor);
     }
 }
