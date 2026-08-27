@@ -38,7 +38,6 @@ public class CrucifiedsThemeScreen extends Screen {
             ).dimensions(centerX - 100, startY + (i * 22), 200, 18).build());
         }
 
-        // Back button
         this.addDrawableChild(ButtonWidget.builder(
             Text.literal("Back"),
             button -> MinecraftClient.getInstance().setScreen(parent)
@@ -54,13 +53,12 @@ public class CrucifiedsThemeScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Container box
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xEE1A1A22);
+        // Container box under text covered by theme secondary color
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
 
-        // Themed header gradient bar
+        // Header title box gradient
         context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
 
-        // Header text inside top gradient box
         context.drawCenteredTextWithShadow(this.textRenderer, "Select Client Theme", centerX, panelY + 14, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
