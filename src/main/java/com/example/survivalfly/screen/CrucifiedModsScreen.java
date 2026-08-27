@@ -113,14 +113,14 @@ public class CrucifiedModsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        // Container box under header text covered by theme secondary color
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
+        // Black 1px border outline
+        context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
 
-        // Header title box gradient
-        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 40, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+        // Entire panel gradient from Primary (top) to Secondary (bottom)
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
 
-        context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 10, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 24, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Crucified's Mod Hub", centerX, panelY + 12, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Category: " + currentCategory, centerX, panelY + 26, 0xFFFFFF);
 
         super.render(context, mouseX, mouseY, delta);
     }
@@ -187,8 +187,11 @@ class ZoomSettingsScreen extends Screen {
         int panelX = centerX - panelWidth / 2;
         int panelY = centerY - panelHeight / 2;
 
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getSecondaryColor());
-        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + 36, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+        // Black 1px border outline
+        context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
+
+        // Entire panel gradient
+        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
         
         context.drawCenteredTextWithShadow(this.textRenderer, "Zoom Configuration", centerX, panelY + 14, 0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
