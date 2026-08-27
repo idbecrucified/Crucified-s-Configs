@@ -1,6 +1,7 @@
 package com.example.survivalfly.screen;
 
 import com.example.survivalfly.CrucifiedTheme;
+import com.example.survivalfly.SoundHelper;
 import com.example.survivalfly.ThemedButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -68,6 +69,7 @@ public class CrucifiedModsScreen extends Screen {
                 Text.literal(zoomText),
                 button -> {
                     zoom = !zoom;
+                    SoundHelper.playToggle(zoom);
                     MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
                 }
             ));
@@ -86,6 +88,7 @@ public class CrucifiedModsScreen extends Screen {
                 Text.literal(fbText),
                 button -> {
                     fullbright = !fullbright;
+                    SoundHelper.playToggle(fullbright);
                     MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
                 }
             ));
@@ -104,7 +107,9 @@ public class CrucifiedModsScreen extends Screen {
             x, startY + (index * 26), 190, 20,
             Text.literal(statusText),
             button -> {
-                onToggle.accept(!currentState);
+                boolean newState = !currentState;
+                onToggle.accept(newState);
+                SoundHelper.playToggle(newState);
                 MinecraftClient.getInstance().setScreen(new CrucifiedModsScreen(parent));
             }
         ));
