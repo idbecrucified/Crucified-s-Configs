@@ -138,71 +138,71 @@ public class CrucifiedModsScreen extends Screen {
     public static boolean isFpsEnabled() { return fpsDisplay; }
     public static boolean isFullbrightEnabled() { return fullbright; }
     public static boolean isKeystrokesEnabled() { return keystrokes; }
-}
 
-class ZoomSettingsScreen extends Screen {
-    private final Screen parent;
+    public static class ZoomSettingsScreen extends Screen {
+        private final Screen parent;
 
-    protected ZoomSettingsScreen(Screen parent) {
-        super(Text.literal("Zoom Settings"));
-        this.parent = parent;
+        public ZoomSettingsScreen(Screen parent) {
+            super(Text.literal("Zoom Settings"));
+            this.parent = parent;
+        }
+
+        @Override
+        protected void init() {
+            int centerX = this.width / 2;
+            int centerY = this.height / 2;
+
+            this.addDrawableChild(new ThemedButtonWidget(
+                centerX - 100, centerY - 30, 200, 20,
+                Text.literal("Zoom Intensity: " + CrucifiedModsScreen.zoomIntensity + "x"),
+                button -> {
+                    if (CrucifiedModsScreen.zoomIntensity == 2.0f) CrucifiedModsScreen.zoomIntensity = 3.0f;
+                    else if (CrucifiedModsScreen.zoomIntensity == 3.0f) CrucifiedModsScreen.zoomIntensity = 4.0f;
+                    else if (CrucifiedModsScreen.zoomIntensity == 4.0f) CrucifiedModsScreen.zoomIntensity = 6.0f;
+                    else if (CrucifiedModsScreen.zoomIntensity == 6.0f) CrucifiedModsScreen.zoomIntensity = 8.0f;
+                    else CrucifiedModsScreen.zoomIntensity = 2.0f;
+                    MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
+                }
+            ));
+
+            this.addDrawableChild(new ThemedButtonWidget(
+                centerX - 100, centerY, 200, 20,
+                Text.literal("Zoom Key: " + CrucifiedModsScreen.zoomKey),
+                button -> {
+                    if (CrucifiedModsScreen.zoomKey.equals("C")) CrucifiedModsScreen.zoomKey = "Z";
+                    else if (CrucifiedModsScreen.zoomKey.equals("Z")) CrucifiedModsScreen.zoomKey = "V";
+                    else if (CrucifiedModsScreen.zoomKey.equals("V")) CrucifiedModsScreen.zoomKey = "LEFT_ALT";
+                    else CrucifiedModsScreen.zoomKey = "C";
+                    MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
+                }
+            ));
+
+            this.addDrawableChild(new ThemedButtonWidget(
+                centerX - 100, centerY + 40, 200, 20,
+                Text.literal("Done"),
+                button -> MinecraftClient.getInstance().setScreen(parent)
+            ));
+        }
+
+        @Override
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            int centerX = this.width / 2;
+            int centerY = this.height / 2;
+            int panelWidth = 260;
+            int panelHeight = 160;
+            int panelX = centerX - panelWidth / 2;
+            int panelY = centerY - panelHeight / 2;
+
+            context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
+            context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
+            context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
+            CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
+            
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Zoom Configuration"), centerX, panelY + 14, 0xFFFFFF);
+            super.render(context, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public boolean shouldPause() { return false; }
     }
-
-    @Override
-    protected void init() {
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-
-        this.addDrawableChild(new ThemedButtonWidget(
-            centerX - 100, centerY - 30, 200, 20,
-            Text.literal("Zoom Intensity: " + CrucifiedModsScreen.zoomIntensity + "x"),
-            button -> {
-                if (CrucifiedModsScreen.zoomIntensity == 2.0f) CrucifiedModsScreen.zoomIntensity = 3.0f;
-                else if (CrucifiedModsScreen.zoomIntensity == 3.0f) CrucifiedModsScreen.zoomIntensity = 4.0f;
-                else if (CrucifiedModsScreen.zoomIntensity == 4.0f) CrucifiedModsScreen.zoomIntensity = 6.0f;
-                else if (CrucifiedModsScreen.zoomIntensity == 6.0f) CrucifiedModsScreen.zoomIntensity = 8.0f;
-                else CrucifiedModsScreen.zoomIntensity = 2.0f;
-                MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
-            }
-        ));
-
-        this.addDrawableChild(new ThemedButtonWidget(
-            centerX - 100, centerY, 200, 20,
-            Text.literal("Zoom Key: " + CrucifiedModsScreen.zoomKey),
-            button -> {
-                if (CrucifiedModsScreen.zoomKey.equals("C")) CrucifiedModsScreen.zoomKey = "Z";
-                else if (CrucifiedModsScreen.zoomKey.equals("Z")) CrucifiedModsScreen.zoomKey = "V";
-                else if (CrucifiedModsScreen.zoomKey.equals("V")) CrucifiedModsScreen.zoomKey = "LEFT_ALT";
-                else CrucifiedModsScreen.zoomKey = "C";
-                MinecraftClient.getInstance().setScreen(new ZoomSettingsScreen(parent));
-            }
-        ));
-
-        this.addDrawableChild(new ThemedButtonWidget(
-            centerX - 100, centerY + 40, 200, 20,
-            Text.literal("Done"),
-            button -> MinecraftClient.getInstance().setScreen(parent)
-        ));
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-        int panelWidth = 260;
-        int panelHeight = 160;
-        int panelX = centerX - panelWidth / 2;
-        int panelY = centerY - panelHeight / 2;
-
-        context.fill(panelX - 1, panelY - 1, panelX + panelWidth + 1, panelY + panelHeight + 1, 0xFF000000);
-        context.fillGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight, CrucifiedTheme.getPrimaryColor(), CrucifiedTheme.getSecondaryColor());
-        context.fill(panelX + 1, panelY + 1, panelX + panelWidth - 1, panelY + 2, 0x55FFFFFF);
-        CrucifiedTheme.renderThemeDecorations(context, panelX, panelY, panelWidth, panelHeight);
-        
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Zoom Configuration"), centerX, panelY + 14, 0xFFFFFF);
-        super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public boolean shouldPause() { return false; }
 }
