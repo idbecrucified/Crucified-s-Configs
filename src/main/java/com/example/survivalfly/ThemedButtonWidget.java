@@ -2,11 +2,10 @@ package com.example.survivalfly;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.text.Text;
 
-public class ThemedButtonWidget extends ClickableWidget {
+public class ThemedButtonWidget extends PressableWidget {
     private final PressAction onPress;
 
     @FunctionalInterface
@@ -20,7 +19,7 @@ public class ThemedButtonWidget extends ClickableWidget {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
+    public void onPress() {
         if (this.onPress != null) {
             this.onPress.onPress(this);
         }
@@ -43,18 +42,13 @@ public class ThemedButtonWidget extends ClickableWidget {
         // 1px Black Border
         context.fill(x - 1, y - 1, x + w + 1, y + h + 1, 0xFF000000);
 
-        // Theme Gradient Button Background
+        // Theme Gradient Background
         context.fillGradient(x, y, x + w, y + h, primary, secondary);
 
-        // Inner highlight line for glass feel
+        // Glass highlight line
         context.fill(x, y, x + w, y + 1, 0x44FFFFFF);
 
         int textColor = this.active ? (this.isHovered() ? 0xFFFF00 : 0xFFFFFF) : 0xA0A0A0;
         context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, this.getMessage(), x + w / 2, y + (h - 8) / 2, textColor);
-    }
-
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-        this.appendDefaultNarrations(builder);
     }
 }
