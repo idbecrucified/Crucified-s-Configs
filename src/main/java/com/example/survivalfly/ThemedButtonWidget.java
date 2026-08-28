@@ -12,43 +12,39 @@ public class ThemedButtonWidget extends ButtonWidget {
     }
 
     @Override
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient client = MinecraftClient.getInstance();
         boolean hovered = this.isHovered();
 
         int primaryColor = CrucifiedTheme.getPrimaryColor();
         int secondaryColor = CrucifiedTheme.getSecondaryColor();
 
-        // 1. Semi-Transparent Background Fill
+        // Semi-Transparent Background Fill
         int bgAlpha = hovered ? 0x99 : 0x55;
         int bgColor = (primaryColor & 0x00FFFFFF) | (bgAlpha << 24);
         drawRoundedRect(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 4, bgColor);
 
-        // 2. Rounded Theme Border
+        // Rounded Theme Border
         int borderAlpha = hovered ? 0xFF : 0x88;
         int borderColor = (secondaryColor & 0x00FFFFFF) | (borderAlpha << 24);
         drawRoundedOutline(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 4, borderColor);
 
-        // 3. Centered Button Text
+        // Centered Text
         int textColor = hovered ? 0xFFFFFFFF : 0xFFE2E8F0;
         int textX = this.getX() + (this.getWidth() - client.textRenderer.getWidth(this.getMessage())) / 2;
         int textY = this.getY() + (this.getHeight() - 8) / 2;
         context.drawTextWithShadow(client.textRenderer, this.getMessage(), textX, textY, textColor);
     }
 
-    // Smooth Rounded Rect Fill
     public static void drawRoundedRect(DrawContext context, int x, int y, int width, int height, int radius, int color) {
         context.fill(x + radius, y, x + width - radius, y + height, color);
         context.fill(x, y + radius, x + radius, y + height - radius, color);
         context.fill(x + width - radius, y + radius, x + width, y + height - radius, color);
     }
 
-    // Smooth Rounded Rect Outline
     public static void drawRoundedOutline(DrawContext context, int x, int y, int width, int height, int radius, int color) {
-        // Horizontal lines
         context.fill(x + radius, y, x + width - radius, y + 1, color);
         context.fill(x + radius, y + height - 1, x + width - radius, y + height, color);
-        // Vertical lines
         context.fill(x, y + radius, x + 1, y + height - radius, color);
         context.fill(x + width - 1, y + radius, x + width, y + height - radius, color);
     }
