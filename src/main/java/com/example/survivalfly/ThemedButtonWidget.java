@@ -19,13 +19,13 @@ public class ThemedButtonWidget extends ButtonWidget {
         int primaryColor = CrucifiedTheme.getPrimaryColor();
         int secondaryColor = CrucifiedTheme.getSecondaryColor();
 
-        int bgAlpha = hovered ? 0xAA : 0x66;
+        int bgAlpha = hovered ? 0xBB : 0x77;
         int bgColor = (primaryColor & 0x00FFFFFF) | (bgAlpha << 24);
-        drawRoundedRect(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6, bgColor);
+        drawRoundedRect(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, bgColor);
 
         int borderAlpha = hovered ? 0xFF : 0x99;
         int borderColor = (secondaryColor & 0x00FFFFFF) | (borderAlpha << 24);
-        drawRoundedOutline(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6, borderColor);
+        drawRoundedOutline(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, borderColor);
 
         int textColor = hovered ? 0xFFFFFFFF : 0xFFE2E8F0;
         int textX = this.getX() + (this.getWidth() - client.textRenderer.getWidth(this.getMessage())) / 2;
@@ -33,43 +33,47 @@ public class ThemedButtonWidget extends ButtonWidget {
         context.drawTextWithShadow(client.textRenderer, this.getMessage(), textX, textY, textColor);
     }
 
-    // Smooth Curved Box Fill
+    // Fixed Correct Corner Quadrant Math
     public static void drawRoundedRect(DrawContext context, int x, int y, int width, int height, int radius, int color) {
         context.fill(x + radius, y, x + width - radius, y + height, color);
         context.fill(x, y + radius, x + radius, y + height - radius, color);
         context.fill(x + width - radius, y + radius, x + width, y + height - radius, color);
 
-        for (int row = 0; row < radius; row++) {
-            for (int col = 0; col < radius; col++) {
-                if ((radius - row) * (radius - row) + (radius - col) * (radius - col) <= radius * radius) {
-                    // Top-Left
-                    context.fill(x + col, y + row, x + col + 1, y + row + 1, color);
-                    // Top-Right
-                    context.fill(x + width - radius + col, y + row, x + width - radius + col + 1, y + row + 1, color);
-                    // Bottom-Left
-                    context.fill(x + col, y + height - radius + row, x + col + 1, y + height - radius + row + 1, color);
-                    // Bottom-Right
-                    context.fill(x + width - radius + col, y + height - radius + row, x + width - radius + col + 1, y + height - radius + row + 1, color);
+        for (int r = 0; r < radius; r++) {
+            for (int c = 0; c < radius; c++) {
+                if ((radius - r - 1) * (radius - r - 1) + (radius - c - 1) * (radius - c - 1) >= radius * radius) {
+                    // Fill background cuts to smooth outer boundaries cleanly
+                    continue;
+                }
+                // Fill true corner pixels
+                int dx = radius - c - 1;
+                int dy = radius - r - 1;
+                if (dx * dx + dy * dy <= radius * radius) {
+                    context.fill(x + radius - 1 - dx, y + radius - 1 - dy, x + radius - dx, y + radius - dy, color);
+                    context.fill(x + width - radius + dx, y + radius - 1 - dy, x + width - radius + dx + 1, y + radius - dy, color);
+                    context.fill(x + radius - 1 - dx, y + height - radius + dy, x + radius - dx, y + height - radius + dy + 1, color);
+                    context.fill(x + width - radius + dx, y + height - radius + dy, x + width - radius + dx + 1, y + height - radius + dy + 1, color);
                 }
             }
         }
     }
 
-    // Smooth Curved Box Outline
     public static void drawRoundedOutline(DrawContext context, int x, int y, int width, int height, int radius, int color) {
         context.fill(x + radius, y, x + width - radius, y + 1, color);
         context.fill(x + radius, y + height - 1, x + width - radius, y + height, color);
         context.fill(x, y + radius, x + 1, y + height - radius, color);
         context.fill(x + width - 1, y + radius, x + width, y + height - radius, color);
 
-        for (int row = 0; row < radius; row++) {
-            for (int col = 0; col < radius; col++) {
-                int distSq = (radius - row) * (radius - row) + (radius - col) * (radius - col);
+        for (int r = 0; r < radius; r++) {
+            for (int c = 0; c < radius; c++) {
+                int dx = radius - c - 1;
+                int dy = radius - r - 1;
+                int distSq = dx * dx + dy * dy;
                 if (distSq <= radius * radius && distSq >= (radius - 1.5) * (radius - 1.5)) {
-                    context.fill(x + col, y + row, x + col + 1, y + row + 1, color);
-                    context.fill(x + width - radius + col, y + row, x + width - radius + col + 1, y + row + 1, color);
-                    context.fill(x + col, y + height - radius + row, x + col + 1, y + height - radius + row + 1, color);
-                    context.fill(x + width - radius + col, y + height - radius + row, x + width - radius + col + 1, y + height - radius + row + 1, color);
+                    context.fill(x + radius - 1 - dx, y + radius - 1 - dy, x + radius - dx, y + radius - dy, color);
+                    context.fill(x + width - radius + dx, y + radius - 1 - dy, x + width - radius + dx + 1, y + radius - dy, color);
+                    context.fill(x + radius - 1 - dx, y + height - radius + dy, x + radius - dx, y + radius - dy + 1, color);
+                    context.fill(x + width - radius + dx, y + height - radius + dy, x + width - radius + dx + 1, y + height - radius + dy + 1, color);
                 }
             }
         }
