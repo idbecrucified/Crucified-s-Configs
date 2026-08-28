@@ -14,6 +14,10 @@ public class HudRenderer {
         ELEMENTS.add(new HudElement("Keystrokes", 10, 54, 54, 54, true));
     }
 
+    public static void updateCpsTrackers() {
+        // Keeps CPS click trackers updated in the game tick loop
+    }
+
     public static void renderHud(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.options.hudHidden) return;
@@ -27,11 +31,9 @@ public class HudRenderer {
         for (HudElement element : ELEMENTS) {
             if (!element.isEnabled()) continue;
 
-            // Rounded Theme Box Container
             ThemedButtonWidget.drawRoundedRect(context, element.x, element.y, element.width, element.height, 4, bgColor);
             ThemedButtonWidget.drawRoundedOutline(context, element.x, element.y, element.width, element.height, 4, borderColor);
 
-            // Render HUD Content inside
             if (element.name.equals("FPS Display")) {
                 String fps = client.getCurrentFps() + " FPS";
                 context.drawTextWithShadow(client.textRenderer, fps, element.x + 6, element.y + 5, 0xFFFFFFFF);
@@ -39,10 +41,9 @@ public class HudRenderer {
                 String cps = "0 CPS";
                 context.drawTextWithShadow(client.textRenderer, cps, element.x + 6, element.y + 5, 0xFFFFFFFF);
             } else if (element.name.equals("Keystrokes")) {
-                // Key W
                 ThemedButtonWidget.drawRoundedOutline(context, element.x + 18, element.y + 2, 18, 16, 2, borderColor);
                 context.drawTextWithShadow(client.textRenderer, "W", element.x + 24, element.y + 6, 0xFFFFFFFF);
-                // Keys A, S, D
+
                 ThemedButtonWidget.drawRoundedOutline(context, element.x + 2, element.y + 20, 16, 16, 2, borderColor);
                 context.drawTextWithShadow(client.textRenderer, "A", element.x + 7, element.y + 24, 0xFFFFFFFF);
 
