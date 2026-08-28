@@ -19,63 +19,59 @@ public class ThemedButtonWidget extends ButtonWidget {
         int primaryColor = CrucifiedTheme.getPrimaryColor();
         int secondaryColor = CrucifiedTheme.getSecondaryColor();
 
-        // 1. Semi-Transparent Background Fill
-        int bgAlpha = hovered ? 0x99 : 0x55;
+        int bgAlpha = hovered ? 0xAA : 0x66;
         int bgColor = (primaryColor & 0x00FFFFFF) | (bgAlpha << 24);
-        drawRoundedRect(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, bgColor);
+        drawRoundedRect(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6, bgColor);
 
-        // 2. Smooth Rounded Theme Border
-        int borderAlpha = hovered ? 0xFF : 0x88;
+        int borderAlpha = hovered ? 0xFF : 0x99;
         int borderColor = (secondaryColor & 0x00FFFFFF) | (borderAlpha << 24);
-        drawRoundedOutline(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, borderColor);
+        drawRoundedOutline(context, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 6, borderColor);
 
-        // 3. Centered Text
         int textColor = hovered ? 0xFFFFFFFF : 0xFFE2E8F0;
         int textX = this.getX() + (this.getWidth() - client.textRenderer.getWidth(this.getMessage())) / 2;
         int textY = this.getY() + (this.getHeight() - 8) / 2;
         context.drawTextWithShadow(client.textRenderer, this.getMessage(), textX, textY, textColor);
     }
 
-    // Smooth Filled Rounded Box
+    // Smooth Curved Box Fill
     public static void drawRoundedRect(DrawContext context, int x, int y, int width, int height, int radius, int color) {
-        // Center cross
         context.fill(x + radius, y, x + width - radius, y + height, color);
         context.fill(x, y + radius, x + radius, y + height - radius, color);
         context.fill(x + width - radius, y + radius, x + width, y + height - radius, color);
 
-        // Corner curve fills
-        for (int i = 0; i < radius; i++) {
-            int dx = (int) Math.round(Math.sqrt(radius * radius - (radius - i) * (radius - i)));
-            // Top Left
-            context.fill(x + radius - dx, y + i, x + radius, y + i + 1, color);
-            // Top Right
-            context.fill(x + width - radius, y + i, x + width - radius + dx, y + i + 1, color);
-            // Bottom Left
-            context.fill(x + radius - dx, y + height - 1 - i, x + radius, y + height - i, color);
-            // Bottom Right
-            context.fill(x + width - radius, y + height - 1 - i, x + width - radius + dx, y + height - i, color);
+        for (int row = 0; row < radius; row++) {
+            for (int col = 0; col < radius; col++) {
+                if ((radius - row) * (radius - row) + (radius - col) * (radius - col) <= radius * radius) {
+                    // Top-Left
+                    context.fill(x + col, y + row, x + col + 1, y + row + 1, color);
+                    // Top-Right
+                    context.fill(x + width - radius + col, y + row, x + width - radius + col + 1, y + row + 1, color);
+                    // Bottom-Left
+                    context.fill(x + col, y + height - radius + row, x + col + 1, y + height - radius + row + 1, color);
+                    // Bottom-Right
+                    context.fill(x + width - radius + col, y + height - radius + row, x + width - radius + col + 1, y + height - radius + row + 1, color);
+                }
+            }
         }
     }
 
-    // Smooth Outline
+    // Smooth Curved Box Outline
     public static void drawRoundedOutline(DrawContext context, int x, int y, int width, int height, int radius, int color) {
-        // Straight Edges
         context.fill(x + radius, y, x + width - radius, y + 1, color);
         context.fill(x + radius, y + height - 1, x + width - radius, y + height, color);
         context.fill(x, y + radius, x + 1, y + height - radius, color);
         context.fill(x + width - 1, y + radius, x + width, y + height - radius, color);
 
-        // Curve Arcs
-        for (int i = 0; i < radius; i++) {
-            int dx = (int) Math.round(Math.sqrt(radius * radius - (radius - i) * (radius - i)));
-            // Top Left
-            context.fill(x + radius - dx, y + i, x + radius - dx + 1, y + i + 1, color);
-            // Top Right
-            context.fill(x + width - radius + dx - 1, y + i, x + width - radius + dx, y + i + 1, color);
-            // Bottom Left
-            context.fill(x + radius - dx, y + height - 1 - i, x + radius - dx + 1, y + height - i, color);
-            // Bottom Right
-            context.fill(x + width - radius + dx - 1, y + height - 1 - i, x + width - radius + dx, y + height - i, color);
+        for (int row = 0; row < radius; row++) {
+            for (int col = 0; col < radius; col++) {
+                int distSq = (radius - row) * (radius - row) + (radius - col) * (radius - col);
+                if (distSq <= radius * radius && distSq >= (radius - 1.5) * (radius - 1.5)) {
+                    context.fill(x + col, y + row, x + col + 1, y + row + 1, color);
+                    context.fill(x + width - radius + col, y + row, x + width - radius + col + 1, y + row + 1, color);
+                    context.fill(x + col, y + height - radius + row, x + col + 1, y + height - radius + row + 1, color);
+                    context.fill(x + width - radius + col, y + height - radius + row, x + width - radius + col + 1, y + height - radius + row + 1, color);
+                }
+            }
         }
     }
 }
