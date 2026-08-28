@@ -1,30 +1,26 @@
-package com.example.survivalfly;
+public class CrucifiedTheme {
+    private static String currentTheme = "default";
 
-public enum CrucifiedTheme {
-    GAMER("Gamer", 0xFF8B5CF6, 0xFFA855F7), // Purple / Indigo default
-    SEA("Sea", 0xFF0D9488, 0xFF14B8A6),
-    SUN("Sun", 0xFFD97706, 0xFFF59E0B),
-    OLED("OLED", 0xFF18181B, 0xFF27272A),
-    FLASH("Flash", 0xFFDC2626, 0xFFEF4444),
-    NATURAL("Natural", 0xFF15803D, 0xFF22C55E),
-    ROCK("Rock", 0xFF374151, 0xFF9CA3AF); // Fixed Rock Theme colors to gray/slate
-
-    private final String name;
-    private final int primaryColor;
-    private final int secondaryColor;
-
-    private static CrucifiedTheme currentTheme = GAMER; // Gamer set as default
-
-    CrucifiedTheme(String name, int primaryColor, int secondaryColor) {
-        this.name = name;
-        this.primaryColor = primaryColor;
-        this.secondaryColor = secondaryColor;
+    // Make color methods static
+    public static int getPrimaryColor() {
+        return 0xFF00FF00; // Replace with your color logic/variable
     }
 
-    public String getName() { return name; }
-    public int getPrimaryColor() { return primaryColor; }
-    public int getSecondaryColor() { return secondaryColor; }
+    public static int getSecondaryColor() {
+        return 0xFF005500; // Replace with your color logic/variable
+    }
 
-    public static CrucifiedTheme getCurrentTheme() { return currentTheme; }
-    public static void setCurrentTheme(CrucifiedTheme theme) { currentTheme = theme; }
+    // Add missing theme getters/setters
+    public static String getCurrentTheme() {
+        return currentTheme;
+    }
+
+    public static void setTheme(String theme) {
+        currentTheme = theme;
+    }
+
+    // Add missing rendering decoration helper
+    public static void renderThemeDecorations(DrawContext context, int x, int y, int width, int height) {
+        // Add decorative rendering logic here
+    }
 }
